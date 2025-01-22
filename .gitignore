@@ -33,5 +33,18 @@ ExportedObj/
 *.unitypackage.meta
 *.app
 
+# Latex stuff
+*.log
+*.aux
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+*.toc
+*.bbl
+*.bcf
+*.blg
+*.run.xml
+*.out
+
 # misc stuff
 .vscode/

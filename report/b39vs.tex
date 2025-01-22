@@ -1,0 +1,46 @@
+\documentclass{article}
+
+\usepackage[hidelinks]{hyperref}
+\usepackage{graphicx}
+\graphicspath{{./imgs/}}
+
+\usepackage{listings}
+
+\usepackage[style=authoryear]{biblatex}
+% \addbibresource{b39vs.bib}
+\renewcommand*{\nameyeardelim}{\addcomma\space}
+\usepackage{bm}
+
+\usepackage{parskip}
+\setlength{\parindent}{12pt}
+
+\usepackage{amstext} % for \text macro
+\usepackage{array}   % for \newcolumntype macro
+\newcolumntype{L}{>{$}l<{$}} % math-mode version of "l" column type
+
+\usepackage{float}
+
+\renewcommand{\labelenumii}{\arabic{enumi}.\arabic{enumii}}
+\renewcommand{\labelenumiii}{\arabic{enumi}.\arabic{enumii}.\arabic{enumiii}}
+\renewcommand{\labelenumiv}{\arabic{enumi}.\arabic{enumii}.\arabic{enumiii}.\arabic{enumiv}}
+
+\begin{document}
+
+\title{B39VS - Systems Project}
+\author{Abdul Maajid Aga - H00431236 \and Muhammad Abban - H00427641 \and Laith Samir Mohamed - H00427630 \and Aisultan Alpysbay - H00xxxxx \and Moiz Saeed - H00xxxxx \and Sufiyan Atif - H00xxxxx}
+\date{\parbox{\linewidth}{\centering%
+  School of Engineering and Physical Sciences \endgraf
+  Heriot Watt University Dubai \endgraf\bigskip
+  April 2025 }}
+\maketitle
+\bigskip
+
+\tableofcontents
+\newpage
+
+\section{Introduction}
+
+\printbibliography[heading=bibintoc]
+
+\end{document}
+
