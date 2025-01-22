@@ -1,0 +1,4 @@
+[submodule "b39vs_ws/src/ROS-TCP-Endpoint"]
+	path = b39vs_ws/src/ROS-TCP-Endpoint
+	url = https://github.com/Unity-Technologies/ROS-TCP-Endpoint.git
+    branch = dev-ros2

@@ -33,4 +33,5 @@ ExportedObj/
 *.unitypackage.meta
 *.app
 
+# misc stuff
 .vscode/
