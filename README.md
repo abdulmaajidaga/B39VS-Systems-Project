@@ -1,3 +1,7 @@
+Hazmat, an indoor waste transportation and disposal robot.
+
+## Setup
+
 To clone the repo, ensure to also include the submodules:
 
 ```bash
@@ -14,3 +18,17 @@ git submodule update --init
 To build the ROS2 workspace, install the following dependencies
 
 *TODO*
+
+## Simulation
+
+To start Unity's TCP connecter, first build and source the workspace (with submodules, see above). Then run the connector node
+
+```bash
+ros2 run ros_tcp_endpoint default_server_endpoint
+```
+
+To send wheel commands to the robot, use
+
+```bash
+ros2 topic pub /wheel_cmd hazmat_msgs/msg/MecanumCmd "{front_right: 1.0}"
+```
