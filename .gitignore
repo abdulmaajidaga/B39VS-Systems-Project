@@ -32,6 +32,7 @@ ExportedObj/
 *.unitypackage
 *.unitypackage.meta
 *.app
+*.blob
 
 # Latex stuff
 *.log
