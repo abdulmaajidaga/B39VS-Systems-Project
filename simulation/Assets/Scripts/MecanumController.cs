@@ -12,13 +12,13 @@ public class MecanumController : MonoBehaviour
     [SerializeField]
     float speed = 4;
 
-    Rigidbody body;
+    // Rigidbody body;
 
     ROSConnection ros;
 
     void Start()
     {
-        body = GetComponent<Rigidbody>();
+        // body = GetComponent<Rigidbody>();
         
         ros = ROSConnection.GetOrCreateInstance();
         ros.Subscribe<MecanumCmdMsg>("/wheel_cmd", callback);
@@ -28,6 +28,10 @@ public class MecanumController : MonoBehaviour
     void callback(MecanumCmdMsg msg)
     {
         Debug.Log(wheels[0].localPosition);
-        body.AddForceAtPosition(speed * msg.front_right * Vector3.forward, transform.position, ForceMode.Acceleration);
+        wheels[0].GetChild(0).GetComponent<ArticulationBody>().SetDriveTargetVelocity(ArticulationDriveAxis.X, speed * msg.front_right);
+        wheels[1].GetChild(0).GetComponent<ArticulationBody>().SetDriveTargetVelocity(ArticulationDriveAxis.X, speed * msg.front_left);
+        wheels[2].GetChild(0).GetComponent<ArticulationBody>().SetDriveTargetVelocity(ArticulationDriveAxis.X, speed * msg.rear_right);
+        wheels[3].GetChild(0).GetComponent<ArticulationBody>().SetDriveTargetVelocity(ArticulationDriveAxis.X, speed * msg.rear_left);
+        // (speed * msg.front_right * Vector3.forward, wheels[0].localPosition, ForceMode.Acceleration);
     }
 }
