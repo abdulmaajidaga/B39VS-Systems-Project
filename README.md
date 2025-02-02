@@ -32,3 +32,9 @@ To send wheel commands to the robot at 30Hz, use
 ```bash
 ros2 topic pub /wheel_cmd hazmat_msgs/msg/MecanumCmd "{rear_right: 1.0, rear_left: 1.0, front_right: 1.0, front_left: 1.0}" -r 30
 ```
+
+To send linear and angular velocity commands at the same, use
+
+```bash
+ros2 topic pub /hazmat/cmd_vel geometry_msgs/msg/Twist "{linear: {x: 1.0, y: 2.0}}" -r 30
+```
