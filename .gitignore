@@ -49,3 +49,5 @@ ExportedObj/
 
 # misc stuff
 .vscode/
+
+.pio/
