@@ -20,7 +20,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'aruco = hazmat_vision.aruco:main'
+            'aruco = hazmat_vision.aruco:main',
+            'odom = hazmat_vision.odom:main'
         ],
     },
 )
