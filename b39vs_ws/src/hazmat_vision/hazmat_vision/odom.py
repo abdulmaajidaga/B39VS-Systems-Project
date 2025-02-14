@@ -6,14 +6,14 @@ from nav_msgs.msg import Odometry
 from std_msgs.msg import Empty
 from hazmat_msgs.msg import MecanumCmd
 
-# Define wheel parameters (update these values as needed)
+# Define wheel parameters 
 wheel_radius = 0.1  # Example value
 wheel_separation_width = 0.5  # Example value
 wheel_separation_length = 0.5  # Example value
 
 class WheelOdom(Node):
     def __init__(self):
-        super().__init__('wheel_odom')  # Initialize the Node with a name
+        super().__init__('wheel_odom')  
 
         # Define the positions
         self.x = 0.0
@@ -38,7 +38,7 @@ class WheelOdom(Node):
 
         # Create a publisher for wheel odometry
         self.wheelcmd_pub = self.create_publisher(
-            Odometry,  # Replace with the correct message type (e.g., Odometry)
+            Odometry, #message type
             "/wheel_cmd",  # Topic name
             10  # Queue size
         )
@@ -81,7 +81,7 @@ class WheelOdom(Node):
         self.y += delta_y
         self.th += delta_th
 
-        # Publish the updated odometry (replace with the correct message type)
+        # Publish the updated odometry 
         odom_msg = Odometry()  
         odom_msg.pose.pose.position.x = self.x
         odom_msg.pose.pose.position.y = self.y
