@@ -15,9 +15,23 @@ If you've already cloned the repo without the submodules, then run
 git submodule update --init
 ```
 
-To build the ROS2 workspace, install the following dependencies
+To build the ROS2 workspace, install the following dependencies:
 
-*TODO*
+- depthai
+- pyserial
+
+You can install the above on Ubuntu or related distros using:
+
+```bash
+sudo apt install python3-serial ros-${ROS_DISTRO}-depthai
+```
+
+To ensure depthai drivers can access the OAK-D camera on the USB port, update your udev rules as such:
+
+```bash
+echo 'SUBSYSTEM=="usb", ATTRS{idVendor}=="03e7", MODE="0666"' | sudo tee /etc/udev/rules.d/80-movidius.rules
+sudo udevadm control --reload-rules && sudo udevadm trigger
+```
 
 ## Simulation
 
