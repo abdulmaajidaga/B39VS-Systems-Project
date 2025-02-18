@@ -16,8 +16,8 @@ class mechnum
     void attach(int EN_Pin ,int IN1_Pin ,int IN2_Pin);
     float get_speed_enc();
     float get_speed_imu();
-    void set_speed(float speed);
-    void set_power(float power ,bool dir);
+    void set_speed(int speed);
+    void set_power(int power);
     void maintain_speed();
 };
 

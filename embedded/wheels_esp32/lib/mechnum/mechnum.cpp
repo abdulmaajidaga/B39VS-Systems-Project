@@ -23,7 +23,7 @@ float mechnum::get_speed_imu() {
     //TODO : USE IMU SPEED 
     return speed_imu;
 }
-void mechnum::set_speed(float speed) {
+void mechnum::set_speed(int speed) {
     //TODO : USE get_speed and set_power to set_speed
     // PID ??
 }
@@ -33,10 +33,10 @@ void mechnum::maintain_speed() {
     
 }
 
-void mechnum::set_power(float powerr ,bool dirr) {
+void mechnum::set_power(int powerr) {
     //TODO : ADD PWM SPEED MODULATION FOR SPEED CONTROL
-    dir = dirr;
-    power = powerr ;
+    bool dir = powerr >= 0 ? 1 : -1;
+    power = powerr >= 0 ? powerr : -powerr;
 
     if (dir) {
         digitalWrite(IN1,HIGH);

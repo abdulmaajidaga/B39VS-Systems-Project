@@ -3,8 +3,9 @@ import math
 from rclpy.node import Node
 from builtin_interfaces.msg import Time
 from nav_msgs.msg import Odometry
-from std_msgs.msg import Empty
 from hazmat_msgs.msg import MecanumCmd
+import tf_transformations as tft
+
 
 # Define wheel parameters 
 wheel_radius = 0.1  # Example value
@@ -85,10 +86,10 @@ class WheelOdom(Node):
         odom_msg = Odometry()  
         odom_msg.pose.pose.position.x = self.x
         odom_msg.pose.pose.position.y = self.y
-     #   odom_msg.pose.pose.position.th = self.th
-      #  odom_msg.pose.pose.position.vx = self.vx
-       # odom_msg.pose.pose.position.vy = self.vy
-        #odom_msg.pose.pose.position.vth = self.vth
+        odom_msg.pose.pose.orientation = tft.quaternion_from_euler(0, 0, self.th)
+        odom_msg.twist.twist.linear.x = self.vx
+        odom_msg.twist.twist.linear.y = self.vy
+        odom_msg.twist.twist.angular.z = self.vth
         self.wheelcmd_pub.publish(odom_msg)
 
 def main(args=None):
@@ -97,6 +98,7 @@ def main(args=None):
     rclpy.spin(node)
     node.destroy_node()
     rclpy.shutdown()
+
 
 if __name__ == '__main__':
     main()

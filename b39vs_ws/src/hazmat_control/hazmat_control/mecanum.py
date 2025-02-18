@@ -10,9 +10,9 @@ class Mecanum(Node):
         self.create_subscription(Twist, "/hazmat/cmd_vel", self.twistCallback, 10)
         self.wheelCmd = self.create_publisher(MecanumCmd, "/wheel_cmd", 10)
 
-        self.LENGTH_X = 0.5
-        self.LENGTH_Y = 0.5
-        self.WHEEL_R = 38.5
+        self.LENGTH_X = 0.26 / 2
+        self.LENGTH_Y = 0.22 / 2
+        self.WHEEL_R = 0.0385
         self.LENGTH_SUM = self.LENGTH_X + self.LENGTH_Y
         self.WHEEL_R_INV = 1 / self.WHEEL_R
 
@@ -23,10 +23,10 @@ class Mecanum(Node):
         velocity_diff = msg.linear.x - msg.linear.y
         angular_term = self.LENGTH_SUM * msg.angular.z
         
-        wheelCmd.front_left = (velocity_diff - angular_term) * self.WHEEL_R_INV
-        wheelCmd.front_right = (velocity_result + angular_term) * self.WHEEL_R_INV
-        wheelCmd.rear_left = (velocity_result - angular_term) * self.WHEEL_R_INV
-        wheelCmd.rear_right = (velocity_diff + angular_term) * self.WHEEL_R_INV
+        wheelCmd.front_left = int((velocity_diff - angular_term) * self.WHEEL_R_INV)
+        wheelCmd.front_right = int((velocity_result + angular_term) * self.WHEEL_R_INV)
+        wheelCmd.rear_left = int((velocity_result - angular_term) * self.WHEEL_R_INV)
+        wheelCmd.rear_right = int((velocity_diff + angular_term) * self.WHEEL_R_INV)
 
         self.wheelCmd.publish(wheelCmd)
         

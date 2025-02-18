@@ -1,4 +1,4 @@
-float32 front_right
-float32 front_left
-float32 rear_right
-float32 rear_left
+int32 front_right
+int32 front_left
+int32 rear_right
+int32 rear_left
