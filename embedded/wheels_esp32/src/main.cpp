@@ -95,7 +95,7 @@ void loop() {
 
 // Function to calculate RPM (adjusted for your motor's encoder PPR)
 float calculateRPM(volatile int &pulseCount) {
-  int pulsesPerRevolution = 20; // Adjust based on your motor specs
+  int pulsesPerRevolution = 150; // Adjust based on your motor specs
   float rpm = (pulseCount / (float)pulsesPerRevolution); // Convert to RPM
   pulseCount = 0; // Reset pulse count for next cycle
   return rpm;
