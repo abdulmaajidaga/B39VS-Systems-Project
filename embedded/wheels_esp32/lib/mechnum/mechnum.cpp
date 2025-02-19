@@ -34,18 +34,13 @@ void mechnum::maintain_speed() {
 }
 
 void mechnum::set_power(int powerr) {
-    //TODO : ADD PWM SPEED MODULATION FOR SPEED CONTROL
-    bool dir = powerr >= 0 ? 1 : -1;
-    power = powerr >= 0 ? powerr : -powerr;
-
-    if (dir) {
+    if (powerr >= 0) {
         digitalWrite(IN1,HIGH);
         digitalWrite(IN2,LOW);
-        pwm.write(EN,power);
-    }
-    else {
+        pwm.write(EN,powerr);
+    } else {
         digitalWrite(IN1,LOW);
         digitalWrite(IN2,HIGH);
-        pwm.write(EN,power);
+        pwm.write(EN,-powerr);
     }
 }

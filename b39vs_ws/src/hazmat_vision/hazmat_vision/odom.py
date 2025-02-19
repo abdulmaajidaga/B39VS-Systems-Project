@@ -5,6 +5,7 @@ from builtin_interfaces.msg import Time
 from nav_msgs.msg import Odometry
 from hazmat_msgs.msg import MecanumCmd
 import tf_transformations as tft
+from geometry_msgs.msg import Quaternion
 
 
 # Define wheel parameters 
@@ -40,7 +41,7 @@ class WheelOdom(Node):
         # Create a publisher for wheel odometry
         self.wheelcmd_pub = self.create_publisher(
             Odometry, #message type
-            "/wheel_cmd",  # Topic name
+            "/wheel_odom",  # Topic name
             10  # Queue size
         )
 
@@ -84,12 +85,22 @@ class WheelOdom(Node):
 
         # Publish the updated odometry 
         odom_msg = Odometry()  
+        odom_msg.header.frame_id = "map"
         odom_msg.pose.pose.position.x = self.x
         odom_msg.pose.pose.position.y = self.y
-        odom_msg.pose.pose.orientation = tft.quaternion_from_euler(0, 0, self.th)
+        quat = Quaternion()
+        q = tft.quaternion_from_euler(0, 0, self.th)
+        quat.x = q[0]
+        quat.y = q[1]
+        quat.z = q[2]
+        quat.w = q[3]
+        odom_msg.pose.pose.orientation = quat
+        # odom_msg.pose.covariance = [0]
         odom_msg.twist.twist.linear.x = self.vx
         odom_msg.twist.twist.linear.y = self.vy
         odom_msg.twist.twist.angular.z = self.vth
+        # odom_msg.twist.covariance = [0]
+        print(odom_msg.twist.twist.linear)
         self.wheelcmd_pub.publish(odom_msg)
 
 def main(args=None):

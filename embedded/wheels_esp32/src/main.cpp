@@ -99,14 +99,14 @@ void loop() {
     m4s = speeds.substring(12,16).toInt();
     
     // Output encoder values
-    Serial.print(m1s); Serial.print(" | ");
-    Serial.print(m2s); Serial.print(" | ");
-    Serial.print(m3s); Serial.print(" | ");
-    Serial.println(m4s);
-    // Serial.print(calculateRPM(pulseCount1)); Serial.print(" | ");
-    // Serial.print(calculateRPM(pulseCount2)); Serial.print(" | ");
-    // Serial.print(calculateRPM(pulseCount3)); Serial.print(" | ");
-    // Serial.println(calculateRPM(pulseCount4));
+    // Serial.print(m1s); Serial.print(" | ");
+    // Serial.print(m2s); Serial.print(" | ");
+    // Serial.print(m3s); Serial.print(" | ");
+    // Serial.println(m4s);
+    Serial.print(calculateRPM(pulseCount1)); Serial.print("|");
+    Serial.print(calculateRPM(pulseCount2)); Serial.print("|");
+    Serial.print(calculateRPM(pulseCount3)); Serial.print("|");
+    Serial.println(calculateRPM(pulseCount4));
   }
 }
 

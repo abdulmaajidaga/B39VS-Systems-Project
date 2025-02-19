@@ -2,16 +2,27 @@ import serial
 import rclpy
 from hazmat_msgs.msg import MecanumCmd
 from rclpy.node import Node
-from std_msgs.msg import Int32
+from rcl_interfaces.msg import ParameterDescriptor, ParameterType
 
 class SerialBridge(Node):
     def __init__(self):
         super().__init__("serial_bridge")
 
+        self.declare_parameter(
+            name="serial_port",
+            value="/dev/ttyACM0",
+            descriptor=ParameterDescriptor(
+                type=ParameterType.PARAMETER_STRING,
+                description="Serial port of esp32",
+            ),
+        )
+
         self.create_timer(1/100, self.serial_tx)
-        self.serial_port = serial.Serial("/dev/ttyACM0", 115200)
+        self.serial_port = serial.Serial(self.get_parameter("serial_port").get_parameter_value().string_value, 115200)
 
         self.create_subscription(MecanumCmd, "/wheel_cmd", self.wheel_callback, 10)
+
+        self.encoder_vel_pub = self.create_publisher(MecanumCmd, "/hazmat/encoder_vel", 10)
 
         self.speeds = MecanumCmd()
 
@@ -19,10 +30,19 @@ class SerialBridge(Node):
         try:
             n = 4
             self.serial_port.write(self.packCommand().encode('utf-8'))
+            self.get_logger().info(f"Sent command: {self.packCommand()}")
             self.serial_port.flush()
-            read = self.serial_port.readline()
+            read = self.serial_port.readline().decode('utf-8')
             self.get_logger().info(f"Serial read: {read}")
-            self.get_logger().info(f"Sent angle: {self.packCommand()}")
+            arr = read.replace("\r\n", "").split("|")
+            print(arr)
+            encoder_vel = MecanumCmd()
+            encoder_vel.front_left = int(float(arr[0]))
+            encoder_vel.front_right = int(float(arr[1]))
+            encoder_vel.rear_left = int(float(arr[2]))
+            encoder_vel.rear_right = int(float(arr[3]))
+            self.encoder_vel_pub.publish(encoder_vel)
+            
         except Exception as e:
             self.get_logger().error(f"Serial write failed: {str(e)}")
 
