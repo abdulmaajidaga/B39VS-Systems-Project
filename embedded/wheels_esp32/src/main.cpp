@@ -46,7 +46,9 @@ float calculateRPM(volatile int &pulseCount) {
   int pulsesPerRevolution = 20; // Adjust based on your motor specs
   float rpm = (pulseCount / (float)pulsesPerRevolution); // Convert to RPM
   pulseCount = 0; // Reset pulse count for next cycle
-  return rpm;
+    // If motor speed is negative, invert RPM sign
+  return (motorSpeed < 0) ? -rpm : rpm;
+
 }
 
 void stopMotors() {
