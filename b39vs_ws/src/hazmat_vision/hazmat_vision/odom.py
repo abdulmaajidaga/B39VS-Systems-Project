@@ -6,12 +6,13 @@ from nav_msgs.msg import Odometry
 from hazmat_msgs.msg import MecanumCmd
 import tf_transformations as tft
 from geometry_msgs.msg import Quaternion
+import numpy as np
 
 
 # Define wheel parameters 
-wheel_radius = 0.1  # Example value
-wheel_separation_width = 0.5  # Example value
-wheel_separation_length = 0.5  # Example value
+wheel_radius = 0.0385  # Example value
+wheel_separation_width = 0.2  # Example value
+wheel_separation_length = 0.26  # Example value
 
 class WheelOdom(Node):
     def __init__(self):
@@ -26,6 +27,10 @@ class WheelOdom(Node):
         self.vx = 0.0
         self.vy = 0.0
         self.vth = 0.0
+
+         # Store (x, y) values for covariance calculation
+        self.past_positions = [] 
+
 
         # Initialize time
         self.time = self.get_clock().now()
@@ -49,15 +54,19 @@ class WheelOdom(Node):
         # Convert RPM to angular velocity in radians per second (APS)
         return rpm * (2 * math.pi) / 60
 
-    def encoder_callback(self, msg):
+    def encoder_callback(self, msg: MecanumCmd):
+        # print("Received encoder data:", msg) 
         # Get the current time
         new_time = self.get_clock().now()
 
         # Example RPM values (replace with actual values from the message)
-        rpm_front_left = 0.0
-        rpm_front_right = 0.0
-        rpm_rear_left = 0.0
-        rpm_rear_right = 0.0
+        rpm_front_left = msg.front_left
+        rpm_front_right = msg.front_right
+        rpm_rear_left = msg.rear_left
+        rpm_rear_right = msg.rear_right
+
+        print(f"FL: {rpm_front_left}, FR: {rpm_front_right}, RL: {rpm_rear_left}, RR: {rpm_rear_right}")
+
 
         # Convert RPM to angular velocities
         v_front_left = self.rpm_to_aps(rpm_front_left)
@@ -83,6 +92,28 @@ class WheelOdom(Node):
         self.y += delta_y
         self.th += delta_th
 
+        # Store past positions
+        self.past_positions.append((self.x, self.y))
+        print(f"New Position: x = {self.x}, y = {self.y}")
+
+
+        # Keep only the last N positions (for memory efficiency)
+        if len(self.past_positions) > 50:  # Store last 50 positions
+            self.past_positions.pop(0)
+
+        # Compute covariance if there are enough data points
+        if len(self.past_positions) > 2:
+            x_values, y_values = zip(*self.past_positions)
+            covariance_matrix = np.cov(x_values, y_values)
+            cov_x_y = covariance_matrix[0][1]  # Covariance between x and y
+            print("Variance X:", np.var(x_values))
+            print("Variance Y:", np.var(y_values))
+            print("Covariance Matrix:\n", np.cov(x_values, y_values))
+        else:
+            cov_x_y = 0.0  # Default value when not enough data
+
+        
+
         # Publish the updated odometry 
         odom_msg = Odometry()  
         odom_msg.header.frame_id = "map"
@@ -101,6 +132,17 @@ class WheelOdom(Node):
         odom_msg.twist.twist.angular.z = self.vth
         # odom_msg.twist.covariance = [0]
         print(odom_msg.twist.twist.linear)
+
+           # Fill covariance matrix
+        odom_msg.pose.covariance = [
+        0.01,  cov_x_y,  0.0,   0.0,   0.0,   0.0,
+        cov_x_y, 0.01,   0.0,   0.0,   0.0,   0.0,
+        0.0,   0.0,   0.01,   0.0,   0.0,   0.0,
+        0.0,   0.0,   0.0,   0.01,   0.0,   0.0,
+        0.0,   0.0,   0.0,   0.0,   0.01,   0.0,
+        0.0,   0.0,   0.0,   0.0,   0.0,   0.01
+    ]
+        
         self.wheelcmd_pub.publish(odom_msg)
 
 def main(args=None):
