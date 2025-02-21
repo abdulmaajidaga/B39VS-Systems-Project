@@ -22,7 +22,6 @@ setup(
     entry_points={
         'console_scripts': [
             'mecanum = hazmat_control.mecanum:main',
-            'visualiser = hazmat_control.arm_visualiser:main'
         ],
     },
 )

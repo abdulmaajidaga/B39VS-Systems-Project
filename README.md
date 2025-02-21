@@ -50,7 +50,7 @@ ros2 run ros_tcp_endpoint default_server_endpoint
 To visualise the arm on RViz, run the code below:
 
 ```bash
-ros2 launch hazmat_control visualiser
+ros2 launch hazmat_control arm_launch.py
 ```
 
 ## Controlling the robot
