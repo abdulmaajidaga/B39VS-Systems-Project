@@ -1,102 +1,247 @@
+<!-- EXAMPLE URDF  -->
+
 <?xml version="1.0"?>
-<robot name="robot_arm">
-  
-  <!-- Base Link: Cylinder -->
+<robot name="visual">
+
+  <material name="blue">
+    <color rgba="0 0 0.8 1"/>
+  </material>
+  <material name="black">
+    <color rgba="0 0 0 1"/>
+  </material>
+  <material name="white">
+    <color rgba="1 1 1 1"/>
+  </material>
+
   <link name="base_link">
     <visual>
-      <origin xyz="0 0 0.0025" rpy="0 0 0"/>
       <geometry>
-        <cylinder length="0.005" radius="0.0143"/>  <!-- Circumference = 90mm, height = 5mm -->
+        <cylinder length="0.6" radius="0.2"/>
       </geometry>
+      <material name="blue"/>
     </visual>
   </link>
 
-  <!-- Rotating base over the base link (same dimensions) -->
-  <link name="base_rot">
+  <link name="right_leg">
     <visual>
-      <origin xyz="0 0 0.0025" rpy="0 0 0"/>
       <geometry>
-        <cylinder length="0.005" radius="0.0143"/>  <!-- Same dimensions as base link -->
+        <box size="0.6 0.1 0.2"/>
       </geometry>
+      <origin rpy="0 1.57075 0" xyz="0 0 -0.3"/>
+      <material name="white"/>
     </visual>
   </link>
 
-  <joint name="base_joint" type="revolute">
+  <joint name="base_to_right_leg" type="fixed">
     <parent link="base_link"/>
-    <child link="base_rot"/>
-    <origin xyz="0 0 0.005" rpy="0 0 0"/>
-    <axis xyz="0 0 1"/>  <!-- Rotational axis along z -->
-    <limit lower="-3.14" upper="3.14" effort="10.0" velocity="1.0"/> <!-- Joint limits for revolute joint -->
+    <child link="right_leg"/>
+    <origin xyz="0 -0.22 0.25"/>
   </joint>
 
-  <!-- First Arm Link -->
-  <link name="arm1">
+  <link name="right_base">
     <visual>
-      <origin xyz="0 0 0.121" rpy="0 0 0"/>  <!-- 121mm from rotating base -->
       <geometry>
-        <cylinder length="0.121" radius="0.010"/>  <!-- Example dimension -->
+        <box size="0.4 0.1 0.1"/>
+      </geometry>
+      <material name="white"/>
+    </visual>
+  </link>
+
+  <joint name="right_base_joint" type="fixed">
+    <parent link="right_leg"/>
+    <child link="right_base"/>
+    <origin xyz="0 0 -0.6"/>
+  </joint>
+
+  <link name="right_front_wheel">
+    <visual>
+      <origin rpy="1.57075 0 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder length="0.1" radius="0.035"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+  </link>
+  <joint name="right_front_wheel_joint" type="fixed">
+    <parent link="right_base"/>
+    <child link="right_front_wheel"/>
+    <origin rpy="0 0 0" xyz="0.133333333333 0 -0.085"/>
+  </joint>
+
+  <link name="right_back_wheel">
+    <visual>
+      <origin rpy="1.57075 0 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder length="0.1" radius="0.035"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+  </link>
+  <joint name="right_back_wheel_joint" type="fixed">
+    <parent link="right_base"/>
+    <child link="right_back_wheel"/>
+    <origin rpy="0 0 0" xyz="-0.133333333333 0 -0.085"/>
+  </joint>
+
+  <link name="left_leg">
+    <visual>
+      <geometry>
+        <box size="0.6 0.1 0.2"/>
+      </geometry>
+      <origin rpy="0 1.57075 0" xyz="0 0 -0.3"/>
+      <material name="white"/>
+    </visual>
+  </link>
+
+  <joint name="base_to_left_leg" type="fixed">
+    <parent link="base_link"/>
+    <child link="left_leg"/>
+    <origin xyz="0 0.22 0.25"/>
+  </joint>
+
+  <link name="left_base">
+    <visual>
+      <geometry>
+        <box size="0.4 0.1 0.1"/>
+      </geometry>
+      <material name="white"/>
+    </visual>
+  </link>
+
+  <joint name="left_base_joint" type="fixed">
+    <parent link="left_leg"/>
+    <child link="left_base"/>
+    <origin xyz="0 0 -0.6"/>
+  </joint>
+
+  <link name="left_front_wheel">
+    <visual>
+      <origin rpy="1.57075 0 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder length="0.1" radius="0.035"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+  </link>
+  <joint name="left_front_wheel_joint" type="fixed">
+    <parent link="left_base"/>
+    <child link="left_front_wheel"/>
+    <origin rpy="0 0 0" xyz="0.133333333333 0 -0.085"/>
+  </joint>
+
+  <link name="left_back_wheel">
+    <visual>
+      <origin rpy="1.57075 0 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder length="0.1" radius="0.035"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+  </link>
+  <joint name="left_back_wheel_joint" type="fixed">
+    <parent link="left_base"/>
+    <child link="left_back_wheel"/>
+    <origin rpy="0 0 0" xyz="-0.133333333333 0 -0.085"/>
+  </joint>
+
+  <joint name="gripper_extension" type="fixed">
+    <parent link="base_link"/>
+    <child link="gripper_pole"/>
+    <origin rpy="0 0 0" xyz="0.19 0 0.2"/>
+  </joint>
+
+  <link name="gripper_pole">
+    <visual>
+      <geometry>
+        <cylinder length="0.2" radius="0.01"/>
+      </geometry>
+      <origin rpy="0 1.57075 0 " xyz="0.1 0 0"/>
+    </visual>
+  </link>
+
+  <joint name="left_gripper_joint" type="fixed">
+    <origin rpy="0 0 0" xyz="0.2 0.01 0"/>
+    <parent link="gripper_pole"/>
+    <child link="left_gripper"/>
+  </joint>
+
+  <link name="left_gripper">
+    <visual>
+      <origin rpy="0.0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://urdf_tutorial/meshes/l_finger.dae"/>
       </geometry>
     </visual>
   </link>
 
-  <joint name="shoulder_joint" type="revolute">
-    <parent link="base_rot"/>
-    <child link="arm1"/>
-    <origin xyz="0 0 0.005" rpy="0 0 0"/>
-    <axis xyz="1 0 0"/>  <!-- Revolving joint with axis towards you -->
-    <limit lower="-1.57" upper="1.57" effort="10.0" velocity="1.0"/>  <!-- Joint limits -->
+  <joint name="left_tip_joint" type="fixed">
+    <parent link="left_gripper"/>
+    <child link="left_tip"/>
   </joint>
 
-  <!-- Second Arm Link -->
-  <link name="arm2">
+  <link name="left_tip">
     <visual>
-      <origin xyz="0 0 0.120" rpy="0 0 0"/>  <!-- 120mm distance to next joint -->
+      <origin rpy="0.0 0 0" xyz="0.09137 0.00495 0"/>
       <geometry>
-        <cylinder length="0.120" radius="0.010"/>  <!-- Example dimension -->
+        <mesh filename="package://urdf_tutorial/meshes/l_finger_tip.dae"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="right_gripper_joint" type="fixed">
+    <origin rpy="0 0 0" xyz="0.2 -0.01 0"/>
+    <parent link="gripper_pole"/>
+    <child link="right_gripper"/>
+  </joint>
+
+  <link name="right_gripper">
+    <visual>
+      <origin rpy="-3.1415 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://urdf_tutorial/meshes/l_finger.dae"/>
       </geometry>
     </visual>
   </link>
 
-  <joint name="elbow_joint" type="revolute">
-    <parent link="arm1"/>
-    <child link="arm2"/>
-    <origin xyz="0 0 0.121" rpy="0 0 0"/>  <!-- Linked to arm1 -->
-    <axis xyz="1 0 0"/>
-    <limit lower="-1.57" upper="1.57" effort="10.0" velocity="1.0"/>  <!-- Joint limits -->
+  <joint name="right_tip_joint" type="fixed">
+    <parent link="right_gripper"/>
+    <child link="right_tip"/>
   </joint>
 
-  <!-- Third Arm Link -->
-  <link name="arm3">
+  <link name="right_tip">
     <visual>
-      <origin xyz="0 0 0.020" rpy="0 0 0"/>  <!-- 20mm distance -->
+      <origin rpy="-3.1415 0 0" xyz="0.09137 0.00495 0"/>
       <geometry>
-        <cylinder length="0.020" radius="0.010"/>  <!-- Example dimension -->
+        <mesh filename="package://urdf_tutorial/meshes/l_finger_tip.dae"/>
       </geometry>
     </visual>
   </link>
 
-  <joint name="wrist_joint" type="revolute">
-    <parent link="arm2"/>
-    <child link="arm3"/>
-    <origin xyz="0 0 0.120" rpy="0 0 0"/>  <!-- Linked to arm2 -->
-    <axis xyz="1 0 0"/>
-    <limit lower="-1.57" upper="1.57" effort="10.0" velocity="1.0"/>  <!-- Joint limits -->
+  <link name="head">
+    <visual>
+      <geometry>
+        <sphere radius="0.2"/>
+      </geometry>
+      <material name="white"/>
+    </visual>
+  </link>
+  <joint name="head_swivel" type="fixed">
+    <parent link="base_link"/>
+    <child link="head"/>
+    <origin xyz="0 0 0.3"/>
   </joint>
 
-  <!-- End Effector -->
-  <link name="end_effector">
+  <link name="box">
     <visual>
-      <origin xyz="0 0 0.010" rpy="0 0 0"/>  <!-- Position for the end effector -->
       <geometry>
-        <sphere radius="0.010"/>  <!-- Example small sphere as end effector -->
+        <box size="0.08 0.08 0.08"/>
       </geometry>
+      <material name="blue"/>
     </visual>
   </link>
 
-  <joint name="end_effector_joint" type="fixed">
-    <parent link="arm3"/>
-    <child link="end_effector"/>
-    <origin xyz="0 0 0.020" rpy="0 0 0"/>  <!-- Linked to arm3 -->
+  <joint name="tobox" type="fixed">
+    <parent link="head"/>
+    <child link="box"/>
+    <origin xyz="0.1814 0 0.1414"/>
   </joint>
-
 </robot>

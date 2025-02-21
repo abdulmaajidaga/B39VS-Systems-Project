@@ -5,9 +5,9 @@ import PyKDL as kdl
 from . import urdf as kdl_parser
 
 
-class LegIK(Node):
+class Arm_IK(Node):
     def __init__(self):
-        super().__init__('leg_ik_node')
+        super().__init__('arm_ik')
 
         # Subscription to /robot_description topic
         self.subscription = self.create_subscription(
@@ -67,7 +67,7 @@ class LegIK(Node):
 def main(args=None):
     rclpy.init(args=args)
 
-    node = LegIK()
+    node = Arm_IK()
 
     # Wait for the /robot_description topic to receive the URDF
     while rclpy.ok():
