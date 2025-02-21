@@ -47,6 +47,12 @@ To start Unity's TCP connecter, first build and source the workspace (with submo
 ros2 run ros_tcp_endpoint default_server_endpoint
 ```
 
+To visualise the arm on RViz, run the code below:
+
+```bash
+ros2 launch hazmat_control visualiser
+```
+
 ## Controlling the robot
 
 Start the node for serial communication for with the ESP32
