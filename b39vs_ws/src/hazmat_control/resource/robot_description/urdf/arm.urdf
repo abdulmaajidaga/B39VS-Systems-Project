@@ -1,0 +1,102 @@
+<?xml version="1.0"?>
+<robot name="robot_arm">
+  
+  <!-- Base Link: Cylinder -->
+  <link name="base_link">
+    <visual>
+      <origin xyz="0 0 0.0025" rpy="0 0 0"/>
+      <geometry>
+        <cylinder length="0.005" radius="0.0143"/>  <!-- Circumference = 90mm, height = 5mm -->
+      </geometry>
+    </visual>
+  </link>
+
+  <!-- Rotating base over the base link (same dimensions) -->
+  <link name="base_rot">
+    <visual>
+      <origin xyz="0 0 0.0025" rpy="0 0 0"/>
+      <geometry>
+        <cylinder length="0.005" radius="0.0143"/>  <!-- Same dimensions as base link -->
+      </geometry>
+    </visual>
+  </link>
+
+  <joint name="base_joint" type="revolute">
+    <parent link="base_link"/>
+    <child link="base_rot"/>
+    <origin xyz="0 0 0.005" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>  <!-- Rotational axis along z -->
+    <limit lower="-3.14" upper="3.14" effort="10.0" velocity="1.0"/> <!-- Joint limits for revolute joint -->
+  </joint>
+
+  <!-- First Arm Link -->
+  <link name="arm1">
+    <visual>
+      <origin xyz="0 0 0.121" rpy="0 0 0"/>  <!-- 121mm from rotating base -->
+      <geometry>
+        <cylinder length="0.121" radius="0.010"/>  <!-- Example dimension -->
+      </geometry>
+    </visual>
+  </link>
+
+  <joint name="shoulder_joint" type="revolute">
+    <parent link="base_rot"/>
+    <child link="arm1"/>
+    <origin xyz="0 0 0.005" rpy="0 0 0"/>
+    <axis xyz="1 0 0"/>  <!-- Revolving joint with axis towards you -->
+    <limit lower="-1.57" upper="1.57" effort="10.0" velocity="1.0"/>  <!-- Joint limits -->
+  </joint>
+
+  <!-- Second Arm Link -->
+  <link name="arm2">
+    <visual>
+      <origin xyz="0 0 0.120" rpy="0 0 0"/>  <!-- 120mm distance to next joint -->
+      <geometry>
+        <cylinder length="0.120" radius="0.010"/>  <!-- Example dimension -->
+      </geometry>
+    </visual>
+  </link>
+
+  <joint name="elbow_joint" type="revolute">
+    <parent link="arm1"/>
+    <child link="arm2"/>
+    <origin xyz="0 0 0.121" rpy="0 0 0"/>  <!-- Linked to arm1 -->
+    <axis xyz="1 0 0"/>
+    <limit lower="-1.57" upper="1.57" effort="10.0" velocity="1.0"/>  <!-- Joint limits -->
+  </joint>
+
+  <!-- Third Arm Link -->
+  <link name="arm3">
+    <visual>
+      <origin xyz="0 0 0.020" rpy="0 0 0"/>  <!-- 20mm distance -->
+      <geometry>
+        <cylinder length="0.020" radius="0.010"/>  <!-- Example dimension -->
+      </geometry>
+    </visual>
+  </link>
+
+  <joint name="wrist_joint" type="revolute">
+    <parent link="arm2"/>
+    <child link="arm3"/>
+    <origin xyz="0 0 0.120" rpy="0 0 0"/>  <!-- Linked to arm2 -->
+    <axis xyz="1 0 0"/>
+    <limit lower="-1.57" upper="1.57" effort="10.0" velocity="1.0"/>  <!-- Joint limits -->
+  </joint>
+
+  <!-- End Effector -->
+  <link name="end_effector">
+    <visual>
+      <origin xyz="0 0 0.010" rpy="0 0 0"/>  <!-- Position for the end effector -->
+      <geometry>
+        <sphere radius="0.010"/>  <!-- Example small sphere as end effector -->
+      </geometry>
+    </visual>
+  </link>
+
+  <joint name="end_effector_joint" type="fixed">
+    <parent link="arm3"/>
+    <child link="end_effector"/>
+    <origin xyz="0 0 0.020" rpy="0 0 0"/>  <!-- Linked to arm3 -->
+  </joint>
+
+</robot>
