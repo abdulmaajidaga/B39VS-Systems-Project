@@ -13,7 +13,7 @@ int m1s = 0, m2s = 0, m3s = 0, m4s = 0;
 #define IN2_1 18
 
 #define ENB1 11
-#define IN3_2 9
+#define IN3_2 9                 
 #define IN4_2 10
 
 // Motor Driver (Bank B) - ESP32 Pin Assignments
@@ -42,12 +42,12 @@ int m1s = 0, m2s = 0, m3s = 0, m4s = 0;
 volatile int pulseCount1 = 0, pulseCount2 = 0, pulseCount3 = 0, pulseCount4 = 0;
 
 // Function to calculate RPM (adjusted for your motor's encoder PPR)
-float calculateRPM(volatile int &pulseCount) {
-  int pulsesPerRevolution = 20; // Adjust based on your motor specs
+float calculateRPM(volatile int &pulseCount, int motorSpeed) {
+  int pulsesPerRevolution = 150; // Adjust based on your motor specs
   float rpm = (pulseCount / (float)pulsesPerRevolution); // Convert to RPM
   pulseCount = 0; // Reset pulse count for next cycle
     // If motor speed is negative, invert RPM sign
-  return (motorSpeed < 0) ? -rpm : rpm;
+  return rpm;
 
 }
 
@@ -57,10 +57,22 @@ void stopMotors() {
 }
 
 // Interrupt service routines (ISR) for encoders
-void IRAM_ATTR enc1_ISR() { pulseCount1++; }
-void IRAM_ATTR enc2_ISR() { pulseCount2++; }
-void IRAM_ATTR enc3_ISR() { pulseCount3++; }
-void IRAM_ATTR enc4_ISR() { pulseCount4++; }
+void IRAM_ATTR enc1_ISR() { 
+  if (digitalRead(ENC1_B) == HIGH) pulseCount1++; // Forward
+  else pulseCount1--; // Backward
+}
+void IRAM_ATTR enc2_ISR() { 
+  if (digitalRead(ENC2_B) == HIGH) pulseCount2++; 
+  else pulseCount2--; 
+}
+void IRAM_ATTR enc3_ISR() { 
+  if (digitalRead(ENC3_B) == HIGH) pulseCount3++; 
+  else pulseCount3--; 
+}
+void IRAM_ATTR enc4_ISR() { 
+  if (digitalRead(ENC4_B) == HIGH) pulseCount4++; 
+  else pulseCount4--; 
+}
 
 void setup() {
   // Initialise all motor pins
