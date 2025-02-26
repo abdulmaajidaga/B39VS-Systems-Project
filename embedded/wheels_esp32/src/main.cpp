@@ -42,11 +42,11 @@ int m1s = 0, m2s = 0, m3s = 0, m4s = 0;
 volatile int pulseCount1 = 0, pulseCount2 = 0, pulseCount3 = 0, pulseCount4 = 0;
 
 // Function to calculate RPM (adjusted for your motor's encoder PPR)
-float calculateRPM(volatile int &pulseCount, int motorSpeed) {
+float calculateRPM(volatile int &pulseCount) {
   int pulsesPerRevolution = 150; // Adjust based on your motor specs
   float rpm = (pulseCount / (float)pulsesPerRevolution); // Convert to RPM
   pulseCount = 0; // Reset pulse count for next cycle
-    // If motor speed is negative, invert RPM sign
+    
   return rpm;
 
 }
