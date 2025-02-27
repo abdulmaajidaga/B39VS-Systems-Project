@@ -26,17 +26,17 @@ int m1s = 0, m2s = 0, m3s = 0, m4s = 0;
 #define IN4_4 15
 
 // Encoder Connections (ESP32 Pins)
-#define ENC1_A 41 // Orange 35
-#define ENC1_B 42 // Green 36
+#define ENC1_A 40 // Orange 35
+#define ENC1_B 39 // Green 36
 
-#define ENC2_A 35 // Orange 47
-#define ENC2_B 36 // Green 48
+#define ENC2_A 41 // Orange 47
+#define ENC2_B 42 // Green 48
 
-#define ENC3_A 39 // Orange 41
-#define ENC3_B 40 // Green 42
+#define ENC3_A 38 // Orange 41
+#define ENC3_B 37 // Green 42
 
-#define ENC4_A 37 // Orange 14
-#define ENC4_B 38 // Green 13
+#define ENC4_A 35 // Orange 14
+#define ENC4_B 36 // Green 13
 
 // Encoder pulse counters
 volatile int pulseCount1 = 0, pulseCount2 = 0, pulseCount3 = 0, pulseCount4 = 0;
