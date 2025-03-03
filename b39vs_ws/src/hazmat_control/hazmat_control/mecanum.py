@@ -11,7 +11,7 @@ class Mecanum(Node):
         self.wheelCmd = self.create_publisher(MecanumCmd, "/wheel_cmd", 10)
 
         self.LENGTH_X = 0.26 / 2
-        self.LENGTH_Y = 0.22 / 2
+        self.LENGTH_Y = 0.19 / 2 
         self.WHEEL_R = 0.0385
         self.LENGTH_SUM = self.LENGTH_X + self.LENGTH_Y
         self.WHEEL_R_INV = 1 / self.WHEEL_R

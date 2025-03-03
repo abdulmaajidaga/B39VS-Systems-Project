@@ -11,8 +11,8 @@ import numpy as np
 
 # Define wheel parameters 
 wheel_radius = 0.0385  # Example value
-wheel_separation_width = 0.2  # Example value
-wheel_separation_length = 0.26  # Example value
+wheel_separation_width = 0.26 / 2
+wheel_separation_length = 0.19 / 2 
 
 class WheelOdom(Node):
     def __init__(self):
@@ -75,8 +75,8 @@ class WheelOdom(Node):
         v_rear_right = self.rpm_to_aps(rpm_rear_right)
 
         # Compute the velocities through forward kinematics
-        self.vx = (v_front_left + v_front_right + v_rear_left + v_rear_right) * wheel_radius / 4
-        self.vy = (-v_front_left + v_front_right + v_rear_left - v_rear_right) * wheel_radius / 4
+        self.vx = (v_front_left + v_front_right + v_rear_left + v_rear_right) * wheel_radius / 4 * 16.67 * 10
+        self.vy = (-v_front_left + v_front_right + v_rear_left - v_rear_right) * wheel_radius / 4 * 16.67 * 10
         self.vth = (-v_front_left + v_front_right - v_rear_left + v_rear_right) * wheel_radius / (4 * (wheel_separation_width + wheel_separation_length))
 
         # Calculate time difference
@@ -106,9 +106,9 @@ class WheelOdom(Node):
             x_values, y_values = zip(*self.past_positions)
             covariance_matrix = np.cov(x_values, y_values)
             cov_x_y = covariance_matrix[0][1]  # Covariance between x and y
-            print("Variance X:", np.var(x_values))
-            print("Variance Y:", np.var(y_values))
-            print("Covariance Matrix:\n", np.cov(x_values, y_values))
+            # print("Variance X:", np.var(x_values))
+            # print("Variance Y:", np.var(y_values))
+            # print("Covariance Matrix:\n", np.cov(x_values, y_values))
         else:
             cov_x_y = 0.0  # Default value when not enough data
 
