@@ -75,13 +75,6 @@ class ArucoNode(Node):
 
         self.aruco_pose_pub.publish(pose_array)
 
-
-
-                
-                
-
-
-
 def main(args=None):
     rclpy.init(args=args)
     node = ArucoNode()

@@ -20,7 +20,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'serialBridge = hazmat_hardware.serial_bridge:main'
+            'serial = hazmat_hardware.serial_bridge:main'
         ],
     },
 )

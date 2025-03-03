@@ -18,8 +18,9 @@ class SerialBridge(Node):
         )
 
         self.create_timer(1/100, self.serial_tx)
-        self.serial_port = serial.Serial(self.get_parameter("serial_port").get_parameter_value().string_value, 115200)
-
+        self.serial_port = serial.Serial(self.get_parameter("serial_port").get_parameter_value().string_value, 9600)
+        self.serial_port.reset_input_buffer()
+        
         self.create_subscription(MecanumCmd, "/wheel_cmd", self.wheel_callback, 10)
 
         self.encoder_vel_pub = self.create_publisher(MecanumCmd, "/hazmat/encoder_vel", 10)
@@ -31,7 +32,6 @@ class SerialBridge(Node):
             n = 4
             self.serial_port.write(self.packCommand().encode('utf-8'))
             self.get_logger().info(f"Sent command: {self.packCommand()}")
-            self.serial_port.flush()
             read = self.serial_port.readline().decode('utf-8')
             self.get_logger().info(f"Serial read: {read}")
             arr = read.replace("\r\n", "").split("|")

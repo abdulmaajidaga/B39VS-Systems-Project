@@ -21,7 +21,8 @@ setup(
     entry_points={
         'console_scripts': [
             'aruco = hazmat_vision.aruco:main',
-            'odom = hazmat_vision.odom:main'
+            'odom = hazmat_vision.odom:main',
+            'camera = hazmat_vision.oak:main'
         ],
     },
 )
