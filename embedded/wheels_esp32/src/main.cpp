@@ -93,7 +93,7 @@ void setup() {
   attachInterrupt(digitalPinToInterrupt(ENC3_A), enc3_ISR, RISING);
   attachInterrupt(digitalPinToInterrupt(ENC4_A), enc4_ISR, RISING);
 
-  Serial.begin(115200);
+  Serial.begin(9600);
 
   stopMotors();
 }
