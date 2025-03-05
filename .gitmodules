@@ -2,3 +2,7 @@
 	path = b39vs_ws/src/ROS-TCP-Endpoint
 	url = https://github.com/Unity-Technologies/ROS-TCP-Endpoint.git
     branch = dev-ros2
+[submodule "b39vs_ws/src/micro_ros_setup"]
+	path = b39vs_ws/src/micro_ros_setup
+	url = https://github.com/micro-ROS/micro_ros_setup.git
+	branch = jazzy
