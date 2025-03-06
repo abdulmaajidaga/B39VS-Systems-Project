@@ -1,9 +1,9 @@
-#ifndef mechnum_h
-#define mechnum_h
+#ifndef mecanum_h
+#define mecanum_h
 
 #include <Arduino.h>
 
-class mechnum 
+class mecanum 
 {
     private:
         float speed_encoder;
