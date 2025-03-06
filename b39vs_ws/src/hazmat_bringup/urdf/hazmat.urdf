@@ -6,7 +6,7 @@
     <color rgba="0.0 0.0 0.0 1.0"/>
   </material>
 
-  <link name="world" />
+  <link name="odom" />
 
   <!-- Central Frame (Base + Odometry) -->
   <link name="central_frame">
@@ -46,10 +46,26 @@
       </geometry>
     </collision>
   </link>
+   <!-- Camera Frame -->
+  <link name="imu_link">
+    <visual>
+      <origin xyz="0.12 0 0.6" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.025"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+    <collision>
+      <origin xyz="0.12 0 0.6" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.025"/>
+      </geometry>
+    </collision>
+  </link>
 
   <!-- Joint: Base (Fixed) -->
   <joint name="base_joint" type="fixed">
-    <parent link="world"/>
+    <parent link="odom"/>
     <child link="central_frame"/>
     <origin xyz="0 0 0" rpy="0 0 0"/>
   </joint>
@@ -61,4 +77,10 @@
     <origin xyz="0.12 0 0.6" rpy="0 0 0"/>
   </joint>
   
+   <!-- Joint: Camera (Fixed) -->
+  <joint name="imu_joint" type="fixed">
+    <parent link="central_frame"/>
+    <child link="imu_link"/>
+    <origin xyz="0.12 0 0.6" rpy="0 0 0"/>
+  </joint>
 </robot>
