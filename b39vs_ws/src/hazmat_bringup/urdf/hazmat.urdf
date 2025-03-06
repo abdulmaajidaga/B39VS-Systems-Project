@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<robot name="hazmat_robot" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <!-- Define Materials -->
+  <material name="black">
+    <color rgba="0.0 0.0 0.0 1.0"/>
+  </material>
+
+  <link name="world" />
+
+  <!-- Central Frame (Base + Odometry) -->
+  <link name="central_frame">
+    <visual>
+      <origin xyz="0 0 0.06" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.3 0.3 0.1"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0.06" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.3 0.3 0.1"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="2.0"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="0.01" ixy="0" ixz="0" iyy="0.01" iyz="0" izz="0.01"/>
+    </inertial>
+  </link>
+  
+  <!-- Camera Frame -->
+  <link name="camera_link">
+    <visual>
+      <origin xyz="0.12 0 0.6" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.025"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+    <collision>
+      <origin xyz="0.12 0 0.6" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.025"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- Joint: Base (Fixed) -->
+  <joint name="base_joint" type="fixed">
+    <parent link="world"/>
+    <child link="central_frame"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  
+  <!-- Joint: Camera (Fixed) -->
+  <joint name="camera_joint" type="fixed">
+    <parent link="central_frame"/>
+    <child link="camera_link"/>
+    <origin xyz="0.12 0 0.6" rpy="0 0 0"/>
+  </joint>
+  
+</robot>
