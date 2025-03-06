@@ -75,8 +75,8 @@ class WheelOdom(Node):
         v_rear_right = self.rpm_to_aps(rpm_rear_right)
 
         # Compute the velocities through forward kinematics
-        self.vx = (v_front_left + v_front_right + v_rear_left + v_rear_right) * wheel_radius / 4 * 16.67 * 10
-        self.vy = (-v_front_left + v_front_right + v_rear_left - v_rear_right) * wheel_radius / 4 * 16.67 * 10
+        self.vx = ((v_front_left + v_front_right + v_rear_left + v_rear_right) * wheel_radius / 4 * 16.67 ) * 10
+        self.vy = ((-v_front_left + v_front_right + v_rear_left - v_rear_right) * wheel_radius / 4 * 16.67 ) * 10
         self.vth = (-v_front_left + v_front_right - v_rear_left + v_rear_right) * wheel_radius / (4 * (wheel_separation_width + wheel_separation_length))
 
         # Calculate time difference
