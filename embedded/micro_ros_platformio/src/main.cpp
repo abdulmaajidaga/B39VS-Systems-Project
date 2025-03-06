@@ -75,38 +75,38 @@ rcl_node_t node;
 #define RCSOFTCHECK(fn) { rcl_ret_t temp_rc = fn; if((temp_rc != RCL_RET_OK)){}}
 
 // Function to calculate RPM (adjusted for your motor's encoder PPR)
-float calculateRPM(volatile int &pulseCount) {
-  int pulsesPerRevolution = 150; // Adjust based on your motor specs
-  float rpm = (pulseCount / (float)pulsesPerRevolution); // Convert to RPM
-  pulseCount = 0; // Reset pulse count for next cycle
-  return rpm;
-}
+// float calculateRPM(volatile int &pulseCount) {
+//   int pulsesPerRevolution = 150; // Adjust based on your motor specs
+//   float rpm = (pulseCount / (float)pulsesPerRevolution); // Convert to RPM
+//   pulseCount = 0; // Reset pulse count for next cycle
+//   return rpm;
+// }
 
 void stopMotors() {
   digitalWrite(ENA1, LOW); digitalWrite(ENB1, LOW);
   digitalWrite(ENA2, LOW); digitalWrite(ENB2, LOW);
 }
 
-// Interrupt service routines (ISR) for encoders
-void IRAM_ATTR enc1_ISR() {
-  if (digitalRead(ENC1_B) == HIGH) pulseCount1++; // Forward
-  else pulseCount1--; // Backward
-}
+// // Interrupt service routines (ISR) for encoders
+// void IRAM_ATTR enc1_ISR() {
+//   if (digitalRead(ENC1_B) == HIGH) pulseCount1++; // Forward
+//   else pulseCount1--; // Backward
+// }
 
-void IRAM_ATTR enc2_ISR() {
-  if (digitalRead(ENC2_B) == HIGH) pulseCount2++;
-  else pulseCount2--;
-}
+// void IRAM_ATTR enc2_ISR() {
+//   if (digitalRead(ENC2_B) == HIGH) pulseCount2++;
+//   else pulseCount2--;
+// }
 
-void IRAM_ATTR enc3_ISR() {
-  if (digitalRead(ENC3_B) == HIGH) pulseCount3++;
-  else pulseCount3--;
-}
+// void IRAM_ATTR enc3_ISR() {
+//   if (digitalRead(ENC3_B) == HIGH) pulseCount3++;
+//   else pulseCount3--;
+// }
 
-void IRAM_ATTR enc4_ISR() {
-  if (digitalRead(ENC4_B) == HIGH) pulseCount4++;
-  else pulseCount4--;
-}
+// void IRAM_ATTR enc4_ISR() {
+//   if (digitalRead(ENC4_B) == HIGH) pulseCount4++;
+//   else pulseCount4--;
+// }
 
 // Infinite error loop function
 void error_loop() {
