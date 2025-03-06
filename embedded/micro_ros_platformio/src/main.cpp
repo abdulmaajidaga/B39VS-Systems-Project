@@ -123,10 +123,10 @@ void timer_callback(rcl_timer_t * timer, int64_t last_call_time) {
     // msg.data++;
     
     // Update mecanum message with current motor speeds and encoder readings
-    mecanum_msg.front_left = calculateRPM(pulseCount1);
-    mecanum_msg.front_right = calculateRPM(pulseCount2);
-    mecanum_msg.rear_left = calculateRPM(pulseCount3);
-    mecanum_msg.rear_right = calculateRPM(pulseCount4);
+    mecanum_msg.front_left = m1.get_speed_enc();
+    mecanum_msg.front_right = m2.get_speed_enc();;
+    mecanum_msg.rear_left = m3.get_speed_enc();
+    mecanum_msg.rear_right = m4.get_speed_enc();
     
     
     // Publish our messages
@@ -172,21 +172,18 @@ void setup() {
   m2.attach(ENB1, IN4_2, IN3_2, ENC2_A, ENC2_B);
   m3.attach(ENA2, IN1_3, IN2_3, ENC3_A, ENC3_B);
   m4.attach(ENB2, IN4_4, IN3_4, ENC4_A, ENC4_B);
+ 
+  // // Set encoder pins as inputs
+  // pinMode(ENC1_A, INPUT_PULLUP); pinMode(ENC1_B, INPUT_PULLUP);
+  // pinMode(ENC2_A, INPUT_PULLUP); pinMode(ENC2_B, INPUT_PULLUP);
+  // pinMode(ENC3_A, INPUT_PULLUP); pinMode(ENC3_B, INPUT_PULLUP);
+  // pinMode(ENC4_A, INPUT_PULLUP); pinMode(ENC4_B, INPUT_PULLUP);
   
-  // Set encoder pins as inputs
-  pinMode(ENC1_A, INPUT_PULLUP); pinMode(ENC1_B, INPUT_PULLUP);
-  pinMode(ENC2_A, INPUT_PULLUP); pinMode(ENC2_B, INPUT_PULLUP);
-  pinMode(ENC3_A, INPUT_PULLUP); pinMode(ENC3_B, INPUT_PULLUP);
-  pinMode(ENC4_A, INPUT_PULLUP); pinMode(ENC4_B, INPUT_PULLUP);
-  
-  // Attach interrupts for encoder readings
-  attachInterrupt(digitalPinToInterrupt(ENC1_A), enc1_ISR, RISING);
-  attachInterrupt(digitalPinToInterrupt(ENC2_A), enc2_ISR, RISING);
-  attachInterrupt(digitalPinToInterrupt(ENC3_A), enc3_ISR, RISING);
-  attachInterrupt(digitalPinToInterrupt(ENC4_A), enc4_ISR, RISING);
-  
-  // Stop motors initially for safety
-  stopMotors();
+  // // Attach interrupts for encoder readings
+  // attachInterrupt(digitalPinToInterrupt(ENC1_A), enc1_ISR, RISING);
+  // attachInterrupt(digitalPinToInterrupt(ENC2_A), enc2_ISR, RISING);
+  // attachInterrupt(digitalPinToInterrupt(ENC3_A), enc3_ISR, RISING);
+  // attachInterrupt(digitalPinToInterrupt(ENC4_A), enc4_ISR, RISING);
   
   // Setup micro-ROS
   set_microros_serial_transports(Serial);
@@ -250,29 +247,7 @@ void setup() {
 void loop() {
   // Handle ROS communication
   RCSOFTCHECK(rclc_executor_spin_some(&executor, RCL_MS_TO_NS(10)));
-  
-  // Check for any direct serial commands (for debugging)
-  // if (Serial.available()){
-  //   String speeds = Serial.readString();
-  //   if (speeds.length() >= 16) {
-  //     m1s = speeds.substring(0,4).toInt();
-  //     m2s = speeds.substring(4,8).toInt();
-  //     m3s = speeds.substring(8,12).toInt();
-  //     m4s = speeds.substring(12,16).toInt();
-      
-  //     // Apply speeds directly from serial
-  //     m1.set_power(m1s);
-  //     m2.set_power(m2s);
-  //     m3.set_power(m3s);
-  //     m4.set_power(m4s);
-      
-  //     // Output RPM values for debugging
-  //     Serial.print(calculateRPM(pulseCount1)); Serial.print("|");
-  //     Serial.print(calculateRPM(pulseCount2)); Serial.print("|");
-  //     Serial.print(calculateRPM(pulseCount3)); Serial.print("|");
-  //     Serial.println(calculateRPM(pulseCount4));
-  //   }
-  // }
+
   
   delay(10); // Short delay to prevent CPU hogging
 }

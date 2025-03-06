@@ -19,7 +19,7 @@ class mecanum
 
     public:
         void attach(int EN_Pin, int IN1_Pin, int IN2_Pin, int ENC1_Pin, int ENC2_Pin);
-        float get_speed_enc();  // Modified to use internal pulsecount
+        int get_speed_enc();  // Modified to use internal pulsecount
         float get_speed_imu();
         void set_speed(int speed);
         void set_power(int power);
