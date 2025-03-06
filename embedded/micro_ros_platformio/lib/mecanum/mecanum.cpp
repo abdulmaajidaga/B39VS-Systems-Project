@@ -78,7 +78,7 @@ void mecanum::enc_ISR3() {
 // Example speed calculation using encoder pulses
 int32_t mecanum::get_speed_enc() {
     int pulsesPerRevolution = 150;  // Adjust based on your motor specs
-    float speed_encoder = (pulsecount / (float)pulsesPerRevolution);  // Convert to RPM
+    int32_t speed_encoder = (pulsecount / (int32_t)pulsesPerRevolution);  // Convert to RPM
     pulsecount = 0;  // Reset pulse count for the next cycle
     return int32_t(speed_encoder);
 }

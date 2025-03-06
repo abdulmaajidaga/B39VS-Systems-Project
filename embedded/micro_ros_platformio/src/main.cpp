@@ -124,7 +124,7 @@ void timer_callback(rcl_timer_t * timer, int64_t last_call_time) {
     
     // Update mecanum message with current motor speeds and encoder readings
     mecanum_msg.front_left = m1.get_speed_enc();
-    mecanum_msg.front_right = m2.get_speed_enc();;
+    mecanum_msg.front_right = m2.get_speed_enc();
     mecanum_msg.rear_left = m3.get_speed_enc();
     mecanum_msg.rear_right = m4.get_speed_enc();
     
