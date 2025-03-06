@@ -45,8 +45,7 @@ volatile int pulseCount1 = 0, pulseCount2 = 0, pulseCount3 = 0, pulseCount4 = 0;
 float calculateRPM(volatile int &pulseCount) {
   int pulsesPerRevolution = 150; // Adjust based on your motor specs
   float rpm = (pulseCount / (float)pulsesPerRevolution); // Convert to RPM
-  pulseCount = 0; // Reset pulse count for next cycle
-    
+  pulseCount = 0; // Reset pulse count for next cycle   
   return rpm;
 
 }
