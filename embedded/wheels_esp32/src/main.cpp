@@ -1,10 +1,10 @@
 #include <Arduino.h>
 #include "mechnum.h"
 
-mechnum m1;
-mechnum m2;
-mechnum m3;
-mechnum m4;
+mecanum m1;
+mecanum m2;
+mecanum m3;
+mecanum m4;
 int m1s = 0, m2s = 0, m3s = 0, m4s = 0;
 
 #define ENA1 17

@@ -4,105 +4,81 @@
 #include <I2Cdev.h>
 #include <MPU6050.h>
 
-// Global array of pointers to mechnum instances for ISR access
-mechnum* mechnumPtr[4] = { nullptr, nullptr, nullptr, nullptr };
-
+// Create a global PWM object (ensure the pwmWrite library is compatible with your ESP32 setup)
 Pwm pwm = Pwm();
-int instanceCounter = 0;
 
-// Attach function to set up pins and interrupt
-void mechnum::attach(int EN_Pin, int IN1_Pin, int IN2_Pin, int ENC1_Pin, int ENC2_Pin) {
-    EN = EN_Pin;
-    IN1 = IN1_Pin;
-    IN2 = IN2_Pin;
-    EN1 = ENC1_Pin;
-    EN2 = ENC2_Pin;
-    pulsecount = 0;  // Initialize pulse count
-
-    pwm.attach(EN);
-    pinMode(IN1, OUTPUT);
-    pinMode(IN2, OUTPUT);
-    pinMode(EN1, INPUT_PULLUP);
-    pinMode(EN2, INPUT_PULLUP);
-
-    // Store instance pointer and attach ISRs based on instance count
-    if (instanceCounter < 4) {
-        mechnumPtr[instanceCounter] = this;
-        switch (instanceCounter) {
-            case 0:
-                attachInterrupt(digitalPinToInterrupt(EN1), enc_ISR0, RISING);
-                break;
-            case 1:
-                attachInterrupt(digitalPinToInterrupt(EN1), enc_ISR1, RISING);
-                break;
-            case 2:
-                attachInterrupt(digitalPinToInterrupt(EN1), enc_ISR2, RISING);
-                break;
-            case 3:
-                attachInterrupt(digitalPinToInterrupt(EN1), enc_ISR3, RISING);
-                break;
-        }
-        instanceCounter++;
-    }
+void mecanum::attach(int EN_Pin, int IN1_Pin, int IN2_Pin, int ENC1_Pin, int ENC2_Pin) {
+  // Save pin assignments
+  EN = EN_Pin;
+  IN1 = IN1_Pin;
+  IN2 = IN2_Pin;
+  EN1 = ENC1_Pin;
+  EN2 = ENC2_Pin;
+  
+  // Initialize pulse counter
+  pulsecount = 0;
+  
+  // Initialize motor control pins
+  pwm.attach(EN);
+  pinMode(IN1, OUTPUT);
+  pinMode(IN2, OUTPUT);
+  
+  // Set encoder pins as inputs (using pullups)
+  pinMode(ENC1_Pin, INPUT_PULLUP);
+  pinMode(ENC2_Pin, INPUT_PULLUP);
+  
+  // Register the common ISR for this motor.
+  // attachInterruptArg passes 'this' as an argument so the ISR knows which instance to update.
+  attachInterruptArg(digitalPinToInterrupt(ENC1_Pin), mecanum::commonISR, this, RISING);
 }
 
-// Separate ISRs for each motor
-void mechnum::enc_ISR0() {
-    if (digitalRead(mechnumPtr[0]->EN2) == HIGH)
-        mechnumPtr[0]->pulsecount++;
-    else
-        mechnumPtr[0]->pulsecount--;
+void IRAM_ATTR mecanum::commonISR(void* arg) {
+  // Cast the argument back to a mecanum instance
+  mecanum* instance = (mecanum*) arg;
+  // Use the second encoder pin (EN2) to determine direction
+  if (digitalRead(instance->EN2) == HIGH) {
+    instance->pulsecount++;
+  } else {
+    instance->pulsecount--;
+  }
 }
 
-void mechnum::enc_ISR1() {
-    if (digitalRead(mechnumPtr[1]->EN2) == HIGH)
-        mechnumPtr[1]->pulsecount++;
-    else
-        mechnumPtr[1]->pulsecount--;
+float mecanum::get_speed_enc() {
+  // Atomically read and reset pulsecount
+  noInterrupts();
+  int pulses = pulsecount;
+  pulsecount = 0;
+  interrupts();
+  
+  // Calculate speed in RPM (adjust pulsesPerRevolution as needed)
+  int pulsesPerRevolution = 150;
+  float rpm = (pulses / (float)pulsesPerRevolution) * 60;  // pulses per second * 60 = RPM
+  return rpm;
 }
 
-void mechnum::enc_ISR2() {
-    if (digitalRead(mechnumPtr[2]->EN2) == HIGH)
-        mechnumPtr[2]->pulsecount++;
-    else
-        mechnumPtr[2]->pulsecount--;
+float mecanum::get_speed_imu() {
+  // Placeholder: return IMU-based speed if implemented
+  return speed_imu;
 }
 
-void mechnum::enc_ISR3() {
-    if (digitalRead(mechnumPtr[3]->EN2) == HIGH)
-        mechnumPtr[3]->pulsecount++;
-    else
-        mechnumPtr[3]->pulsecount--;
+void mecanum::set_power(int power) {
+  // Constrain power to valid range
+  power = constrain(power, -255, 255);
+  if (power >= 0) {
+    digitalWrite(IN1, HIGH);
+    digitalWrite(IN2, LOW);
+    pwm.write(EN, power);
+  } else {
+    digitalWrite(IN1, LOW);
+    digitalWrite(IN2, HIGH);
+    pwm.write(EN, -power);
+  }
 }
 
-// Example speed calculation using encoder pulses
-int mechnum::get_speed_enc() {
-    int pulsesPerRevolution = 150;  // Adjust based on your motor specs
-    float speed_encoder = (pulsecount / (float)pulsesPerRevolution);  // Convert to RPM
-    pulsecount = 0;  // Reset pulse count for the next cycle
-    return speed_encoder;
+void mecanum::set_speed(int speed) {
+  // Placeholder for PID control to set motor speed
 }
 
-float mechnum::get_speed_imu() {
-    return speed_imu;  // Placeholder
-}
-
-void mechnum::set_power(int powerr) {
-    if (powerr >= 0) {
-        digitalWrite(IN1, HIGH);
-        digitalWrite(IN2, LOW);
-        pwm.write(EN, powerr);
-    } else {
-        digitalWrite(IN1, LOW);
-        digitalWrite(IN2, HIGH);
-        pwm.write(EN, -powerr);
-    }
-}
-
-void mechnum::set_speed(int speed) {
-    // To be implemented
-}
-
-void mechnum::maintain_speed() {
-    // To be implemented
+void mecanum::maintain_speed() {
+  // Placeholder for speed maintenance logic
 }
