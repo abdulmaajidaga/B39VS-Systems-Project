@@ -46,7 +46,7 @@ class WheelOdom(Node):
         # Create a publisher for wheel odometry
         self.wheelcmd_pub = self.create_publisher(
             Odometry, #message type
-            "/wheel_odom",  # Topic name
+            "/hazmat/wheel_odom",  # Topic name
             10  # Queue size
         )
 

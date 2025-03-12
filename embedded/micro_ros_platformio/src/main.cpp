@@ -25,7 +25,7 @@ int m1s = 0, m2s = 0, m3s = 0, m4s = 0;
 #define IN4_2 10
 
 // Motor Driver (Bank B) - ESP32 Pin Assignments
-#define ENA2 4
+#define ENA2 2
 #define IN1_3 6
 #define IN2_3 5
 #define ENB2 16
@@ -33,14 +33,14 @@ int m1s = 0, m2s = 0, m3s = 0, m4s = 0;
 #define IN4_4 15
 
 // Encoder Connections (ESP32 Pins)
-#define ENC1_A 40
-#define ENC1_B 39
-#define ENC2_A 41
-#define ENC2_B 42
-#define ENC3_A 38
-#define ENC3_B 37
-#define ENC4_A 35
-#define ENC4_B 36
+#define ENC1_A 21
+#define ENC1_B 20
+#define ENC2_A 45
+#define ENC2_B 0
+#define ENC3_A 35
+#define ENC3_B 38
+#define ENC4_A 47
+#define ENC4_B 48
 
 // ROS2 objects
 rcl_timer_t timer;

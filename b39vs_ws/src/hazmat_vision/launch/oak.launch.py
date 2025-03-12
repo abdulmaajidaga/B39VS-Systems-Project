@@ -5,13 +5,10 @@ from launch import LaunchDescription
 from launch.actions import (
     DeclareLaunchArgument,
     IncludeLaunchDescription,
-    OpaqueFunction,
 )
-from launch.conditions import IfCondition
-from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import ComposableNodeContainer, LoadComposableNodes, Node
 from launch_ros.descriptions import ComposableNode
+from launch.launch_description_sources import PythonLaunchDescriptionSource
 
 
 def launch_setup(context, *args, **kwargs):
@@ -69,6 +66,20 @@ def launch_setup(context, *args, **kwargs):
 
 
 def generate_launch_description():
-    return LaunchDescription(
-        [OpaqueFunction(function=launch_setup)]
-    )
+    return LaunchDescription([
+        Node(
+            package="hazmat_vision",
+            executable="odom",
+            output='screen',
+        ),
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(
+                os.path.join(get_package_share_directory("depthai_ros_driver"), "launch", "camera.launch.py")
+            ),
+            launch_arguments={
+                "pointcloud.enable": "true",
+                "params_file": "", # TODO!
+                "parent_frame": "camera_link"
+            }
+        )
+    ])
