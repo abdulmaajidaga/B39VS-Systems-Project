@@ -63,6 +63,22 @@
     </collision>
   </link>
 
+  <link name="scan_link">
+    <visual>
+      <origin xyz="0.12 0 0.6" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.025"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+    <collision>
+      <origin xyz="0.12 0 0.6" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.025"/>
+      </geometry>
+    </collision>
+  </link>
+
   <!-- Joint: Base (Fixed) -->
   <joint name="base_joint" type="fixed">
     <parent link="odom"/>
@@ -86,7 +102,7 @@
    <!-- Joint: Camera (Fixed) -->
   <joint name="scan_joint" type="fixed">
     <parent link="central_frame"/>
-    <child link="imu_link"/>
+    <child link="scan_link"/>
     <origin xyz="0.12 0 0.6" rpy="0 0 0"/>
   </joint>
 </robot>
