@@ -59,7 +59,12 @@ int currentAngle3 = 90;  // Store the last angle for Servo 3
 #define SERVO3_CW 470       
 #define SERVO3_CCW 210      
 #define SERVO4_MIN 120   // Servo 4 range (0-270°)
-#define SERVO4_MAX 470  
+#define SERVO4_MAX 470 
+
+#define ANALOG1_PIN 3
+#define ANALOG2_PIN 12
+#define ANALOG3_PIN 13
+#define ANALOG4_PIN 14
 
 // ROS2 objects
 rcl_timer_t timer;
@@ -112,7 +117,7 @@ void timer_callback(rcl_timer_t *timer, int64_t last_call_time) {
     joint_state_msg.position[3] = map(analogValue4, 250, 2203, 0, 195);
 
     // Publish the joint state message
-    RCSOFTCHECK(rcl_publish(&joint_publisher, &joint_state_msg, NULL););
+    RCSOFTCHECK(rcl_publish(&joint_publisher, &joint_state_msg, NULL));
   }
 }
 
@@ -191,7 +196,11 @@ void setup() {
   mecanum_msg.rear_left = 0;
   mecanum_msg.rear_right = 0;
 
-
+  double joint_positions[4] = {0, 0, 0, 0};
+  joint_state_msg.position.data = joint_positions;
+  joint_state_msg.position.size = 4;
+  joint_state_msg.position.capacity = 4;
+  
 
   RCCHECK(rclc_executor_add_subscription(&executor, &mecanum_subscriber, &mecanum_recv_msg, &mecanum_subscription_callback, ON_NEW_DATA));
   RCCHECK(rclc_executor_add_subscription(&executor, &joint_subscriber, &joint_cmd_msg, &joint_cmd_callback, ON_NEW_DATA));
