@@ -47,6 +47,8 @@ int m1s = 0, m2s = 0, m3s = 0, m4s = 0;
 
 Adafruit_PWMServoDriver PWM = Adafruit_PWMServoDriver(0x40);
 int currentAngle3 = 90;  // Store the last angle for Servo 3
+// Declare the moveToAngle3 function to fix the scope error
+void moveToAngle3(int targetAngle);
 
 #define I2C_SDA 20 
 #define I2C_SCL 19
@@ -111,10 +113,10 @@ void timer_callback(rcl_timer_t *timer, int64_t last_call_time) {
     int analogValue3 = analogRead(ANALOG3_PIN);
     int analogValue4 = analogRead(ANALOG4_PIN);
 
-    joint_state_msg.position[0] = map(analogValue1, 250, 2203, 0, 195);
-    joint_state_msg.position[1] = map(analogValue2, 250, 2203, 0, 195);
-    joint_state_msg.position[2] = map(analogValue3, 343, 3006, 0, 180);
-    joint_state_msg.position[3] = map(analogValue4, 250, 2203, 0, 195);
+    joint_state_msg.position.data[0] = map(analogValue1, 250, 2203, 0, 195);
+    joint_state_msg.position.data[1] = map(analogValue2, 250, 2203, 0, 195);
+    joint_state_msg.position.data[2] = map(analogValue3, 343, 3006, 0, 180);
+    joint_state_msg.position.data[3] = map(analogValue4, 250, 2203, 0, 195);
 
     // Publish the joint state message
     RCSOFTCHECK(rcl_publish(&joint_publisher, &joint_state_msg, NULL));
@@ -139,10 +141,11 @@ void mecanum_subscription_callback(const void *msgin) {
 void joint_cmd_callback(const void *msgin) {
     const sensor_msgs__msg__JointState *msg = (const sensor_msgs__msg__JointState *)msgin;
 
-    int angle1 = msg->position[0];
-    int angle2 = msg->position[1];
-    int angle3 = msg->position[2];
-    int angle4 = msg->position[3];
+    int angle1 = (int)msg->position.data[0];
+    int angle2 = (int)msg->position.data[1];
+    int angle3 = (int)msg->position.data[2];
+    int angle4 = (int)msg->position.data[3];
+
 
     if (angle1 >= 15 && angle1 <= 152 && angle2 >= 0 && angle2 <= 270 &&
         angle3 >= 0 && angle3 <= 360 && angle4 >= 0 && angle4 <= 196) {
