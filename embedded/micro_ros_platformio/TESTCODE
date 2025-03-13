@@ -151,14 +151,7 @@ void setup() {
   mecanum_msg.rear_left = 0;
   mecanum_msg.rear_right = 0;
 
-  rosidl_runtime_c__String joint_names[4];
-  for (int i = 0; i < 4; i++) {
-    rosidl_runtime_c__String__assign(&joint_names[i], "joint_name");
-  }
-  joint_state_msg.name.data = joint_names;
-  joint_state_msg.name.size = 4;
-  joint_state_msg.position.data = joint_positions;
-  joint_state_msg.position.size = 4;
+  joint_positions;
 
   allocator = rcl_get_default_allocator();
   RCCHECK(rclc_support_init(&support, 0, NULL, &allocator));
