@@ -83,4 +83,10 @@
     <child link="imu_link"/>
     <origin xyz="0.12 0 0.6" rpy="0 0 0"/>
   </joint>
+   <!-- Joint: Camera (Fixed) -->
+  <joint name="scan_joint" type="fixed">
+    <parent link="central_frame"/>
+    <child link="imu_link"/>
+    <origin xyz="0.12 0 0.6" rpy="0 0 0"/>
+  </joint>
 </robot>
