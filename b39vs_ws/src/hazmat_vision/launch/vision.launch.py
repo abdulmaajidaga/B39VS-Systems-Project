@@ -38,7 +38,11 @@ def generate_launch_description():
             name='cartographer_node',
             # output='screen',
             arguments=['-configuration_directory', config_dir,
-                       '-configuration_basename', "carto_oak.lua"]
+                       '-configuration_basename', "carto_oak.lua"],
+            remappings=[
+                ("points2", "oak/points"),
+                ("imu", "oak/imu/data")
+            ]
         ),
        
         # Launching the rplidar A3
@@ -70,7 +74,7 @@ def generate_launch_description():
                 [os.path.join(get_package_share_directory("depthai_ros_driver"), 'launch'), "/camera.launch.py"], 
             ),
             launch_arguments={
-                "pointcloud.enable": "false",
+                "pointcloud.enable": "true",
                 "params_file": os.path.join(config_dir, "params.yaml"),
                 "parent_frame": "camera_link"
             }.items()

@@ -9,7 +9,7 @@
   <link name="odom" />
 
   <!-- Central Frame (Base + Odometry) -->
-  <link name="central_frame">
+  <link name="base_link">
     <visual>
       <origin xyz="0 0 0.06" rpy="0 0 0"/>
       <geometry>
@@ -47,7 +47,7 @@
     </collision>
   </link>
    <!-- Camera Frame -->
-  <link name="imu_link">
+  <!-- <link name="imu_link">
     <visual>
       <origin xyz="0.12 0 0.6" rpy="0 0 0"/>
       <geometry>
@@ -61,7 +61,7 @@
         <sphere radius="0.025"/>
       </geometry>
     </collision>
-  </link>
+  </link> -->
 
   <link name="scan_link">
     <visual>
@@ -82,26 +82,26 @@
   <!-- Joint: Base (Fixed) -->
   <joint name="base_joint" type="fixed">
     <parent link="odom"/>
-    <child link="central_frame"/>
+    <child link="base_link"/>
     <origin xyz="0 0 0" rpy="0 0 0"/>
   </joint>
   
   <!-- Joint: Camera (Fixed) -->
   <joint name="camera_joint" type="fixed">
-    <parent link="central_frame"/>
+    <parent link="base_link"/>
     <child link="camera_link"/>
     <origin xyz="0.12 0 0.6" rpy="0 0 0"/>
   </joint>
   
    <!-- Joint: Camera (Fixed) -->
-  <joint name="imu_joint" type="fixed">
-    <parent link="central_frame"/>
+  <!-- <joint name="imu_joint" type="fixed">
+    <parent link="base_link"/>
     <child link="imu_link"/>
     <origin xyz="0.12 0 0.6" rpy="0 0 0"/>
-  </joint>
+  </joint> -->
    <!-- Joint: Camera (Fixed) -->
   <joint name="scan_joint" type="fixed">
-    <parent link="central_frame"/>
+    <parent link="base_link"/>
     <child link="scan_link"/>
     <origin xyz="0.12 0 0.6" rpy="0 0 0"/>
   </joint>
