@@ -6,84 +6,55 @@
     <color rgba="0.0 0.0 0.0 1.0"/>
   </material>
 
-  <link name="odom" />
-
   <!-- Central Frame (Base + Odometry) -->
   <link name="base_link">
     <visual>
-      <origin xyz="0 0 0.06" rpy="0 0 0"/>
       <geometry>
         <box size="0.3 0.3 0.1"/>
       </geometry>
       <material name="black"/>
     </visual>
-    <collision>
-      <origin xyz="0 0 0.06" rpy="0 0 0"/>
-      <geometry>
-        <box size="0.3 0.3 0.1"/>
-      </geometry>
-    </collision>
-    <inertial>
-      <mass value="2.0"/>
-      <origin xyz="0 0 0"/>
-      <inertia ixx="0.01" ixy="0" ixz="0" iyy="0.01" iyz="0" izz="0.01"/>
-    </inertial>
   </link>
   
   <!-- Camera Frame -->
   <link name="camera_link">
     <visual>
-      <origin xyz="0.12 0 0.6" rpy="0 0 0"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
         <sphere radius="0.025"/>
       </geometry>
       <material name="black"/>
     </visual>
-    <collision>
-      <origin xyz="0.12 0 0.6" rpy="0 0 0"/>
-      <geometry>
-        <sphere radius="0.025"/>
-      </geometry>
-    </collision>
   </link>
-   <!-- Camera Frame -->
-  <!-- <link name="imu_link">
+  
+  <link name="imu_link">
     <visual>
-      <origin xyz="0.12 0 0.6" rpy="0 0 0"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
         <sphere radius="0.025"/>
       </geometry>
       <material name="black"/>
     </visual>
-    <collision>
-      <origin xyz="0.12 0 0.6" rpy="0 0 0"/>
-      <geometry>
-        <sphere radius="0.025"/>
-      </geometry>
-    </collision>
-  </link> -->
+  </link>
 
   <link name="scan_link">
     <visual>
-      <origin xyz="0.12 0 0.6" rpy="0 0 0"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
         <sphere radius="0.025"/>
       </geometry>
       <material name="black"/>
     </visual>
-    <collision>
-      <origin xyz="0.12 0 0.6" rpy="0 0 0"/>
-      <geometry>
-        <sphere radius="0.025"/>
-      </geometry>
-    </collision>
   </link>
+
+  <!-- Base footprint -->
+  <link name="base_footprint" />
 
   <!-- Joint: Base (Fixed) -->
   <joint name="base_joint" type="fixed">
-    <parent link="odom"/>
-    <child link="base_link"/>
-    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <parent link="base_link"/>
+    <child link="base_footprint"/>
+    <origin xyz="0 0 -0.035" rpy="0 0 0"/>
   </joint>
   
   <!-- Joint: Camera (Fixed) -->
@@ -92,17 +63,18 @@
     <child link="camera_link"/>
     <origin xyz="0.12 0 0.6" rpy="0 0 0"/>
   </joint>
-  
-   <!-- Joint: Camera (Fixed) -->
-  <!-- <joint name="imu_joint" type="fixed">
+
+  <!-- Joint: IMU (Fixed) -->
+  <joint name="imu_joint" type="fixed">
     <parent link="base_link"/>
     <child link="imu_link"/>
     <origin xyz="0.12 0 0.6" rpy="0 0 0"/>
-  </joint> -->
-   <!-- Joint: Camera (Fixed) -->
+  </joint>
+  
+  <!-- Joint: Lidar (Fixed) -->
   <joint name="scan_joint" type="fixed">
     <parent link="base_link"/>
     <child link="scan_link"/>
-    <origin xyz="0.12 0 0.6" rpy="0 0 0"/>
+    <origin xyz="0.08 0 0.6" rpy="0 0 0"/>
   </joint>
 </robot>
