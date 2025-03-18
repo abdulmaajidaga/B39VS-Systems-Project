@@ -3,7 +3,7 @@
 import rclpy
 from rclpy.node import Node
 import depthai as dai
-from sensor_msgs.msg import Image, Imu
+from sensor_msgs.msg import Image, Imu, CameraInfo
 from cv_bridge import CvBridge
 import numpy as np
 
@@ -58,6 +58,7 @@ class OakCamNode(Node):
         self.rgb_pub = self.create_publisher(Image, '/oak/cam/rgb', 10)
         self.depth_pub = self.create_publisher(Image, '/oak/cam/depth', 10)
         self.imu_pub = self.create_publisher(Imu, '/oak/imu/data', 10)
+        self.cam_info_pub = self.create_publisher(CameraInfo, '/oak/cam/info', 10)
         
         # Create DepthAI pipeline
         self.pipeline = dai.Pipeline()
@@ -172,6 +173,50 @@ class OakCamNode(Node):
         
         self.get_logger().info('OAK-CAM Node with IMU (Accel/Gyro/Orientation) initialized on-device.')
 
+        self.cam_info = CameraInfo()
+        self.cam_info.distortion_model = "rational_polynomial"
+        self.cam_info.width = 1280
+        self.cam_info.height = 720
+        self.cam_info.header.frame_id = "camera_link"
+        self.cam_info.d = [12.394248962402344, 
+                        8.096855163574219, 
+                        6.784557626815513e-05, 
+                        -0.0006477058632299304, 
+                        -2.903660297393799, 
+                        12.360657691955566, 
+                        11.882957458496094, 
+                        -3.034278154373169]
+        self.cam_info.k = [763.7289428710938,
+                        0.0,
+                        645.0989990234375,
+                        0.0,
+                        763.1572265625,
+                        342.0258483886719,
+                        0.0,
+                        0.0,
+                        1.0]
+        self.cam_info.r = [1.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0]
+        self.cam_info.p = [763.7289428710938,
+                        0.0,
+                        645.0989990234375,
+                        0.0,
+                        0.0,
+                        763.1572265625,
+                        342.0258483886719,
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0,
+                        0.0]
+
     def publish_imu_data(self):
         """
         Retrieve IMU packets from the queue, parse them, and publish 
@@ -255,6 +300,9 @@ class OakCamNode(Node):
                 depth_msg.header.stamp = self.get_clock().now().to_msg()
                 depth_msg.header.frame_id = "camera_link"
                 self.depth_pub.publish(depth_msg)
+
+            # Publish camera intrinsic parameters
+            self.cam_info_pub.publish(self.cam_info)
             
         except Exception as e:
             self.get_logger().error(f"Error publishing frames: {e}")

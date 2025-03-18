@@ -11,8 +11,6 @@ from launch_ros.descriptions import ComposableNode
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 
 def generate_launch_description():
-    print(os.path.join(get_package_share_directory("depthai_ros_driver"), 'launch'))
-    config_dir = os.path.join(get_package_share_directory('hazmat_vision'), 'config')
 
     return LaunchDescription([
         # Node for converting Twist commands to individual wheel velocities
@@ -44,10 +42,6 @@ def generate_launch_description():
             PythonLaunchDescriptionSource(
                 [os.path.join(get_package_share_directory("hazmat_vision"), 'launch'), "/vision.launch.py"], 
             ),
-            # For later use
-            # launch_arguments={
-            #     "pointcloud.enable": "false",
-            # }.items()
         ),
 
     ])

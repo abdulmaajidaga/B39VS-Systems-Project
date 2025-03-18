@@ -40,11 +40,11 @@ class ArucoNode(Node):
         # Assume that camera parameters will remain the same...
         self.destroy_subscription(self.info_sub)
         
-    def camera_cb(self, msg):
+    def camera_cb(self, msg: Image):
         cvImg = self.cvBridge.imgmsg_to_cv2(msg, "mono8")
 
         pose_array = PoseArray()
-        pose_array.header.frame_id = "oak-d-base-frame"
+        pose_array.header.frame_id = msg.header.frame_id
 
         corners, marker_ids, rejected = self.aruco_detector.detectMarkers(cvImg)
 
@@ -55,7 +55,6 @@ class ArucoNode(Node):
             )
 
             for i, marker_id in enumerate(marker_ids):
-
                 pose = Pose()
                 pose.position.x = tvecs[i][0][0]
                 pose.position.y = tvecs[i][0][1]
