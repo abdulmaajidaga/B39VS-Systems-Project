@@ -25,9 +25,9 @@ int m1s = 0, m2s = 0, m3s = 0, m4s = 0;
 #define IN4_2 10
 
 // Motor Driver (Bank B) - ESP32 Pin Assignments
-#define ENA2 2
-#define IN1_3 6
-#define IN2_3 5
+#define ENA2 4
+#define IN1_3 5
+#define IN2_3 6
 #define ENB2 16
 #define IN3_4 7
 #define IN4_4 15
