@@ -21,14 +21,14 @@ def generate_launch_description():
         ),
 
         # Node for micro ROS communication (with ESP)
-        Node(
-            package='micro_ros_agent',
-            executable='micro_ros_agent',
-            name='micro_ros_agent',
-            output='screen',
-            arguments=['serial',
-                       '--dev', '/dev/ttyACM0']
-        ),
+        # Node(
+        #     package='micro_ros_agent',
+        #     executable='micro_ros_agent',
+        #     name='micro_ros_agent',
+        #     output='screen',
+        #     arguments=['serial',
+        #                '--dev', '/dev/ttyACM0']
+        # ),
 
         # Publishes TF tree from URDF file
         IncludeLaunchDescription(

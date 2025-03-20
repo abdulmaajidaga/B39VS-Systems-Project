@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using RosMessageTypes.Hazmat;
+using RosMessageTypes.Geometry;
 using Unity.Robotics.ROSTCPConnector;
 using UnityEngine;
 
@@ -17,30 +17,40 @@ public class MecanumController : MonoBehaviour
     float radiusValue = 38.5f / 4f;
     float distanceSum = 1 / (0.5f + 0.5f);
 
-    ArticulationBody body;
+    // ArticulationBody body;
+    Rigidbody body;
 
     ROSConnection ros;
 
-    Vector3 targetVelocity = new();
+    // Vector3 targetVelocity = new();
     float targetOmega = 0;
+    float linearX = 0;
+    float linearY = 0;
 
     void Start()
     {
-        body = GetComponent<ArticulationBody>();
+        // body = GetComponent<ArticulationBody>();
+        body = GetComponent<Rigidbody>();
         
         ros = ROSConnection.GetOrCreateInstance();
-        ros.Subscribe<MecanumCmdMsg>("/wheel_cmd", callback);
+        // ros.Subscribe<MecanumCmdMsg>("/hazmat/wheel_cmd", callback);
+        ros.Subscribe<TwistMsg>("/hazmat/cmd_vel", callback);
     }
 
     void FixedUpdate()
     {
-        body.velocity = targetVelocity;
-        body.angularVelocity = targetOmega * Vector3.up;
+        Debug.Log(linearX);
+        body.velocity = speed * new Vector3(-linearY, 0, linearX);
+        body.angularVelocity = speed * targetOmega * Vector3.up;
     }
 
     // Update is called once per frame
-    void callback(MecanumCmdMsg msg)
+    void callback(TwistMsg msg)
     {
+        Debug.Log("command recieved");
+        targetOmega = (float) msg.angular.z;
+        linearX = (float) msg.linear.x;
+        linearY = (float) msg.linear.y;
         // wheels[0].GetChild(0).GetComponent<ArticulationBody>().SetDriveTargetVelocity(ArticulationDriveAxis.X, wheelCalibrations[0] * speed * msg.front_right);
         // wheels[1].GetChild(0).GetComponent<ArticulationBody>().SetDriveTargetVelocity(ArticulationDriveAxis.X, wheelCalibrations[1] * speed * msg.front_left);
         // wheels[2].GetChild(0).GetComponent<ArticulationBody>().SetDriveTargetVelocity(ArticulationDriveAxis.X, wheelCalibrations[2] * speed * msg.rear_right);
@@ -50,9 +60,9 @@ public class MecanumController : MonoBehaviour
 
         
         // Unity coordinate systems uses Z as forward and X as right
-        targetVelocity.z = speed * radiusValue * (msg.front_left + msg.front_right + msg.rear_left + msg.rear_right);
-        targetVelocity.x = speed * radiusValue * (-msg.front_left + msg.front_right + msg.rear_left - msg.rear_right);
-        targetOmega = radiusValue * (-msg.front_left + msg.front_right - msg.rear_left + msg.rear_right) * distanceSum;
-        Debug.Log(targetVelocity);
+        // targetVelocity.z = speed * radiusValue * (msg.front_left + msg.front_right + msg.rear_left + msg.rear_right);
+        // targetVelocity.x = speed * radiusValue * (-msg.front_left + msg.front_right + msg.rear_left - msg.rear_right);
+        // targetOmega = radiusValue * (-msg.front_left + msg.front_right - msg.rear_left + msg.rear_right) * distanceSum;
+        // Debug.Log(targetVelocity);
     }
 }
