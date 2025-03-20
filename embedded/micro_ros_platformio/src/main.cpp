@@ -26,28 +26,13 @@ int m1s = 0, m2s = 0, m3s = 0, m4s = 0;
 
 // Motor Driver (Bank B) - ESP32 Pin Assignments
 #define ENA2 4
-<<<<<<< HEAD
-#define IN1_3 5
-#define IN2_3 6
-=======
 #define IN1_3 6
 #define IN2_3 5
->>>>>>> 55f3334 (pushed working code)
 #define ENB2 16
 #define IN3_4 7
 #define IN4_4 15
 
 // Encoder Connections (ESP32 Pins)
-<<<<<<< HEAD
-#define ENC1_A 21
-#define ENC1_B 20
-#define ENC2_A 45
-#define ENC2_B 0
-#define ENC3_A 35
-#define ENC3_B 38
-#define ENC4_A 47
-#define ENC4_B 48
-=======
 #define ENC1_A 40
 #define ENC1_B 39
 #define ENC2_A 41
@@ -56,7 +41,6 @@ int m1s = 0, m2s = 0, m3s = 0, m4s = 0;
 #define ENC3_B 37
 #define ENC4_A 35
 #define ENC4_B 36
->>>>>>> 55f3334 (pushed working code)
 
 // ROS2 objects
 rcl_timer_t timer;
@@ -120,23 +104,6 @@ void setup() {
   delay(2000);
 
   allocator = rcl_get_default_allocator();
-<<<<<<< HEAD
-  // RCCHECK(rclc_support_init(&support, 0, NULL, &allocator));
-  // RCCHECK(rclc_node_init_default(&node, "mecanum_node", "", &support));
-
-  // RCCHECK(rclc_publisher_init_default(
-  //   &mecanum_publisher,
-  //   &node,
-  //   ROSIDL_GET_MSG_TYPE_SUPPORT(hazmat_msgs, msg, MecanumCmd),
-  //   "hazmat/encoder_vel"));
-
-  const unsigned int timer_timeout = 100;
-  // RCCHECK(rclc_timer_init_default(
-  //   &timer,
-  //   &support,
-  //   RCL_MS_TO_NS(timer_timeout),
-  //   timer_callback));
-=======
   RCCHECK(rclc_support_init(&support, 0, NULL, &allocator));
   RCCHECK(rclc_node_init_default(&node, "mecanum_node", "", &support));
 
@@ -152,25 +119,15 @@ void setup() {
     &support,
     RCL_MS_TO_NS(timer_timeout),
     timer_callback));
->>>>>>> 55f3334 (pushed working code)
 
-  // RCCHECK(rclc_executor_init(&executor, &support.context, 2, &allocator));
-  // RCCHECK(rclc_executor_add_timer(&executor, &timer));
+  RCCHECK(rclc_executor_init(&executor, &support.context, 2, &allocator));
+  RCCHECK(rclc_executor_add_timer(&executor, &timer));
 
   mecanum_msg.front_left = 0;
   mecanum_msg.front_right = 0;
   mecanum_msg.rear_left = 0;
   mecanum_msg.rear_right = 0;
 
-<<<<<<< HEAD
-  // RCCHECK(rclc_subscription_init_default(
-  //   &mecanum_subscriber,
-  //   &node,
-  //   ROSIDL_GET_MSG_TYPE_SUPPORT(hazmat_msgs, msg, MecanumCmd),
-  //   "/hazmat/wheel_cmd"));
-
-  // RCCHECK(rclc_executor_add_subscription(&executor, &mecanum_subscriber, &mecanum_recv_msg, &mecanum_subscription_callback, ON_NEW_DATA));
-=======
   RCCHECK(rclc_subscription_init_default(
     &mecanum_subscriber,
     &node,
@@ -178,7 +135,6 @@ void setup() {
     "/hazmat/wheel_cmd"));
 
   RCCHECK(rclc_executor_add_subscription(&executor, &mecanum_subscriber, &mecanum_recv_msg, &mecanum_subscription_callback, ON_NEW_DATA));
->>>>>>> 55f3334 (pushed working code)
 }
 
 void loop() {
