@@ -26,7 +26,8 @@ setup(
             'aruco = hazmat_vision.aruco:main',
             'odom = hazmat_vision.odom:main',
             'camera = hazmat_vision.oak:main',
-            'color = hazmat_vision.color:main'
+            'color = hazmat_vision.color:main',
+            'audio = hazmat_vision.audio:main'
         ],
     },
 )

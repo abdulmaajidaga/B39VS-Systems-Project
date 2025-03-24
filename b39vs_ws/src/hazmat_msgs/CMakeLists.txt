@@ -11,6 +11,7 @@ find_package(ament_cmake REQUIRED)
 # Custom messages
 find_package(rosidl_default_generators REQUIRED)
 rosidl_generate_interfaces(${PROJECT_NAME}
+  "srv/String.srv"
   "msg/MecanumCmd.msg"
 )
 
