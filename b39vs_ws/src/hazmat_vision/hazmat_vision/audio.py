@@ -22,7 +22,7 @@ class AudioService(Node):
         stop_flag.clear()
         try:
             audio = AudioSegment.from_file(file_path, format="mp3")
-            chunk_length = 100  # milliseconds
+            chunk_length = 1000  # milliseconds
             for i in range(0, len(audio), chunk_length):
                 if stop_flag.is_set():
                     break

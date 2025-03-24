@@ -5,7 +5,6 @@ from geometry_msgs.msg import Twist
 from cv_bridge import CvBridge
 import cv2
 import numpy as np
-import math
 
 class YellowColorDetector(Node):
     def __init__(self):
@@ -28,7 +27,7 @@ class YellowColorDetector(Node):
             10
         )
 
-        self.create_publisher(Twist, '/hazmat/cmd_vel', 10)
+        self.twist_pub = self.create_publisher(Twist, '/hazmat/cmd_vel', 10)
 
         self.declare_parameter("target_color", "yellow")
 
@@ -62,7 +61,15 @@ class YellowColorDetector(Node):
                     cv2.putText(frame, f"({cx}, {cy})", (x, y - 10),
                                 cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
                     
-                    frame_diff = abs(cx - frame.shape[1] / 2)
+                    frame_diff = frame.shape[1] / 2 - cx
+
+                    twsit_msg = Twist()
+                    if (abs(frame_diff) >= 50):
+                        twsit_msg.linear.y = frame_diff / 10
+                    else:
+                        twsit_msg.linear.x = -4.0
+                    self.twist_pub.publish(twsit_msg)
+
                     print(frame.shape[1] / 2, cx, frame_diff)
 
             # Display the processed frame
