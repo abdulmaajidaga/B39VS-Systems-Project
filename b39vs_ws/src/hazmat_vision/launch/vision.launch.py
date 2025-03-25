@@ -59,14 +59,14 @@ def generate_launch_description():
         #                  'angle_compensate': "true", 
         #                  'scan_mode': "Sensitivity"}],
         #     ),
-        # IncludeLaunchDescription(
-        #     PythonLaunchDescriptionSource(
-        #         [os.path.join(get_package_share_directory("sllidar_ros2"), 'launch'), "/sllidar_a3_launch.py"], 
-        #     ),
-        #     launch_arguments={
-        #         "frame_id": "scan_link"
-        #     }.items()
-        # ),
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(
+                [os.path.join(get_package_share_directory("sllidar_ros2"), 'launch'), "/sllidar_c1_launch.py"], 
+            ),
+            launch_arguments={
+                "frame_id": "scan_link"
+            }.items()
+        ),
 
         # Start the OAK camera
         # IncludeLaunchDescription(
@@ -80,10 +80,10 @@ def generate_launch_description():
         #     }.items()
         # ),
 
-        # Node(
-        #     package="hazmat_vision",
-        #     executable="camera",
-        #     output='screen',
-        # )
+        Node(
+            package="hazmat_vision",
+            executable="camera",
+            output='screen',
+        )
 
     ])

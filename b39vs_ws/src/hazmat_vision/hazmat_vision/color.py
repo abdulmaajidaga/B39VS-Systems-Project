@@ -65,16 +65,19 @@ class YellowColorDetector(Node):
 
                     twsit_msg = Twist()
                     if (abs(frame_diff) >= 50):
-                        twsit_msg.linear.y = frame_diff / 10
+                        if frame_diff < 0:
+                            twsit_msg.linear.y = 3.4
+                        else:
+                            twsit_msg.linear.y = -3.4
                     else:
-                        twsit_msg.linear.x = -4.0
+                        twsit_msg.linear.x = -2.5
                     self.twist_pub.publish(twsit_msg)
 
                     print(frame.shape[1] / 2, cx, frame_diff)
 
             # Display the processed frame
-            cv2.imshow("Processed Frame", frame)
-            cv2.imshow("Mask", mask)
+            # cv2.imshow("Processed Frame", frame)
+            # cv2.imshow("Mask", mask)
 
             
 
