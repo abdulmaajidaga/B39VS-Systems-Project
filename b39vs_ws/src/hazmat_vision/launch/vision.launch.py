@@ -41,6 +41,7 @@ def generate_launch_description():
                        '-configuration_basename', "carto_oak.lua"],
             remappings=[
                 ("points2", "oak/points"),
+                ("scan", "scan_filtered"),
                 ("imu", "oak/imu/data")
             ]
         ),
