@@ -18,6 +18,9 @@ def generate_launch_description():
             package="hazmat_control",
             executable="mecanum",
             output='screen',
+            # remappings=[
+            #     ("hazmat/cmd_vel", "cmd_vel"),
+            # ]
         ),
 
         # Node for micro ROS communication (with ESP)

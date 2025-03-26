@@ -52,9 +52,9 @@
 
   <!-- Joint: Base (Fixed) -->
   <joint name="base_joint" type="fixed">
-    <parent link="base_link"/>
-    <child link="base_footprint"/>
-    <origin xyz="0 0 -0.035" rpy="0 0 0"/>
+    <parent link="base_footprint"/>
+    <child link="base_link"/>
+    <origin xyz="0 0 0.035" rpy="0 0 0"/>
   </joint>
   
   <!-- Joint: Camera (Fixed) -->
@@ -68,13 +68,13 @@
   <joint name="imu_joint" type="fixed">
     <parent link="base_link"/>
     <child link="imu_link"/>
-    <origin xyz="0.07 0 0.09" rpy="0 0 0"/>
+    <origin xyz="0.062 -0.038 0.089" rpy="3.142 1.571 0"/>
   </joint>
   
   <!-- Joint: Lidar (Fixed) -->
   <joint name="scan_joint" type="fixed">
     <parent link="base_link"/>
     <child link="scan_link"/>
-    <origin xyz="0.6 0 0.01" rpy="0 0 -1.5707"/>
+    <origin xyz="0.06 0 0.01" rpy="0 0 -1.571"/>
   </joint>
 </robot>

@@ -1,10 +1,11 @@
 import rclpy
 from rclpy.node import Node
-from sensor_msgs.msg import Image
+from sensor_msgs.msg import Image, LaserScan
 from geometry_msgs.msg import Twist
 from cv_bridge import CvBridge
 import cv2
 import numpy as np
+import math
 
 class YellowColorDetector(Node):
     def __init__(self):
@@ -26,12 +27,48 @@ class YellowColorDetector(Node):
             self.image_callback,
             10
         )
+        self.lidar_sub = self.create_subscription(
+            LaserScan,
+            '/scan_filtered',
+            self.scan_callback,
+            10
+        )
 
         self.twist_pub = self.create_publisher(Twist, '/hazmat/cmd_vel', 10)
 
         self.declare_parameter("target_color", "yellow")
 
         self.get_logger().info("Color Detector Node has started!")
+
+        self.scan_data = LaserScan()
+        self.closest_distance = 1.0
+        
+
+    def scan_callback(self, msg: LaserScan):
+        scan = msg
+        self.scan_data = msg
+        # Define the front sector in radians (e.g., -30° to 30°)
+        front_sector_min = -math.radians(70)  # -0.5236 rad
+        front_sector_max = math.radians(110)   #  0.5236 rad
+
+        # Calculate the index range corresponding to the front sector
+        # LaserScan angles: angle = scan.angle_min + index * scan.angle_increment
+        start_index = int((front_sector_min - scan.angle_min) / scan.angle_increment)
+        end_index = int((front_sector_max - scan.angle_min) / scan.angle_increment)
+
+        # Ensure indices are within valid bounds
+        start_index = max(0, start_index)
+        end_index = min(len(scan.ranges) - 1, end_index)
+
+        # Extract the ranges within the desired sector and filter valid readings
+        front_ranges = [r for r in scan.ranges[start_index:end_index+1]
+                        if scan.range_min <= r <= scan.range_max]
+
+        if front_ranges:
+            self.closest_distance = min(front_ranges)
+            # print("Closest object in front: %.2f m", self.closest_distance)
+        else:
+            print("No valid range measurements in the front sector.")
 
     def image_callback(self, msg):
         target_color = self.get_parameter("target_color").value
@@ -65,21 +102,24 @@ class YellowColorDetector(Node):
 
                     twsit_msg = Twist()
                     if (abs(frame_diff) >= 50):
+                        print("tight/left", self.closest_distance)
                         if frame_diff < 0:
-                            twsit_msg.linear.y = 3.4
+                            twsit_msg.linear.y = 60.5
                         else:
-                            twsit_msg.linear.y = -3.4
+                            twsit_msg.linear.y = -60.5
                     else:
-                        twsit_msg.linear.x = -2.5
+                        print("ahead", self.closest_distance)
+                        if self.closest_distance > 0.42:
+                            twsit_msg.linear.x = 12.5
                     self.twist_pub.publish(twsit_msg)
+                    
 
-                    print(frame.shape[1] / 2, cx, frame_diff)
+                    # print("image: ", frame.shape[1] / 2, cx, frame_diff)
+                    # print("lidar: ", len(self.scan_data.ranges), np.array(self.scan_data.ranges)[178:182])
 
             # Display the processed frame
-            # cv2.imshow("Processed Frame", frame)
-            # cv2.imshow("Mask", mask)
-
-            
+            cv2.imshow("Processed Frame", frame)
+            cv2.imshow("Mask", mask)
 
             # Wait for key press to exit (you may need to press 'q' to close the window)
             if cv2.waitKey(1) & 0xFF == ord('q'):
