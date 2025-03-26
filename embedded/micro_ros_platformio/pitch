@@ -1,0 +1,10 @@
+we have worked on an autonomous mobile manipulator, with the sole goal of collecting waste and disposing it.
+equipped with mecanum wheels to smoothly traverse in an industrial environment and a 3 DOF four arm-linkage robot arm to pick up the waste.
+uses a oak 3d depth camera, a rp lidar c1 for SLAM, and the rasberry pi 5 as the processor.
+uses a 14.8 V 5500 mah, with pull runtime of above 3 hours, we pull 1.5 A on an avg and 2 A peak.  
+The max load our robot arm can take is approx 1 kg.
+We have a buck converter to step down voltage form 14.8 to 5v for the electronic components.
+The ESP32 S3 is equipped with microros and controls the mecanum wheels, it publishes the encoder values to /hazmat/encoder_vel and subscribes to /hazmat/cmd_vel and moves according to what is published there.
+The rasberry pi 5 connects to the esp32s3, lidar, oak and the servo driver.
+
+
