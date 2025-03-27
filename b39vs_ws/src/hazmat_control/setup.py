@@ -22,6 +22,7 @@ setup(
     entry_points={
         'console_scripts': [
             'mecanum = hazmat_control.mecanum:main',
+            'pid = hazmat_control.pid:main'
         ],
     },
 )

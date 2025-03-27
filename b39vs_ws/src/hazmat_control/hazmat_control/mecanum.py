@@ -8,7 +8,7 @@ class Mecanum(Node):
         super().__init__("mecanum")
 
         self.create_subscription(Twist, "/hazmat/cmd_vel", self.twistCallback, 10)
-        self.wheelCmd = self.create_publisher(MecanumCmd, "/hazmat/wheel_cmd", 10)
+        self.wheelCmd = self.create_publisher(MecanumCmd, "/hazmat/wheel_cmd_raw", 10)
 
         self.LENGTH_X = 0.26 / 2
         self.LENGTH_Y = 0.19 / 2 
