@@ -24,28 +24,28 @@ def generate_launch_description():
         # ),
         
         # Cartographer occupancy grid publisher
-        # Node(
-        #     package='cartographer_ros',
-        #     executable='cartographer_occupancy_grid_node',
-        #     name='cartographer_occupancy_grid_node',
-        #     output='screen',
-        #     arguments=['-resolution', '0.05',
-        #                '-publish_period_sec', '1.0']
-        # ),
-        # # # Cartographer SLAM node
-        # Node(
-        #     package='cartographer_ros',
-        #     executable='cartographer_node',
-        #     name='cartographer_node',
-        #     # output='screen',
-        #     arguments=['-configuration_directory', config_dir,
-        #                '-configuration_basename', "carto_oak.lua"],
-        #     remappings=[
-        #         ("points2", "oak/points"),
-        #         ("scan", "scan_filtered"),
-        #         ("imu", "oak/imu/data")
-        #     ]
-        # ),
+        Node(
+            package='cartographer_ros',
+            executable='cartographer_occupancy_grid_node',
+            name='cartographer_occupancy_grid_node',
+            output='screen',
+            arguments=['-resolution', '0.05',
+                       '-publish_period_sec', '1.0']
+        ),
+        # # Cartographer SLAM node
+        Node(
+            package='cartographer_ros',
+            executable='cartographer_node',
+            name='cartographer_node',
+            # output='screen',
+            arguments=['-configuration_directory', config_dir,
+                       '-configuration_basename', "carto_oak.lua"],
+            remappings=[
+                ("points2", "oak/points"),
+                ("scan", "scan_filtered"),
+                ("imu", "oak/imu/data")
+            ]
+        ),
         Node(
             package="laser_filters",
             executable="scan_to_scan_filter_chain",

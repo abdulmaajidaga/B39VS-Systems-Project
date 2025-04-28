@@ -27,7 +27,10 @@ setup(
             'odom = hazmat_vision.odom:main',
             'camera = hazmat_vision.oak:main',
             'color = hazmat_vision.color:main',
-            'audio = hazmat_vision.audio:main'
+            'audio = hazmat_vision.audio:main',
+            'arm_controller = hazmat_vision.arm_controller:main',
+            "cam = hazmat_vision.cam:main",
+            "arm = hazmat_vision.arm:main",
         ],
     },
 )

@@ -23,30 +23,43 @@ kit = ServoKit(channels=16)
 # 0: 20 - 85
 # 3: 140 - 55
 
-# while True:
-#     kit.servo[int(sys.argv[1])].angle = int(input())
 
 if sys.argv[1] == "0":
-    kit.servo[1].angle = 20
-    kit.servo[2].angle = 140
+    # kit.servo[0].angle = 0
+    # kit.servo[1].angle = 20
+    # kit.servo[2].angle = 140
+    # kit.servo[3].angle = 0
+    kit.servo[1].angle = 85
+    kit.servo[2].angle = 55
     kit.servo[3].angle = 0
-    kit.servo[0].angle = 0
+    time.sleep(0.8)
+    kit.servo[3].angle = 38
+    time.sleep(0.8)
+    kit.servo[1].angle = 20
+    kit.servo[2].angle = 80
+    kit.servo[3].angle = 38
+    time.sleep(0.8)
 elif sys.argv[1] == "1":
-    kit.servo[1].angle = 85
-    kit.servo[2].angle = 55
-    time.sleep(0.6)
-    kit.servo[3].angle = 38
-elif sys.argv[1] == "2":
     kit.servo[1].angle = 20
-    kit.servo[2].angle = 140
-    kit.servo[3].angle = 38
+    kit.servo[2].angle = 80
+    kit.servo[3].angle = 0
 elif sys.argv[1] == "3":
+    kit.servo[0].angle = 0
+    time.sleep(0.6)
     kit.servo[1].angle = 85
-    kit.servo[2].angle = 55
+    kit.servo[2].angle = 65
     kit.servo[3].angle = 38
     time.sleep(0.6)
     kit.servo[3].angle = 0
-
+# elif sys.argv[1] == "1":
+    time.sleep(0.6)
+    kit.servo[0].angle = 0
+    kit.servo[1].angle = 20
+    kit.servo[2].angle = 140
+    kit.servo[3].angle = 0
+elif sys.argv[1] == "5":
+    while True:
+        kit.servo[int(sys.argv[2])].angle = int(input())
 
 time.sleep(0.6)
 

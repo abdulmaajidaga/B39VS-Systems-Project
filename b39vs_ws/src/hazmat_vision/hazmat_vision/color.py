@@ -6,6 +6,10 @@ from cv_bridge import CvBridge
 import cv2
 import numpy as np
 import math
+import os
+import signal
+
+pid = os.getpid()
 
 class YellowColorDetector(Node):
     def __init__(self):
@@ -36,7 +40,7 @@ class YellowColorDetector(Node):
 
         self.twist_pub = self.create_publisher(Twist, '/hazmat/cmd_vel', 10)
 
-        self.declare_parameter("target_color", "yellow")
+        self.declare_parameter("target_color", "green")
 
         self.get_logger().info("Color Detector Node has started!")
 
@@ -48,8 +52,8 @@ class YellowColorDetector(Node):
         scan = msg
         self.scan_data = msg
         # Define the front sector in radians (e.g., -30° to 30°)
-        front_sector_min = -math.radians(70)  # -0.5236 rad
-        front_sector_max = math.radians(110)   #  0.5236 rad
+        front_sector_min = -math.radians(80)  # -0.5236 rad
+        front_sector_max = math.radians(100)   #  0.5236 rad
 
         # Calculate the index range corresponding to the front sector
         # LaserScan angles: angle = scan.angle_min + index * scan.angle_increment
@@ -101,17 +105,21 @@ class YellowColorDetector(Node):
                     frame_diff = frame.shape[1] / 2 - cx
 
                     twsit_msg = Twist()
-                    if (abs(frame_diff) >= 50):
-                        print("tight/left", self.closest_distance)
-                        if frame_diff < 0:
-                            twsit_msg.linear.y = 60.5
-                        else:
-                            twsit_msg.linear.y = -60.5
-                    else:
+                    if self.closest_distance > 0.43:
+                        # if (abs(frame_diff) >= 80):
+                        #     print("tight/left", self.closest_distance)
+                        #     if frame_diff < 0:
+                        #         twsit_msg.linear.y = -1.0
+                        #     else:
+                        #         twsit_msg.linear.y = 1.0
+                        # # else:
                         print("ahead", self.closest_distance)
-                        if self.closest_distance > 0.42:
-                            twsit_msg.linear.x = 12.5
-                    self.twist_pub.publish(twsit_msg)
+                        twsit_msg.linear.x = 0.65
+                        self.twist_pub.publish(twsit_msg)
+                    else:
+                        twsit_msg.linear.x = 0.0
+                        self.twist_pub.publish(twsit_msg)
+                        os.kill(pid, signal.SIGTERM)
                     
 
                     # print("image: ", frame.shape[1] / 2, cx, frame_diff)
