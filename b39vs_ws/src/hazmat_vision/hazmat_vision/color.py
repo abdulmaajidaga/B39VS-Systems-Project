@@ -40,7 +40,7 @@ class YellowColorDetector(Node):
 
         self.twist_pub = self.create_publisher(Twist, '/hazmat/cmd_vel', 10)
 
-        self.declare_parameter("target_color", "green")
+        self.declare_parameter("target_color", "yellow")
 
         self.get_logger().info("Color Detector Node has started!")
 
