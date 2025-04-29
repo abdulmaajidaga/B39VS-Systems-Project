@@ -6,6 +6,8 @@
 
 \usepackage{listings}
 
+\usepackage{indentfirst}
+
 \usepackage[style=authoryear]{biblatex}
 % \addbibresource{b39vs.bib}
 \renewcommand*{\nameyeardelim}{\addcomma\space}
@@ -13,6 +15,20 @@
 
 \usepackage{parskip}
 \setlength{\parindent}{12pt}
+
+% title page pic from: https://tex.stackexchange.com/questions/214255/inserting-a-picture-in-a-title-page
+\usepackage{titling}
+% set up \maketitle to accept a new item
+\pretitle{\begin{center}\placetitlepicture\large}
+\postdate{\par\end{center}}
+
+% commands for including the picture
+\newcommand{\titlepicture}[2][]{%
+  \renewcommand\placetitlepicture{%
+    \includegraphics[#1]{#2}\par\medskip
+  }%
+}
+\newcommand{\placetitlepicture}{} % initialization
 
 \usepackage{amstext} % for \text macro
 \usepackage{array}   % for \newcolumntype macro
@@ -26,15 +42,15 @@
 
 \begin{document}
 
+\titlepicture[width=0.85\textwidth]{logo.png}
 \title{B39VS - Systems Project}
-\author{Abdul Maajid Aga - H00431236 \and Muhammad Abban - H00427641 \and Laith Samir Mohamed - H00427630 \and Aisultan Alpysbay - H00xxxxx \and Moiz Saeed - H00xxxxx \and Sufiyan Atif - H00xxxxx}
+\author{Abdul Maajid Aga - H00431236 \and Muhammad Abban - H00427641 \and Laith Samir Mohamed - H00427630 \and Aisultan Alpysbay - H00xxxxx \and Moiz Saeed - H00xxxxx \and Sufyaan Atif - H00434736}
 \date{\parbox{\linewidth}{\centering%
   School of Engineering and Physical Sciences \endgraf
   Heriot-Watt University Dubai \endgraf\bigskip
   April 2025 }}
 \maketitle
 \bigskip
-
 \newpage
 
 \begin{abstract}
@@ -47,11 +63,298 @@
 
 \subsection{Project overview}
 
-\subsection{Aims and Objectives}
+The project involves the design and development of an autonomous mobile manipulator capable of picking up waste from waste points and disposing of it at the base station. 
+
+The robot, designated ‘Hazmat’ manufactured by SLAM Industries, is equipped with a Raspberry Pi 5 as its main processor, assisted by an ESP32-S3 to offload computational tasks. This configuration reduces the processing burden on the Pi and provides an additional safeguard against potential hardware faults due to faulty wiring. 
+
+Hazmat is fitted with mecanum wheels, enabling omni-directional movement and allowing it to smoothly traverse through tight spaces within a factory environment. The robot utilizes a stereo-depth camera (Oak-D Pro W) with an integrated IMU, motor encoders, and a 2D LiDAR (Rplidar A3) to perform simultaneous localization and mapping (SLAM), enabling it to autonomously locate waste containers and navigate to disposal points. 
+
+Hazmat is also equipped with a 3-DOF manipulator designed using a four-bar linkage mechanism, and a dual-claw soft servo gripper for efficient waste pickup and placement. The servo motors were modified to output potentiometer feedback to the Pi, enabling real-time inverse kinematics calculations for the robotic arm. Power is supplied by a lithium polymer battery that drives the wheels, while a buck converter is used to step down voltage for the robot’s electronic systems. 
+
+\subsection{Aims and objectives}
+
+Aims:
+
+\begin{itemize}
+
+    \item To design, fabricate, and demonstrate a functional, autonomous mobile manipulator capable of navigating an indoor environment, picking up hazardous waste containers, and delivering them to designated disposal areas with minimal human intervention. 
+
+\end{itemize}
+
+Objectives:
+
+\begin{itemize}
+
+\item Design and fabricate a stable mobile robot based on mecanum wheels to allow omnidirectional movement in constrained indoor environments. 
+
+
+\item Develop a secure container compartment to safely transport waste containers during robot motion. 
+
+
+\item Integrate vision and ranging sensors (stereo camera, 2D LiDAR, ultrasonic sensors) to enable environmental perception, obstacle detection, and navigation. 
+
+
+\item Design and build a 3-DOF robotic manipulator with a four-bar linkage for grasping and moving waste containers. 
+
+
+\item Implement autonomous navigation using SLAM (Simultaneous Localization and Mapping) and obstacle avoidance algorithms. 
+
+
+\item Implement object and container recognition using colour coding and computer vision methods. 
+
+
+\item Develop audio feedback features to alert humans during path obstruction scenarios. 
+
+
+\item Integrate micro-ROS middleware to allow reliable communication between the embedded control systems and the central processor. 
+
+
+\item Implement a user interface and visual indicators (LEDs or screen) to display robot status and task progress. 
+
+
+\item Develop a simple autonomous charging strategy (proposal stage) for future continuous operation.
+
+
+\item Simulate and test robot behaviour in Gazebo or a relevant simulation environment before real-world testing. 
+
+
+\item Manage team roles and collaborate effectively across mechanical, electrical, and software domains to achieve system integration.
+
+\end{itemize}
 
 \subsection{Roles and Responsibilities}
 
+SLAM Industries started as a military contractor, developing advanced autonomous systems for extreme environments. Our team created robots for reconnaissance, high-risk operations, and more, pushing the limits of robotics technology. Now, we have shifted focus, using our military-grade expertise to design robots for a wide range of industries. From hazardous waste management to autonomous transportation, we deliver reliable, high-performance solutions. 
+
+SLAM Industries is a team of six passionate individuals committed to redefining the future of autonomous systems. The company structure is organized as shown in Figure \ref{organisation}, and the key responsibilities and contributions are as follows:
+
+\begin{figure}[h]
+    \centering\includegraphics[width=0.85\textwidth]{organisation.png}
+    \caption{Organisation hierarchy}
+    \label{organisation}
+\end{figure}
+
+\textbf{Abdul Maajid Aga – Director of Robotic Operations}
+
+\begin{itemize}
+
+\item Designed the robot base, top plate, and structural stands, ensuring organized component layout and accessibility. 
+    
+
+\item Co-developed the 3-DOF four-bar linkage arm with Laith. 
+    
+
+\item Migrated wheel control from serial to micro-ROS on the ESP32-S3. 
+    
+
+\item Helped wire and verify the full electrical system. 
+    
+
+\item Developed inverse kinematics algorithms for the arm (not used in final version). 
+    
+
+\item Created and refined early prototypes for mechanical testing. 
+    
+
+\item Optimized the robot’s structure for easy assembly, maintenance, and manufacturing. 
+    
+
+\item 3D-printed and assembled mechanical components. 
+    
+
+\item Led the team, assigned tasks, enforced timelines, and maintained momentum. 
+    
+
+\item Provided morale support and ensured teammate well-being throughout the project.
+
+\end{itemize}
+
+\textbf{Laith Mohammed – Senior Executive Mechanical Director}
+
+\begin{itemize}
+\item Assisted in designing and prototyping multiple robot base plates using laser-cut acrylic until finalizing the design. 
+    
+
+\item Designed and prototyped several robotic arm versions using laser-cut acrylic to reach the final version. 
+    
+
+\item Sourced power converters and built cable harnesses for power distribution. 
+    
+
+\item Assembled a custom PCB using a perf board to securely integrate the ESP32 with the motor driver board. 
+    
+
+\item Developed a C++ library to control and read the speed of the mecanum wheels. 
+    
+
+\item Coordinated between electrical, mechanical, and software teams.
+\end{itemize}
+
+\textbf{Aisultan Alpysbay – Electronics and Embedded Systems Lead}
+
+\begin{itemize}
+\item Designed the electrical schematic, simplified diagram, and initial PCB (not used in final system). 
+    
+
+\item Assembled the robotic arm multiple times, including rebuilds after failures. 
+    
+
+\item Rewired the robot’s electronics twice for improved reliability. 
+    
+
+\item Replaced damaged motor drivers. 
+    
+
+\item Researched and provided design inspiration for the final robot layout. 
+    
+
+\item Soldered additional wiring onto four servos for sensor feedback (one later replaced). 
+    
+
+\item Suggested vision-based alignment techniques to improve arm positioning.
+\end{itemize}
+
+\textbf{Sufyaan Atif – Electronics Specialist and Marketing Support}
+
+\begin{itemize}
+\item Designed the complete electrical schematic and simplified system power flow diagram. 
+    
+
+\item Gathered and organized all required electronic components. 
+    
+
+\item Assembled and wired the robot's electrical system. 
+    
+
+\item Tested DC motors, encoders, and sensors for functionality. 
+    
+
+\item Wrote code to read encoder pulses and calculate wheel RPM. 
+    
+
+\item Calibrated encoders for reliable measurements. 
+    
+
+\item Assembled the robotic arm and programmed servo operating limits. 
+    
+
+\item Tested arm movement with different joint angles. 
+    
+
+\item Managed the project website and marketing activities.
+\end{itemize}
+
+\textbf{Abban Fahim – Senior Software Developer}
+
+\begin{itemize}
+\item Interfaced sensors with Raspberry Pi, including LiDAR and stereo camera. 
+    
+
+\item Set up the complete ROS framework, launch scripts, and development environment on Raspberry Pi. 
+    
+
+\item Implemented inverse kinematics and PID controller for mobile base control. 
+    
+
+\item Created a simulation environment to test mobile robot behavior. 
+    
+
+\item Assisted in implementing SLAM and color detection nodes. 
+    
+
+\item Developed ArUco marker detection and localization system. 
+    
+
+\item Built the autonomous navigation stack, fusing multi-sensor data and odometry. 
+    
+
+\item Wrote the initial serial communication prototype between Pi and ESP. 
+    
+
+\item Programmed final I2C communication system for the manipulator. 
+    
+
+\item Mentored the team on Linux, version control, and ROS fundamentals.
+\end{itemize}
+
+\textbf{Moiz Saeed – Software Intern}
+
+\begin{itemize}
+\item Assisted in designing the robot's base structure. 
+    
+
+\item Developed and tested the odometry ROS node. 
+    
+
+\item Supported the implementation of Cartographer SLAM using LiDAR for mapping and localization. 
+    
+
+\item Wrote the full URDF (Unified Robot Description Format) model for the robot. 
+    
+
+\item Helped set up the robot’s transformation (TF) frames in ROS. 
+    
+
+\item Implemented a colour detection system using OpenCV. 
+    
+
+\item Developed a ROS node for audio feedback and notifications. 
+    
+
+\item Assisted in the development of the robot’s autonomous navigation system.
+\end{itemize}
+
 \subsection{Project scope}
+
+This project focused on the design, development, and demonstration of a scaled-down autonomous mobile manipulator intended for hazardous waste handling in an industrial indoor environment. The system combines mechanical design, embedded electronics, and advanced software integration to meet the key operational requirements. 
+
+The main elements covered within the project scope included:
+
+\begin{itemize}
+\item Designed a stable mobile base with mecanum wheels for omnidirectional movement in confined spaces. 
+    
+
+\item Assembled a 3-DOF manipulator with a four-bar linkage for waste handling. 
+    
+
+\item Integrated a secure containment compartment to safely transport waste containers. 
+    
+
+\item Integrated a stereo depth camera and 2D LiDAR for environment perception and mapping. 
+    
+
+\item Implemented basic colour detection for container identification. 
+    
+
+\item Developed SLAM-based autonomous navigation between pickup and drop-off points. 
+    
+
+\item Implemented basic path planning with fallback behaviour for obstacle avoidance. 
+    
+
+\item Added an audio feedback system to alert humans blocking the path. 
+    
+
+\item Fully integrated mechanical, electrical, and software subsystems. 
+    
+
+\item Used micro-ROS for communication between the Raspberry Pi and ESP32 controllers. 
+    
+
+\item Implemented initial robot status communication via ROS topics. 
+    
+
+\item Created a simulation environment for validating inverse kinematics, PID control, and navigation algorithms. 
+    
+
+\item Conducted multiple rounds of physical testing for calibration and optimization. 
+    
+
+\item Structured task division across team members specializing in mechanics, electronics, software, and marketing. 
+    
+
+\item Regular design reviews and troubleshooting sessions to address integration challenges.
+\end{itemize}
 
 \section{Background and Theory}
 
@@ -84,10 +387,10 @@
 \begin{figure}[h]
     \centering\includegraphics[width=0.85\textwidth]{software_flowchart.png}
     \caption{High level overview of the ROS nodes and topics}
-    \label{ros-nodes}
+    \label{software_flowchart}
 \end{figure}
 
-Our software stack was primarily built upon the expansive ecosystem of Robot Operating System (ROS), which provided cross-script communication, parallelisation, and ready-to-use packages maintained by robotics companies and industry experts, out of the box.  Figure \ref{ros-nodes}
+Our software stack was primarily built upon the expansive ecosystem of Robot Operating System (ROS), which provided cross-script communication, parallelisation, and ready-to-use packages maintained by robotics companies and industry experts, out of the box.  Figure \ref{software_flowchart}
 
 \subsubsection{SLAM}
 
