@@ -73,7 +73,7 @@ The project involves the design and development of an autonomous mobile manipula
 
 The robot, designated 'Hazmat' manufactured by SLAM Industries, is equipped with a Raspberry Pi 5 as its main processor, assisted by an ESP32-S3 to offload computational tasks. This configuration reduces the processing burden on the Pi and provides an additional safeguard against potential hardware faults due to faulty wiring. 
 
-Hazmat is fitted with mecanum wheels, enabling omni-directional movement and allowing it to smoothly traverse through tight spaces within a factory environment. The robot utilizes a stereo-depth camera (Oak-D Pro W) with an integrated IMU, motor encoders, and a 2D LiDAR (Rplidar A3) to perform simultaneous localization and mapping (SLAM), enabling it to autonomously locate waste containers and navigate to disposal points. 
+Hazmat is fitted with mecanum wheels, enabling omni-directional movement and allowing it to smoothly traverse through tight spaces within a factory environment. The robot utilizes a stereo-depth camera (Oak-D Pro W) with an integrated IMU, motor encoders, and a 2D LiDAR (RpLiDAR A3) to perform simultaneous localization and mapping (SLAM), enabling it to autonomously locate waste containers and navigate to disposal points. 
 
 Hazmat is also equipped with a 3-DOF manipulator designed using a four-bar linkage mechanism, and a dual-claw soft servo gripper for efficient waste pickup and placement. The servo motors were modified to output potentiometer feedback to the Pi, enabling real-time inverse kinematics calculations for the robotic arm. Power is supplied by a lithium polymer battery that drives the wheels, while a buck converter is used to step down voltage for the robot's electronic systems. 
 
@@ -248,41 +248,27 @@ SLAM Industries is a team of six passionate individuals committed to redefining 
 \item Assisted in the development of the robot's autonomous navigation system.
 \end{itemize}
 
-\subsection{Project scope}
+\subsection{Project Scope}
 
-This project focused on the design, development, and demonstration of a scaled-down autonomous mobile manipulator intended for hazardous waste handling in an industrial indoor environment. The system combines mechanical design, embedded electronics, and advanced software integration to meet the key operational requirements.
+The scope of project Hazmat is to design, develop, and deploy an autonomous mobile manipulator capable of detecting, navigating to, and safely handling hazardous materials in indoor industrial environments. The system integrates a mecanum-wheeled base for omnidirectional mobility, a 3-DOF robotic arm with a four-bar linkage for stable manipulation, and a multi-sensor perception suite comprising ultrasonic sensors, an RPLiDAR C1, and an Oak-D depth camera for SLAM and object recognition.
 
-The main elements covered within the project scope included:
+The project includes:
 
-\begin{itemize}\item Designed a stable mobile base with mecanum wheels for omnidirectional movement in confined spaces.
-    
-\item Assembled a 3-DOF manipulator with a four-bar linkage for waste handling.
-    
-\item Integrated a secure containment compartment to safely transport waste containers.
-    
-\item Integrated a stereo depth camera and 2D LiDAR for environment perception and mapping.
-    
-\item Implemented basic colour detection for container identification.
-    
-\item Developed SLAM-based autonomous navigation between pickup and drop-off points.
-    
-\item Implemented basic path planning with fallback behaviour for obstacle avoidance.
-    
-\item Added an audio feedback system to alert humans blocking the path.
-    
-\item Fully integrated mechanical, electrical, and software subsystems.
-    
-\item Used micro-ROS for communication between the Raspberry Pi and ESP32 controllers.
-    
-\item Implemented initial robot status communication via ROS topics.
-    
-\item Created a simulation environment for validating inverse kinematics, PID control, and navigation algorithms.
-    
-\item Conducted multiple rounds of physical testing for calibration and optimization.
-    
-\item Structured task division across team members specializing in mechanics, electronics, software, and marketing.
-    
-\item Regular design reviews and troubleshooting sessions to address integration challenges.
+\begin{itemize}
+    \item Development of motion control algorithms for precise omnidirectional navigation.
+    \item Implementation of object detection and tracking for hazardous item identification.
+    \item Real-time SLAM integration using LiDAR and depth vision for autonomous localization and mapping.
+    \item Robotic arm control with feedback for precise grasping and placement.
+    \item ROS-based communication framework across subsystems using micro-ROS and a Raspberry Pi 5.
+    \item Power management and autonomy optimization for operation within a 2+ hour runtime window.
+\end{itemize}
+
+Out of Scope:
+
+\begin{itemize}
+    \item Outdoor navigation and GPS-based localization.
+    \item Handling of liquid or airborne hazardous materials.
+    \item Integration with cloud-based monitoring or remote control systems.
 \end{itemize}
 
 \section{Background and Theory}
@@ -360,6 +346,37 @@ In the current era of rapid technological advancement, the shift toward autonomo
 This chapter outlines the design methodology and implementation sequence of an autonomous hazardous waste retrieval unit. The system has been engineered for deployment in environments deemed unsafe for prolonged human presence. Operational goals include waste identification, secure collection, and optimized navigation, all executed without direct human intervention.
 
 \subsection{Concept Development and Evaluation}
+
+Our primary novel concept was the manipulator, hence we considered multiple designs, and used a design choice matrix to find the most appropriate one. Our criterion were: the appropriateness and the end-effector to our task and its simplicity; the accuracy that could be achieved in end-effector positions; the static and dynamic (during movement of joints or mobile base) stability of the manipulator; the load it could carry; and finally the complexity of its implementation.
+
+The designs we considered as follow, and their decision matrix scores are shown in Table 1,
+
+\begin{itemize}
+
+\item A 2-DOF forklift that would require objects to be placed at some elevation and would function with two linear actuators that would move the hoist horizontally in the direction of the robots movement and vertically up or down.
+
+\item A suction gripper that would be limited to working on flat surfaces, and would have three revolute joints for a full range of motion in 3D space.
+
+\item A crane mechanism with one rotating joint around the z (vertical) axis and one linear actuator to lower or raise the hoist to be able to reach and hold the objects in a safe place.
+
+\item A simple 3-DOF arm with only revolute joints and a two-claw grippers was chosen as a baseline for the rest. It concluded as the best choice and was further developed with a two-bar linkage mechanism to further improve stability by bring the manipulator's centre of the mass lower.
+
+\end{{itemize}}
+
+\begin{table}[!ht]
+  \centering
+  \begin{tabular}{|m{12em}|l|l|m{5em}|l|m{5em}|}
+  \hline
+      \textbf{Gripper type} & \textbf{Weight} & \textbf{Forklift} & \textbf{Suction gripper} & \textbf{Crane} & \textbf{Regular 3-DOF arm} \\ \hline
+      Degrees of freedom & 0 & 2 & 3 & 3 & 3 \\ \hline
+      End effector & 25 & 1 & 2 & 2 & 3 \\ \hline
+      Accuracy/tolerance & 25 & 5 & 4 & 3 & 3 \\ \hline
+      Stability \& weight & 25 & 1 & 3 & 2 & 3 \\ \hline
+      Strength \& load capacity & 15 & 5 & 1 & 3 & 3 \\ \hline
+      Electrical \& programming complexity & 10 & 4 & 3 & 3 & 3 \\ \hline
+      Final score & 0 & 290 & 270 & 250 & 300 \\ \hline
+  \end{tabular}
+\end{table}
 
 \subsection{Digital Design}
 
@@ -506,13 +523,35 @@ This functionality allows the robot to respond to events or user interactions wi
 
 \subsection{Circuit schematics}
 
+For the battery, we have used 4-cell 14.8V LiPo battery that gives power to motor driver “OSOYOO Model Y v2.0” and 4 motors. Then, from battery current goes to buck converter that steps it down from 14.8V to 5V. 
+
+The converter powers the Pi and I2C (PCA9685) board for the servo motors. Then Pi then powers Lidar Speaker. The simplified diagram presents an easier overview of the current flow in the system. The Raspberry Pi 5 also provides power for additional peripherals like the camera and LiDAR. The ESP32-S3 board handles the encoders to monitor motor speed and movement. The flowchart in Figure \ref{electrics} helps visualize the high-level power distribution and the logical connections between the major components without diving into the detailed wiring. Figures \ref{schematic_old} and \ref{schematic_current} show the initial and final schematics of the wiring respectively, where each part is carefully labelled in the schematic to show how power and data are distributed between the motors, encoders, servo motors, sensors, and controllers.  
+
+\begin{figure}[H]
+  \centering\includegraphics[width=0.85\textwidth]{electrics.png}
+  \caption{High-level electric circuit diagram}
+  \label{electrics}
+\end{figure}
+
+\begin{figure}[H]
+  \centering\includegraphics[width=0.85\textwidth]{schematic_old.png}
+  \caption{Previous schematics}
+  \label{schematic_old}
+\end{figure}
+
+\begin{figure}[H]
+  \centering\includegraphics[width=0.85\textwidth]{schematic_current.png}
+  \caption{current schematics}
+  \label{schematic_current}
+\end{figure}
+
 \subsection{Prototype development}
 
 \section{Results}
 
 \subsection{Computer simulation}
 
-We developed a full robot simulation in the Unity game engine with target points and Aruco markers in the scene to test and iterate on our navigation software in the initial stages of the project. The simulation was capable of simulating both RGB and depth frames for our stereo cameras, a Lidar, an IMU, as wheels that can be individually commanded with feedback from encoders. The simulation environment can be seen in Figure \ref{sim_1}.
+We developed a full robot simulation in the Unity game engine with target points and Aruco markers in the scene to test and iterate on our navigation software in the initial stages of the project. The simulation was capable of simulating both RGB and depth frames for our stereo cameras, a LiDAR, an IMU, as wheels that can be individually commanded with feedback from encoders. The simulation environment can be seen in Figure \ref{sim_1}.
 
 \begin{figure}[h]
   \centering\includegraphics[width=0.85\textwidth]{sim_1.png}
@@ -522,7 +561,15 @@ We developed a full robot simulation in the Unity game engine with target points
 
 \subsection{Testing results}
 
-\subsection{Discussions}
+Testing our SLAM algorithm in real life, we were able to map and localise in it later with high accuracy, the produced map can be seen in Figure \ref{map}. The odometry node was able to localise direction quite accurately too, with noticeable drift beyond 2 metres of movement.
+
+\begin{figure}[H]
+  \centering\includegraphics[width=0.65\textwidth]{map.png}
+  \caption{2D occupancy map of the East end of the EE lab}
+  \label{map}
+\end{figure}
+
+Our autonomous navigation logic allowed the robot to reach its required target positions with a tolerance of $\pm$3 cm due to delay in getting a LiDAR reading to actually commanding the robot. For the manipulator, we required manual placement of objects away from the robot, as our logic mainly only changed the rotation of the first joint to track the object.
 
 \section{Management and Marketing}
 
