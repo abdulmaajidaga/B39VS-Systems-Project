@@ -14,8 +14,8 @@
 
 \usepackage{indentfirst}
 
-\usepackage[style=authoryear]{biblatex}
-% \addbibresource{b39vs.bib}
+\usepackage[style=ieee]{biblatex}
+\addbibresource{b39vs.bib}
 \renewcommand*{\nameyeardelim}{\addcomma\space}
 \usepackage{bm}
 
@@ -50,7 +50,7 @@
 
 \titlepicture[width=0.85\textwidth]{logo.png}
 \title{B39VS - Systems Project}
-\author{Abdul Maajid Aga - H00431236 \and Muhammad Abban - H00427641 \and Laith Samir Mohamed - H00427630 \and Aisultan Alpysbay - H00xxxxx \and Moiz Saeed - H00xxxxx \and Sufyaan Atif - H00434736}
+\author{Abdul Maajid Aga - H00431236 \\ Muhammad Abban - H00427641 \\ Laith Samir Mohamed - H00427630 \\ Aisultan Alpysbay - H00407970 \\ Moaiz Saeed - H00451062 \\ Sufyaan Atif - H00434736}
 \date{\parbox{\linewidth}{\centering%
   School of Engineering and Physical Sciences \endgraf
   Heriot-Watt University Dubai \endgraf\bigskip
@@ -71,7 +71,7 @@
 
 The project involves the design and development of an autonomous mobile manipulator capable of picking up waste from waste points and disposing of it at the base station. 
 
-The robot, designated ‘Hazmat' manufactured by SLAM Industries, is equipped with a Raspberry Pi 5 as its main processor, assisted by an ESP32-S3 to offload computational tasks. This configuration reduces the processing burden on the Pi and provides an additional safeguard against potential hardware faults due to faulty wiring. 
+The robot, designated 'Hazmat' manufactured by SLAM Industries, is equipped with a Raspberry Pi 5 as its main processor, assisted by an ESP32-S3 to offload computational tasks. This configuration reduces the processing burden on the Pi and provides an additional safeguard against potential hardware faults due to faulty wiring. 
 
 Hazmat is fitted with mecanum wheels, enabling omni-directional movement and allowing it to smoothly traverse through tight spaces within a factory environment. The robot utilizes a stereo-depth camera (Oak-D Pro W) with an integrated IMU, motor encoders, and a 2D LiDAR (Rplidar A3) to perform simultaneous localization and mapping (SLAM), enabling it to autonomously locate waste containers and navigate to disposal points. 
 
@@ -90,39 +90,27 @@ Aims:
 Objectives:
 
 \begin{itemize}
-
 \item Design and fabricate a stable mobile robot based on mecanum wheels to allow omnidirectional movement in constrained indoor environments.
-
 
 \item Develop a secure container compartment to safely transport waste containers during robot motion.
 
-
 \item Integrate vision and ranging sensors (stereo camera, 2D LiDAR, ultrasonic sensors) to enable environmental perception, obstacle detection, and navigation.
-
 
 \item Design and build a 3-DOF robotic manipulator with a four-bar linkage for grasping and moving waste containers.
 
-
 \item Implement autonomous navigation using SLAM (Simultaneous Localization and Mapping) and obstacle avoidance algorithms.
-
 
 \item Implement object and container recognition using colour coding and computer vision methods.
 
-
 \item Develop audio feedback features to alert humans during path obstruction scenarios.
-
 
 \item Integrate micro-ROS middleware to allow reliable communication between the embedded control systems and the central processor.
 
-
 \item Implement a user interface and visual indicators (LEDs or screen) to display robot status and task progress.
-
 
 \item Develop a simple autonomous charging strategy (proposal stage) for future continuous operation.
 
-
 \item Simulate and test robot behaviour in Gazebo or a relevant simulation environment before real-world testing.
-
 
 \item Manage team roles and collaborate effectively across mechanical, electrical, and software domains to achieve system integration.
 
@@ -143,170 +131,120 @@ SLAM Industries is a team of six passionate individuals committed to redefining 
 \textbf{Abdul Maajid Aga – Director of Robotic Operations}
 
 \begin{itemize}
-
 \item Designed the robot base, top plate, and structural stands, ensuring organized component layout and accessibility.
     
-
 \item Co-developed the 3-DOF four-bar linkage arm with Laith.
     
-
 \item Migrated wheel control from serial to micro-ROS on the ESP32-S3.
     
-
 \item Helped wire and verify the full electrical system.
     
-
 \item Developed inverse kinematics algorithms for the arm (not used in final version).
     
-
 \item Created and refined early prototypes for mechanical testing.
     
-
 \item Optimized the robot's structure for easy assembly, maintenance, and manufacturing.
     
-
 \item 3D-printed and assembled mechanical components.
     
-
 \item Led the team, assigned tasks, enforced timelines, and maintained momentum.
     
-
 \item Provided morale support and ensured teammate well-being throughout the project.
 
 \end{itemize}
 
 \textbf{Laith Mohammed – Senior Executive Mechanical Director}
 
-\begin{itemize}
-\item Assisted in designing and prototyping multiple robot base plates using laser-cut acrylic until finalizing the design.
+\begin{itemize}\item Assisted in designing and prototyping multiple robot base plates using laser-cut acrylic until finalizing the design.
     
-
 \item Designed and prototyped several robotic arm versions using laser-cut acrylic to reach the final version.
     
-
 \item Sourced power converters and built cable harnesses for power distribution.
     
-
 \item Assembled a custom PCB using a perf board to securely integrate the ESP32 with the motor driver board.
     
-
 \item Developed a C++ library to control and read the speed of the mecanum wheels.
     
-
 \item Coordinated between electrical, mechanical, and software teams.
 \end{itemize}
 
 \textbf{Aisultan Alpysbay – Electronics and Embedded Systems Lead}
 
-\begin{itemize}
-\item Designed the electrical schematic, simplified diagram, and initial PCB (not used in final system).
+\begin{itemize}\item Designed the electrical schematic, simplified diagram, and initial PCB (not used in final system).
     
-
 \item Assembled the robotic arm multiple times, including rebuilds after failures.
     
-
 \item Rewired the robot's electronics twice for improved reliability.
     
-
 \item Replaced damaged motor drivers.
     
-
 \item Researched and provided design inspiration for the final robot layout.
     
-
 \item Soldered additional wiring onto four servos for sensor feedback (one later replaced).
     
-
 \item Suggested vision-based alignment techniques to improve arm positioning.
 \end{itemize}
 
 \textbf{Sufyaan Atif – Electronics Specialist and Marketing Support}
 
-\begin{itemize}
-\item Designed the complete electrical schematic and simplified system power flow diagram.
+\begin{itemize}\item Designed the complete electrical schematic and simplified system power flow diagram.
     
-
 \item Gathered and organized all required electronic components.
     
-
 \item Assembled and wired the robot's electrical system.
     
-
 \item Tested DC motors, encoders, and sensors for functionality.
     
-
 \item Wrote code to read encoder pulses and calculate wheel RPM.
     
-
 \item Calibrated encoders for reliable measurements.
     
-
 \item Assembled the robotic arm and programmed servo operating limits.
     
-
 \item Tested arm movement with different joint angles.
     
-
 \item Managed the project website and marketing activities.
 \end{itemize}
 
 \textbf{Abban Fahim – Senior Software Developer}
 
-\begin{itemize}
-\item Interfaced sensors with Raspberry Pi, including LiDAR and stereo camera.
+\begin{itemize}\item Interfaced sensors with Raspberry Pi, including LiDAR and stereo camera.
     
-
 \item Set up the complete ROS framework, launch scripts, and development environment on Raspberry Pi.
     
-
 \item Implemented inverse kinematics and PID controller for mobile base control.
     
-
 \item Created a simulation environment to test mobile robot behavior.
     
-
 \item Assisted in implementing SLAM and color detection nodes.
     
-
 \item Developed Aruco marker detection and localization system.
     
-
 \item Built the autonomous navigation stack, fusing multi-sensor data and odometry.
     
-
 \item Wrote the initial serial communication prototype between Pi and ESP.
     
-
 \item Programmed final I2C communication system for the manipulator.
     
-
 \item Mentored the team on Linux, version control, and ROS fundamentals.
 \end{itemize}
 
 \textbf{Moiz Saeed – Software Intern}
 
-\begin{itemize}
-\item Assisted in designing the robot's base structure.
+\begin{itemize}\item Assisted in designing the robot's base structure.
     
-
 \item Developed and tested the odometry ROS node.
     
-
 \item Supported the implementation of Cartographer SLAM using LiDAR for mapping and localization.
     
-
 \item Wrote the full URDF (Unified Robot Description Format) model for the robot.
     
-
 \item Helped set up the robot's transformation (TF) frames in ROS.
     
-
 \item Implemented a colour detection system using OpenCV.
     
-
 \item Developed a ROS node for audio feedback and notifications.
     
-
 \item Assisted in the development of the robot's autonomous navigation system.
 \end{itemize}
 
@@ -316,49 +254,34 @@ This project focused on the design, development, and demonstration of a scaled-d
 
 The main elements covered within the project scope included:
 
-\begin{itemize}
-\item Designed a stable mobile base with mecanum wheels for omnidirectional movement in confined spaces.
+\begin{itemize}\item Designed a stable mobile base with mecanum wheels for omnidirectional movement in confined spaces.
     
-
 \item Assembled a 3-DOF manipulator with a four-bar linkage for waste handling.
     
-
 \item Integrated a secure containment compartment to safely transport waste containers.
     
-
 \item Integrated a stereo depth camera and 2D LiDAR for environment perception and mapping.
     
-
 \item Implemented basic colour detection for container identification.
     
-
 \item Developed SLAM-based autonomous navigation between pickup and drop-off points.
     
-
 \item Implemented basic path planning with fallback behaviour for obstacle avoidance.
     
-
 \item Added an audio feedback system to alert humans blocking the path.
     
-
 \item Fully integrated mechanical, electrical, and software subsystems.
     
-
 \item Used micro-ROS for communication between the Raspberry Pi and ESP32 controllers.
     
-
 \item Implemented initial robot status communication via ROS topics.
     
-
 \item Created a simulation environment for validating inverse kinematics, PID control, and navigation algorithms.
     
-
 \item Conducted multiple rounds of physical testing for calibration and optimization.
     
-
 \item Structured task division across team members specializing in mechanics, electronics, software, and marketing.
     
-
 \item Regular design reviews and troubleshooting sessions to address integration challenges.
 \end{itemize}
 
@@ -405,11 +328,11 @@ $$u=k_{P}e+k_{I}\int_{0}^{t}{e\ dt}+k_{D}\dot{e}$$
 
 Odometry is the process of estimating a robot's change in position (x, y) and orientation ($\theta$) by integrating its measured velocities over time. In wheeled robots, we typically derive those velocities from the wheel encoders' readings i.e. RPM values in our case. 
 
-The process of computing the robot's motion begins with the acquisition of RPM values from the wheels. These RPM values are first converted into angular velocities to represent the rotational speed of each wheel in radians per second. Once the angular velocities ($\omega_{fl}, \omega_{fr}, \omega_{rl}, \omega_{rr}$) are obtained, the forward kinematics equations are applied to determine the robot's linear velocities in the x and y directions, as well as its angular velocity about the z-axis, given the radius of the wheels $r$, and length $L$ and width $W$ from the 2D centre of the robot
+The process of computing the robot's motion begins with the acquisition of RPM values from the wheels. These RPM values are first converted into angular velocities to represent the rotational speed of each wheel in radians per second. Once the angular velocities ($\omega_{fl}, \omega_{fr}, \omega_{rl}, \omega_{rr}$) are obtained, the forward kinematics equations are applied to determine the robot's linear velocities in the x and y directions, as well as its angular velocity about the z-axis, given the radius of the wheels $r$, and length $l_x$ and width $l_y$ from the 2D centre of the robot
 
 $$ v_x = \frac{r}{4}(\omega_{fl} + \omega_{fr} + \omega_{rl} + \omega_{rr}) $$ 
 $$ v_y = \frac{r}{4}(-\omega_{fl} + \omega_{fr} + \omega_{rl} - \omega_{rr}) $$ 
-$$ \omega_{z} = \frac{r}{4(L+W)}(-\omega_{fl} + \omega_{fr} - \omega_{rl} + \omega_{rr}) $$  
+$$ \omega_{z} = \frac{r}{4(l_x+l_y)}(-\omega_{fl} + \omega_{fr} - \omega_{rl} + \omega_{rr}) $$  
 
 Following the computation of the velocities, integration over time is performed to update the robot's position and orientation. This integration yields the robot's displacement along the x and y, and orientation along z, effectively estimating its trajectory over time based on the measured motion data
 
@@ -432,7 +355,7 @@ where $W_{t}$ and $V_{t}$ are mutually independent, and the equations are sequen
 
 \section{Methodology and Implementation}
 
-In the current era of rapid technological advancement, the shift toward autonomous systems has become not only logical but essential. Automation reduces human risk exposure, optimizes operational efficiency, and expands capabilities beyond biological limitations. Tasks involving hazardous materials present significant health and safety concerns for human operators. Exposure to toxic compounds, unstable environments, and unpredictable variables necessitates the development of non-human agents capable of executing such operations with precision and resilience. 
+In the current era of rapid technological advancement, the shift toward autonomous systems has become not only logical but essential. Automation reduces human risk exposure, optimizes operational efficiency, and expands capabilities beyond biological limitations. Tasks involving hazardous materials present significant health and safety concerns for human operators. Exposure to toxic compounds, unstable environments, and unpredictable variables necessitates the development of non-human agents capable of executing such operations with precision and resilience.
 
 This chapter outlines the design methodology and implementation sequence of an autonomous hazardous waste retrieval unit. The system has been engineered for deployment in environments deemed unsafe for prolonged human presence. Operational goals include waste identification, secure collection, and optimized navigation, all executed without direct human intervention.
 
@@ -458,15 +381,88 @@ This chapter outlines the design methodology and implementation sequence of an a
     \label{software_flowchart}
 \end{figure}
 
-Our software stack was primarily built upon the expansive ecosystem of Robot Operating System (ROS), which provided cross-script communication, parallelisation, and ready-to-use packages maintained by robotics companies and industry experts, out of the box.  Figure \ref{software_flowchart}
+Our software stack was primarily built upon the expansive ecosystem of Robot Operating System (ROS) \cite{doi:10.1126/scirobotics.abm6074}, which provided cross-script communication, parallelisation, and ready-to-use packages maintained by robotics companies and industry experts, out of the box.  Figure \ref{software_flowchart}
 
 \subsubsection{SLAM}
 
 The robots transform tree was carefully structured in the Universal Robot Description File (URDF) to support Cartographer's configurations. The IMU (\code{imu_link}) and LiDAR (\code{scan_link}) were each fixed relative to the central robot frame (\code{base_link}). The overall Transformation (TF) hierarchy followed the structure: 
 
-Our SLAM solution was built upon the ROS packages for Google's Cartographer library, configured for 2D mapping using LiDAR and IMU data. The core configuration for Cartographer was defined in the Lua script (cartographer.lua), where key parameters such as \code{use_trajectory_builder_2d = true} and \code{use_imu_data = true} were set to enable 2D SLAM operation and integrate IMU data into the state estimation pipeline. The IMU played a crucial role in providing continuous orientation and rotational velocity data, improving pose estimation accuracy, particularly during rapid movements or in environments with sparse LiDAR features.
+Our SLAM solution was built upon the ROS packages for Google's Cartographer library, configured for 2D mapping using LiDAR and IMU data. The core configuration for Cartographer was defined in the Lua script (cartographer.lua), where key parameters such as \code{use_trajectory_builder_2d = true} and \code{use_imu_data = true} were set to enable 2D SLAM operation and integrate IMU data into the state estimation pipeline. The IMU played a crucial role in providing continuous orientation and rotational velocity data, improving pose estimation accuracy, particularly during rapid movements or in environments with sparse LiDAR features. The following listing is our lua configuration file for Cartographer:
 
-Through the fusion of filtered LiDAR data and IMU measurements, Cartographer achieved more reliable and drift-resistant SLAM performance. While LiDAR provided detailed spatial mapping through scan matching, the IMU contributed to maintaining accurate heading and motion estimation during situations where scan matching alone would have been less reliable.
+\begin{lstlisting}
+include "map_builder.lua" 
+include "trajectory_builder.lua" 
+ 
+options = { 
+  map_builder = MAP_BUILDER, 
+  trajectory_builder = TRAJECTORY_BUILDER, 
+  map_frame = "map", 
+  tracking_frame = "imu_link", 
+  published_frame = "imu_link", 
+  odom_frame = "odom", 
+  provide_odom_frame = true,
+  publish_frame_projected_to_2d = true, 
+  use_odometry = false, 
+  use_nav_sat = false, 
+  use_landmarks = false, 
+  publish_to_tf = true, 
+  num_laser_scans = 1, 
+  num_multi_echo_laser_scans = 0, 
+  num_subdivisions_per_laser_scan = 1, 
+  num_point_clouds = 0, 
+  lookup_transform_timeout_sec = 0.2, 
+  submap_publish_period_sec = 0.3, 
+  pose_publish_period_sec = 5e-3, 
+  trajectory_publish_period_sec = 30e-3, 
+  rangefinder_sampling_ratio = 1., 
+  odometry_sampling_ratio = 1., 
+  fixed_frame_pose_sampling_ratio = 1., 
+  imu_sampling_ratio = 1., 
+  landmarks_sampling_ratio = 1., 
+} 
+ 
+MAP_BUILDER.use_trajectory_builder_2d = true 
+ 
+TRAJECTORY_BUILDER_2D.min_range = 0.05 
+TRAJECTORY_BUILDER_2D.max_range = 3. 
+TRAJECTORY_BUILDER_2D.missing_data_ray_length = 3. 
+TRAJECTORY_BUILDER_2D.use_imu_data = true  
+TRAJECTORY_BUILDER_2D.use_online_correlative_scan_matching = true  
+TRAJECTORY_BUILDER_2D.motion_filter.max_angle_radians = math.rad(0.1) 
+ 
+POSE_GRAPH.constraint_builder.min_score = 0.65 
+POSE_GRAPH.constraint_builder.global_localization_min_score = 0.7 
+\end{lstlisting}
+
+The LiDAR sensor was responsible for generating 2D laser scans of the surrounding environment. These scans were pre-processed through a custom filtering step implemented in the \code{scan_callback()} function of the Color node. In this filtering process, a forward-facing sector was isolated (defined between -80$^{\circ}$ and +100$^{\circ}$) and invalid or noisy range readings were discarded based on \code{range_min} and \code{range_max} conditions. The filtered data was published on the \code{/scan_filtered} topic, which was then used by the Cartographer SLAM node for map building. Cartographer constructed an occupancy grid map by matching these incoming filtered scans against the existing map. The following listing shows the code for \code{scan_callback}:
+
+\begin{lstlisting}[language=Python]
+def scan_callback(self, msg: LaserScan): 
+  scan = msg 
+  self.scan_data = msg 
+  # Define the front sector in radians 
+  front_sector_min = -math.radians(80) # -0.5236 rad 
+  front_sector_max = math.radians(100) # 0.5236 rad 
+  
+  # Calculate the index range corresponding to the front sector 
+  # LaserScan angles: angle = scan.angle_min + index * scan.angle_increment 
+  start_index = int((front_sector_min - scan.angle_min) / scan.angle_increment) 
+  end_index = int((front_sector_max - scan.angle_min) / scan.angle_increment) 
+  
+  # Ensure indices are within valid bounds 
+  start_index = max(0, start_index) 
+  end_index = min(len(scan.ranges) - 1, end_index) 
+  
+  # Extract the ranges within the desired sector and filter valid readings 
+  front_ranges = [r for r in scan.ranges[start_index:end_index+1] 
+  if scan.range_min <= r <= scan.range_max]:
+    if front_ranges: 
+      self.closest_distance = min(front_ranges) 
+    else: 
+      print("No valid range measurements in the front sector.") 
+\end{lstlisting}
+
+To further enhance localization robustness, \code{use_online_correlative_scan_matching} was enabled in the Lua configuration, and motion filter parameters such as \code{motion_filter.max_angle_radians} were tuned to suppress noise from minor pose fluctuations. Through the fusion of filtered LiDAR data and IMU measurements, Cartographer achieved more reliable and drift-resistant SLAM performance. While LiDAR provided detailed spatial mapping through scan matching, the IMU contributed to maintaining accurate heading and motion estimation during situations where scan matching alone would have been less reliable.
 
 \subsubsection{Vision}
 
@@ -474,7 +470,6 @@ The camera was utilised for two purposes: segmenting colours and detecting Aruco
 
 \begin{itemize}
     \item following coloured objects in the environment. The minimum size threshold on the contour regions was set to remove noise and ensure only valid targets were processed. The robot was set to move left or right based on where the centre-point of the target was and move towards it until reaching a certain distance away from it, as demonstrated in Figure \ref{sim_2}.
-
 \item visual servoing for the manipulator's base joint to rotate and align itself with the object to be picked up. The manipulator's end-effector was coloured distinctively to achieve tracking of both ends, and the operation is demonstrated in Figure \ref{arm_cam}.
 \end{itemize}
 
@@ -492,7 +487,22 @@ The camera was utilised for two purposes: segmenting colours and detecting Aruco
 
 \subsubsection{Embedded systems}
 
+The ESP-32 were programmed with the ESP-IDF framework and the micro-ROS libraries to facilitate communication between it and the Pi. Our custom message \code{MecanumCmd} was compiled and we setup subscribers using it for commanding our wheels, as well as a publisher for the wheel encoder values. The transport we used was serial with the maximum baud-rate of 115200, as it provided less latency than anything wireless and was possible due to an abundance of USB ports on the Pi.
+
 \subsubsection{Control}
+
+To command the mobile base, we computed the inverse kinematics (IK) of the robot to give us individual wheel velocities. These were then supplied as target velocities to a PID controller per-wheel, to ensure they were followed in stable manner. The IK equations are given as follows
+
+$$\omega_{fl}=\frac{1}{r}(v_{x}-v_{y}-(l_{x}+l_{y})\omega_{z})$$
+$$\omega_{fr}=\frac{1}{r}(v_{x}+v_{y}+(l_{x}+l_{y})\omega_{z})$$
+$$\omega_{rl}=\frac{1}{r}(v_{x}+v_{y}-(l_{x}+l_{y})\omega_{z})$$
+$$\omega_{rr}=\frac{1}{r}(v_{x}-v_{y}+(l_{x}+l_{y})\omega_{z})$$
+
+\subsubsection{Audio feedback}
+
+An audio playback service node was implemented to enable verbal interaction between the robot and its environment. The node, named \code{AudioService}, was developed to enable dynamic sound output on the robot through ROS 2 services. It provides two service endpoints: one to start audio playback and another to stop it. 
+
+This functionality allows the robot to respond to events or user interactions with verbal cues, alerts, or predefined audio messages and it is triggered when the robot detects a human or obstacle directly in front of it. Upon detection, the robot initiates audio playback for a specified duration before executing a maneuverer to navigate around the object. This behaviour allows the robot to provide an audible cue such as a warning or instruction prior to acting, enhancing its interactive and socially aware operation. While this integration of the audio node into the robot's feedback loop demonstrates effective modular design, it is acknowledged that the timing, responsiveness, and contextual awareness of this feature require refinement in the final prototype. 
 
 \subsection{Circuit schematics}
 
@@ -502,7 +512,7 @@ The camera was utilised for two purposes: segmenting colours and detecting Aruco
 
 \subsection{Computer simulation}
 
-We developed a full robot simulation in the Unity game engine with target points and Aruco markers in the scene to test and iterate on our navigation software in the initial stages of the project. The simulation was capable of simulating both RGB and depth frames for our stereo cameras, a Lidar, an IMU, as wheel as individually commandable wheels with feedback from encoders. The simulation environment can be seen in Figure \ref{sim_1}.
+We developed a full robot simulation in the Unity game engine with target points and Aruco markers in the scene to test and iterate on our navigation software in the initial stages of the project. The simulation was capable of simulating both RGB and depth frames for our stereo cameras, a Lidar, an IMU, as wheels that can be individually commanded with feedback from encoders. The simulation environment can be seen in Figure \ref{sim_1}.
 
 \begin{figure}[h]
   \centering\includegraphics[width=0.85\textwidth]{sim_1.png}
