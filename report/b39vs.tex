@@ -281,7 +281,7 @@ Out of Scope:
 
 Mecanum wheels allow a robot to move in any direction without changing its orientation. Each wheel has angled rollers (at 45°) mounted around its rim. When the wheels spin, they create a combination of forward/backward movement and sideways movement. By carefully controlling the speed and direction of each wheel, the robot can move forward, backward, sideways (strafe), diagonally, or rotate on the spot. This gives the robot full omnidirectional mobility, as outlined in Figure \ref{mecanum}. 
 
-\begin{figure}[h]
+\begin{figure}[H]
   \centering\includegraphics[width=0.85\textwidth]{mecanum.png}
   \caption{A common 4-wheeled mecanum configuration}
   \label{mecanum}
@@ -300,7 +300,7 @@ A PID controller (Proportional-Integral-Derivative controller) is used in a clos
 $$e=r-y$$
 $$u=k_{P}e+k_{I}\int_{0}^{t}{e\ dt}+k_{D}\dot{e}$$ 
 
-\begin{figure}[h]
+\begin{figure}[H]
   \centering\includegraphics[width=0.85\textwidth]{pid.png}
   \caption{Block diagram of PID control}
   \label{pid}
@@ -349,7 +349,7 @@ This chapter outlines the design methodology and implementation sequence of an a
 
 Our primary novel concept was the manipulator, hence we considered multiple designs, and used a design choice matrix to find the most appropriate one. Our criterion were: the appropriateness and the end-effector to our task and its simplicity; the accuracy that could be achieved in end-effector positions; the static and dynamic (during movement of joints or mobile base) stability of the manipulator; the load it could carry; and finally the complexity of its implementation.
 
-The designs we considered as follow, and their decision matrix scores are shown in Table 1,
+The designs we considered as follow, and their decision matrix scores are shown in the table below,
 
 \begin{itemize}
 
@@ -359,11 +359,11 @@ The designs we considered as follow, and their decision matrix scores are shown 
 
 \item A crane mechanism with one rotating joint around the z (vertical) axis and one linear actuator to lower or raise the hoist to be able to reach and hold the objects in a safe place.
 
-\item A simple 3-DOF arm with only revolute joints and a two-claw grippers was chosen as a baseline for the rest. It concluded as the best choice and was further developed with a two-bar linkage mechanism to further improve stability by bring the manipulator's centre of the mass lower.
+\item A simple 3-DOF arm with only revolute joints and a two-claw grippers was chosen as a baseline for the rest. It concluded as the best choice and was further developed with a four-bar linkage mechanism to further improve stability by bring the manipulator's centre of the mass lower.
 
-\end{{itemize}}
+\end{itemize}
 
-\begin{table}[!ht]
+\begin{table}[H]
   \centering
   \begin{tabular}{|m{12em}|l|l|m{5em}|l|m{5em}|}
   \hline
@@ -384,15 +384,179 @@ The designs we considered as follow, and their decision matrix scores are shown 
 
 \subsubsection{Mobile Base}
 
+The base plate is a flat, 3D-printed PLA structure designed to support the primary electronic and mechanical components of the robot. It features mounting holes for the motors and Mecanum wheels, along with embedded M3 heat-set inserts to ensure secure fastening of the motor brackets, depicted in Figure \ref{base_1}. Adjacent to each motor mount is a 20mm * 6mm rectangular cutout, specifically designed for routing motor cables from the underside of the plate. A larger central slot is incorporated to accommodate additional wiring, including battery leads and power distribution cables. The Osoyoo motor driver mount, located at the center of the base plate, also includes M3 heat-set inserts for reliable installation. Mounting provisions are included for the Raspberry Pi 5, utilizing M2.5 heat inserts, as well as for the ESP32-S3, RPLIDAR, and buck converter. The accompanying engineering drawing in Figure \ref{base_2}. 
+
+\begin{figure}[H]
+  \centering\includegraphics[width=0.85\textwidth]{base_1.png}
+  \caption{3D render of the base plate}
+  \label{base_1}
+\end{figure}
+
+\begin{figure}[H]
+  \centering\includegraphics[width=0.65\textwidth]{base_2.png}
+  \caption{Engineering drawing of the base plate}
+  \label{base_2}
+\end{figure}
+
+The top plate is a flat, 3D-printed PLA panel engineered to support the manipulator arm and sensor payload. It incorporates an integrated mount for the arm base, along with a dedicated slot to accommodate a slip ring, enabling continuous 360-degree rotation of the arm without cable entanglement. The top plate is elevated above the base plate via standoffs, which provide sufficient vertical clearance to house the onboard camera and ensure an unobstructed field of view for the RPLIDAR. A designated camera mounting point is also included in the design. The standoff configuration has been optimized to maximize the LiDAR's coverage while maintaining structural integrity. The base servo motor is mounted through the top plate, forming the foundation for the 3-DOF manipulator arm, which is subsequently assembled on top to enable rotational movement around the base axis. Figures \ref{top_1} and \ref{top_2} illustrate the top plate, and Figure \ref{top_3} contains the engineering drawing.
+
+\begin{figure}[H]
+  \centering\includegraphics[width=0.85\textwidth]{top_1.png}
+  \caption{3D render of the top plate}
+  \label{top_1}
+\end{figure}
+
+\begin{figure}[H]
+  \centering\includegraphics[width=0.65\textwidth]{top_2.png}
+  \caption{Another view of the top plate}
+  \label{top_2}
+\end{figure}
+
+\begin{figure}[H]
+  \centering\includegraphics[width=0.85\textwidth]{top_3.png}
+  \caption{Engineering drawing of the toop plate}
+  \label{top_3}
+\end{figure}
+
+A secure payload compartment is mounted on the top plate to enable safe and stable transportation of hazardous waste between collection and disposal points, as shown in Figures \ref{top_4} and \ref{top_5}.
+
+\begin{figure}[H]
+  \centering\includegraphics[width=0.65\textwidth]{top_4.png}
+  \caption{Top plate with payload compartment}
+  \label{top_4}
+\end{figure}
+
+\begin{figure}[H]
+  \centering\includegraphics[width=0.85\textwidth]{top_5.png}
+  \caption{The final assembly}
+  \label{top_5}
+\end{figure}
+
 \subsubsection{Manipulator}
 
-    \subsubsection{Assembly}
+The manipulator arm features three degrees of freedom (3-DOF) and incorporates an offset four-bar linkage mechanism. The first joint enables rotational motion about the z-axis, while the second and third joints provide rotational movement about the x-axis. Notably, the third joint is actuated via a four-bar linkage connected to a servo motor mounted at the base of the arm. This configuration minimizes the mass and rotational inertia acting on the distal segments of the arm, thereby enhancing load-bearing capability and overall system stability. By offloading the actuation to the base, the design significantly improves mechanical efficiency and reduces strain on the upper servos. Figures \ref{arm_1} and \ref{arm_2} respectively contain an illustratiion and the engineering drawings for the arm.
+
+\begin{figure}[H]
+  \centering\includegraphics[width=0.85\textwidth]{arm_1.png}
+  \caption{3D render of the base arm}
+  \label{arm_1}
+\end{figure}
+
+\begin{figure}[H]
+  \centering\includegraphics[width=0.65\textwidth]{arm_2.png}
+  \caption{Engineering drawing of the arm}
+  \label{arm_2}
+\end{figure}
+
+The manipulator is maintained in an upright orientation by a double four-bar linkage system. The manipulator assembly consists of five components: the housing, the flexible gripper, the gripper end holder, the wire, the servo pulley, and the servo motor. 
+
+The housing, gripper end holder, and servo pulley are 3D-printed using PLA, while the flexible gripper is fabricated using TPU filament for its elasticity. This design was selected for its simplicity, reliability, and ease of manufacturing. The table below details the Denavit-Hartenberg parameters for the arm.
+
+\begin{center}
+  \begin{tabular}{| L | L | L | L | L |}
+  \hline
+  \bm{i} & \bm{a_{i}} & \bm{\alpha_{i}} & \bm{d_{i}} & \bm{\theta_{i}} \\ \hline
+  1 & 0 & \pi/2 & 0 & \theta_{1} \\
+  2 & 120mm & 0 & 0 & \theta_{2} \\
+  3 & 120mm & 0 & 0 & \theta_{3} \\ \hline
+  \end{tabular}
+\end{center}
+
+\subsubsection{Assembly}
+
+The robot assembly comprises five primary components: the base plate, standoffs, top plate, manipulator arm, and associated electronics. 
+
+\textbf{Step 1: Base Plate Assembly}
+
+\begin{enumerate}
+  \item Print the Base Plate using suitable material (e.g., PLA, PETG, or ABS). 
+
+  \item Mount the four motors to the underside of the base plate using four M3 screws per motor (16 M3 screws total). 
+  
+  \item Attach the Mecanum wheels to the motor shafts and secure each wheel with the appropriate fastener. 
+\end{enumerate}
+
+\textbf{Step 2: Electronics on the Base Plate}
+
+\begin{enumerate}
+  \item Mount the Raspberry Pi onto the designated holes on the base plate using four M2.5 screws. 
+
+  \item Attach the buck converter to its allocated position using double-sided tape. 
+  
+  \item Secure the Osoyoo Y2 motor driver at the center of the base plate using M3 screws. 
+  
+  \item Mount the RPLIDAR opposite the Raspberry Pi. 
+  
+  \item Install the ESP32-S3 module opposite the buck converter. 
+\end{enumerate}
+
+Note: All mounting holes include heat-set inserts for improved screw retention and secure fastening. 
+
+\textbf{Step 3: Wiring and Power Distribution}
+
+\begin{enumerate}
+  \item Route the motor wires to the ESP32-S3 through the two slots adjacent to the Osoyoo driver. 
+
+  \item Secure the battery beneath the base plate using two zip ties through the same slots. 
+  
+  \item Connect power lines from the battery to: 
+  
+  \begin{itemize}
+    \item The Osoyoo Y v2.0 motor driver. 
+    
+    \item The buck converter. 
+  \end{itemize}
+  
+  \item Distribute regulated power from the buck converter to the rest of the electronics, including the Raspberry Pi and ESP32-S3. 
+\end{enumerate}
+
+\textbf{Step 4: Structural Assembly }
+
+\begin{enumerate}
+  \item Install four standoffs on the base plate using M3 screws, these standoffs provide vertical clearance for the components and for the lidar to function correctly. 
+
+  \item Attach the top plate to the standoffs and secure temporarily. 
+  
+  \item Apply super glue to the base of each standoff to bond them to the base plate for structural rigidity. 
+  
+  \item Once the glue has fully cured, the top plate can be unscrewed to allow access to the internal components without damaging the assembly. 
+\end{enumerate}
+
+\textbf{Step 5: Top Plate Assembly }
+
+\begin{enumerate}
+  \item Mount the base servo underneath the top plate at the specified position. 
+
+  \item Assemble the 3-DOF four-bar linkage manipulator arm on the top plate, interfacing it with the base servo. 
+  
+  \item Attach the secure payload compartment. 
+  
+  \item Attach the Oak-D camera on the top plate along with the servo driver. 
+  
+  \item Complete all wiring from the manipulator servos to the Raspberry Pi or ESP32-S3 as per the control logic. 
+\end{enumerate}
 
 \subsection{Sensors}
 
+Hazmat's arm has a 3-DOF arm with 3 servomotors (hereafter referred to as servos). We decided to create an inverse kinematics system, and for that, we need a feedback angle from the servos. Our servomotors had a potentiometer inside that outputs an analog signal that is corelated to servomotor's actual angle, visible in Figure \ref{servo_1}. In order to get that signal servos were opened, and additional wire was soldered to one of the potentiometers pins, as shown in Figure \ref{servo_2}.
+
+\begin{figure}[H]
+  \centering\includegraphics[width=0.85\textwidth]{servo_1.png}
+  \caption{Servomotor working principle}
+  \label{servo_1}
+\end{figure}
+
+\begin{figure}[H]
+  \centering\includegraphics[width=0.65\textwidth]{servo_2.png}
+  \caption{Servomotor with orange wire soldered to potentiometer}
+  \label{servo_2}
+\end{figure}
+
+Hence, the fourth wire was outputting feedback signal. This signal had minimum and maximum values that were corresponded to the minimum and maximum servo angles. The range of the analog signal differs in between different servo; it was depended on the servo calibration method when they were produced. In the code, it was mapped to correspond with an angle. 
+
 \subsection{Software}
 
-\begin{figure}[h]
+\begin{figure}[H]
     \centering\includegraphics[width=0.85\textwidth]{software_flowchart.png}
     \caption{High level overview of the ROS nodes and topics}
     \label{software_flowchart}
@@ -490,13 +654,13 @@ The camera was utilised for two purposes: segmenting colours and detecting Aruco
 \item visual servoing for the manipulator's base joint to rotate and align itself with the object to be picked up. The manipulator's end-effector was coloured distinctively to achieve tracking of both ends, and the operation is demonstrated in Figure \ref{arm_cam}.
 \end{itemize}
 
-\begin{figure}[h]
+\begin{figure}[H]
     \centering\includegraphics[width=0.85\textwidth]{sim_2.png}
     \caption{Yellow target detection}
     \label{sim_2}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[H]
   \centering\includegraphics[width=0.85\textwidth]{arm_cam.png}
   \caption{HSV mask and detection of object and gripper}
   \label{arm_cam}
@@ -553,7 +717,7 @@ The converter powers the Pi and I2C (PCA9685) board for the servo motors. Then P
 
 We developed a full robot simulation in the Unity game engine with target points and Aruco markers in the scene to test and iterate on our navigation software in the initial stages of the project. The simulation was capable of simulating both RGB and depth frames for our stereo cameras, a LiDAR, an IMU, as wheels that can be individually commanded with feedback from encoders. The simulation environment can be seen in Figure \ref{sim_1}.
 
-\begin{figure}[h]
+\begin{figure}[H]
   \centering\includegraphics[width=0.85\textwidth]{sim_1.png}
   \caption{Simulation environment inside the Unity editor}
   \label{sim_1}
