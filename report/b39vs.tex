@@ -1,6 +1,11 @@
 \documentclass{article}
 
 \usepackage[hidelinks]{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=black,
+  urlcolor=cyan
+}
 \usepackage{graphicx}
 \graphicspath{{./imgs/}}
 
@@ -566,7 +571,13 @@ Our software stack was primarily built upon the expansive ecosystem of Robot Ope
 
 \subsubsection{SLAM}
 
-The robots transform tree was carefully structured in the Universal Robot Description File (URDF) to support Cartographer's configurations. The IMU (\code{imu_link}) and LiDAR (\code{scan_link}) were each fixed relative to the central robot frame (\code{base_link}). The overall Transformation (TF) hierarchy followed the structure: 
+The robots transform tree was carefully structured in the Universal Robot Description File (URDF) to support Cartographer's configurations. The IMU (\code{imu_link}) and LiDAR (\code{scan_link}) were each fixed relative to the central robot frame (\code{base_link}). The overall transformation (TF) hierarchy followed the structure shown in Figure \ref{tf_tree}.
+
+\begin{figure}[H]
+  \centering\includegraphics[width=0.85\textwidth]{tf_tree.png}
+  \caption{Transformation tree visualised with rqt\_tf\_tree}
+  \label{tf_tree}
+\end{figure}
 
 Our SLAM solution was built upon the ROS packages for Google's Cartographer library, configured for 2D mapping using LiDAR and IMU data. The core configuration for Cartographer was defined in the Lua script (cartographer.lua), where key parameters such as \code{use_trajectory_builder_2d = true} and \code{use_imu_data = true} were set to enable 2D SLAM operation and integrate IMU data into the state estimation pipeline. The IMU played a crucial role in providing continuous orientation and rotational velocity data, improving pose estimation accuracy, particularly during rapid movements or in environments with sparse LiDAR features. The following listing is our lua configuration file for Cartographer:
 
@@ -739,15 +750,108 @@ Our autonomous navigation logic allowed the robot to reach its required target p
 
 \subsection{Project Management}
 
+The development of Hazmat followed a structured project management approach to ensure timely and effective execution. The project was divided into distinct phases: planning, design, implementation, integration, testing, and final demonstration. Task assignments were made based on individual team members' technical strengths, with regular meetings conducted to monitor progress and resolve arising issues. 
+
+A Gantt chart was created using Microsoft Project to plan and track activities throughout the academic semester. This facilitated effective time management, accountability, and coordination within the team. Weekly meetings provided opportunities for iterative testing and refinement, particularly during critical stages such as sensor integration, SLAM implementation, and mechanical assembly. 
+
+Key milestones of the project included the successful integration of the LiDAR and camera systems, enabling real-time perception of the environment. The team created a custom indoor layout to simulate a hazardous waste handling scenario and designed a complete mechanical structure of the robot, which was then 3D printed and assembled. A teleoperation mode was implemented for manual control and testing, followed by the deployment of autonomous navigation using SLAM (Simultaneous Localization and Mapping) combined with LiDAR for dynamic map generation. Object detection and colour-based sorting were successfully demonstrated, allowing the robot to identify, pick, and classify hazardous waste materials based on visual input. 
+
+Risk mitigation strategies were implemented to address potential delays in hardware procurement, sensor calibration challenges, and software integration issues. 
+
 \subsection{Project Finance}
+
+\textbf{Bill of Materials (BOM)} 
+
+The following table summarizes the major components used in the SLAM: Hazmat project along with their quantity and approximate cost:
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{|m{15em}|l|m{6em}|m{6em}|}
+  \hline
+      \textbf{Component} & \textbf{Quantity} & \textbf{Unit Price (AED)} & \textbf{Total Price (AED)} \\ \hline
+      Raspberry Pi 5 & 1 & 290 & 290 \\ \hline
+      ESP32-S3 & 1 & 25 & 25 \\ \hline
+      LiDAR & 1 & 400 & 400 \\ \hline
+      Stereo Camera & 1 & 250 & 250 \\ \hline
+      DC Motors with Encoders & 4 & 60 & 240 \\ \hline
+      Servo Motors & 4 & 40 & 160 \\ \hline
+      Motor Drivers & 2 & 80 & 160 \\ \hline
+      Mecanum Wheels & 4 & 50 & 200 \\ \hline
+      3D Printing Material (PLA \& TPU) & - & 20 & 100 \\ \hline
+      Misc. Components (buck converter, I2C board, bearings, end-effector) & - & 150 & 150 \\ \hline
+      Total Estimated Cost & 2000 AED & ~ & ~ \\ \hline
+  \end{tabular}
+\end{table}
+
+\textbf{Human Resources}
+
+Man-hours were estimated based on the Gantt chart and roles defined within the project. Assuming an hourly rate of AED 25 (for estimation purposes), the breakdown given in Figure \ref{cost_breakdown}.
+
+\begin{figure}[H]
+  \centering\includegraphics[width=0.85\textwidth]{cost_breakdown.png}
+  \caption{HR cost breakdown}
+  \label{cost_breakdown}
+\end{figure}
+
+\textbf{Marketing expenses}
+
+To promote and present Hazmat, basic marketing materials were used, including: 
+
+\begin{itemize}
+\item A0-size printed poster: AED 100 
+
+\item Website cost: AED 1000 
+
+\item Flyer cost: AED 300 
+\end{itemize}
 
 \subsection{Marketing}
 
+\begin{itemize}
+\item \href{https://sufyaaneleven.wixsite.com/slam-1}{Web Design}
+
+\item \href{https://www.canva.com/design/DAGl8qyATHM/gMJVukmr9t3nYkrDabiAuA/edit?utm_content=DAGl8qyATHM&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton}{Flyer}
+
+\item \href{https://www.canva.com/design/DAGiopdpyvU/Y5H8ABwQNilrYqnPYj6jyA/edit?utm_content=DAGiopdpyvU&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton}{Poster Presentation}
+\end{itemize}
+
 \subsection{Risk Management}
+
+\begin{figure}[H]
+  \centering\includegraphics[width=0.85\textwidth]{swot.png}
+  \caption{SWOT analysis}
+  \label{swot}
+\end{figure}
 
 \subsection{Health, Safety, and Environment}
 
+Hazmat was developed with strict consideration for health, safety, and environmental regulations. All mechanical components were securely assembled, and electrical wiring was insulated and properly routed to avoid short circuits or overheating. 
+
+To ensure safety during operation: 
+
+\begin{itemize}
+\item The robot speed was limited to prevent accidental collisions. 
+
+\item Edges on 3D-printed parts were rounded. 
+
+\item The robotic arm was programmed to operate within a controlled range of motion. 
+
+\item Voltage regulators were used to maintain stable power delivery. 
+\end{itemize}
+
+From an environmental standpoint, the use of 3D-printed PLA - a biodegradable material - was emphasized. The system's purpose itself addresses environmental sustainability by improving hazardous waste handling, thereby reducing risks of human exposure and environmental contamination. 
+
 \section{Conclusion and Future Work}
+
+The SLAM: Hazmat project represents the outcome of a rigorous engineering effort driven by a shared commitment to innovation, safety, and practical problem-solving. Assigned the task of designing a robotic solution to assist in hazardous waste handling, our team set out to develop an autonomous system capable of minimizing human exposure in high-risk environments. 
+
+Throughout the development process, our team applied advanced concepts in robotics, artificial intelligence, and autonomous navigation. By integrating SLAM (Simultaneous Localization and Mapping), real-time obstacle avoidance, and robotic manipulation, we engineered a prototype capable of navigating hazardous zones and safely transporting waste materials. This system is particularly suitable for scenarios involving chemical spills, industrial accidents, or post-disaster clean-up operations. 
+
+The project not only tested our technical capabilities but also required us to collaborate on broader aspects such as project management, market research, sustainability, and ethical considerations. We analysed how such a system could be deployed in real-world settings, particularly in areas where manual waste handling poses serious health and environmental risks. 
+
+Despite several challenges—including hardware limitations and mapping inconsistencies—our team remained focused and solution-oriented. Each obstacle presented an opportunity to learn, iterate, and improve. The final prototype demonstrates that autonomous systems can play a meaningful role in addressing global safety concerns and industrial inefficiencies. 
+
+In conclusion, SLAM: Hazmat is more than just a demonstration of robotic capability; it reflects the potential for engineering to solve real-world problems through thoughtful design, interdisciplinary teamwork, and a commitment to impact. This project has laid a strong foundation for future developments in the field of autonomous hazardous waste management and has highlighted the value of integrating emerging technologies into socially responsible engineering solutions. 
 
 \printbibliography[heading=bibintoc]
 
