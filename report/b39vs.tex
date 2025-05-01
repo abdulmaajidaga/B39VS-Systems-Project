@@ -70,7 +70,7 @@
 \newpage
 
 \begin{abstract}
-    Meow meow
+  This paper presents the design and evaluation of Hazmat, an autonomous mobile manipulator developed for indoor hazardous waste handling. The system combines a mecanum-wheeled base for omni-directional mobility, a 3-DOF robotic arm with a four-bar linkage for object manipulation, and a stereo vision system with LiDAR for perception. Navigation is achieved using Cartographer SLAM with encoder and IMU-based odometry. A micro-ROS architecture enables real-time communication between a Raspberry Pi 5 and an ESP32-S3, facilitating distributed control. Design iterations were guided by CAD modeling and Unity simulation. Experimental validation in controlled environments demonstrated reliable localization, navigation, and waste manipulation, highlighting the system's potential for deployment in industrial safety applications.
 \end{abstract}
 
 \tableofcontents
@@ -104,7 +104,7 @@ Objectives:
 
 \item Develop a secure container compartment to safely transport waste containers during robot motion.
 
-\item Integrate vision and ranging sensors (stereo camera, 2D LiDAR, ultrasonic sensors) to enable environmental perception, obstacle detection, and navigation.
+\item Integrate vision and ranging sensors (stereo camera, 2D LiDAR) to enable environmental perception, obstacle detection, and navigation.
 
 \item Design and build a 3-DOF robotic manipulator with a four-bar linkage for grasping and moving waste containers.
 
@@ -260,7 +260,7 @@ SLAM Industries is a team of six passionate individuals committed to redefining 
 
 \subsection{Project Scope}
 
-The scope of project Hazmat is to design, develop, and deploy an autonomous mobile manipulator capable of detecting, navigating to, and safely handling hazardous materials in indoor industrial environments. The system integrates a mecanum-wheeled base for omnidirectional mobility, a 3-DOF robotic arm with a four-bar linkage for stable manipulation, and a multi-sensor perception suite comprising ultrasonic sensors, an RPLiDAR C1, and an Oak-D depth camera for SLAM and object recognition.
+The scope of project Hazmat is to design, develop, and deploy an autonomous mobile manipulator capable of detecting, navigating to, and safely handling hazardous materials in indoor industrial environments. The system integrates a mecanum-wheeled base for omnidirectional mobility, a 3-DOF robotic arm with a four-bar linkage for stable manipulation, and a multi-sensor perception suite comprising a RPLiDAR C1, and an Oak-D depth camera for SLAM and object recognition.
 
 The project includes:
 
@@ -412,7 +412,7 @@ The diagram in Figure \ref{digital_design} illustrates an FSM diagram of our rob
 
 \subsubsection{Mobile Base}
 
-The base plate is a flat, 3D-printed PLA structure designed to support the primary electronic and mechanical components of the robot. It features mounting holes for the motors and Mecanum wheels, along with embedded M3 heat-set inserts to ensure secure fastening of the motor brackets, depicted in Figure \ref{base_1}. Adjacent to each motor mount is a 20mm * 6mm rectangular cutout, specifically designed for routing motor cables from the underside of the plate. A larger central slot is incorporated to accommodate additional wiring, including battery leads and power distribution cables. The Osoyoo motor driver mount, located at the center of the base plate, also includes M3 heat-set inserts for reliable installation. Mounting provisions are included for the Raspberry Pi 5, utilizing M2.5 heat inserts, as well as for the ESP32-S3, RPLIDAR, and buck converter. The accompanying engineering drawing in Figure \ref{base_2}. 
+The base plate is a flat, 3D-printed PLA structure designed to support the primary electronic and mechanical components of the robot. It features mounting holes for the motors and mecanum wheels, along with embedded M3 heat-set inserts to ensure secure fastening of the motor brackets, depicted in Figure \ref{base_1}. Adjacent to each motor mount is a 20mm * 6mm rectangular cutout, specifically designed for routing motor cables from the underside of the plate. A larger central slot is incorporated to accommodate additional wiring, including battery leads and power distribution cables. The Osoyoo motor driver mount, located at the center of the base plate, also includes M3 heat-set inserts for reliable installation. Mounting provisions are included for the Raspberry Pi 5, utilizing M2.5 heat inserts, as well as for the ESP32-S3, RPLIDAR, and buck converter. The accompanying engineering drawing in Figure \ref{base_2}. 
 
 \begin{figure}[H]
   \centering\includegraphics[width=0.85\textwidth]{base_1.png}
@@ -851,7 +851,7 @@ The finalized arm design was fully integrated with the top plate and 3D printed 
   \label{dev_14}
 \end{figure}
 
-The end effector was designed in Fusion and 3d printed with TPU, the first literation of the main body used a mini 9g servo, which turned out to be too weak for the application, thus a second one was printed to fit a normal sized servo. Figures \ref{dev_16} and \ref{dev_17} show the design of the end-effector, and Figure \ref{dev_19} shows our final gripper in action.
+The end effector was designed using Fusion 360 and fabricated using TPU through 3D printing. The initial prototype incorporated a mini 9g servo motor which proved to be insufficient in torque for the application. As a result, a revised version was produced to accommodate a standard-sized servo, providing the necessary strength, torque and reliability. Figures \ref{dev_16} and \ref{dev_17} illustrate the design iterations of the end-effector, while Figure \ref{90} showcases the final gripper in operation.
 
 \begin{figure}[H]
   \centering\includegraphics[width=0.85\textwidth]{dev_16.png}
@@ -992,15 +992,15 @@ From an environmental standpoint, the use of 3D-printed PLA - a biodegradable ma
 
 \section{Conclusion and Future Work}
 
-The Hazmat project represents the outcome of a rigorous engineering effort driven by a shared commitment to innovation, safety, and practical problem-solving. Assigned the task of designing a robotic solution to assist in hazardous waste handling, our team set out to develop an autonomous system capable of minimizing human exposure in high-risk environments. 
+The SLAM: Hazmat project represents the outcome of a rigorous engineering effort driven by a shared commitment to innovation, safety, and practical problem-solving. Tasked with developing a robotic solution for hazardous waste handling, our team designed and implemented an autonomous system aimed at minimizing human exposure in high-risk environments.
 
-Throughout the development process, our team applied advanced concepts in robotics, artificial intelligence, and autonomous navigation. By integrating SLAM (Simultaneous Localization and Mapping), real-time obstacle avoidance, and robotic manipulation, we engineered a prototype capable of navigating hazardous zones and safely transporting waste materials. This system is particularly suitable for scenarios involving chemical spills, industrial accidents, or post-disaster clean-up operations. 
+Throughout the development process, we applied advanced concepts in robotics and autonomous navigation. Notable technical achievements include the successful implementation of SLAM using Cartographer with LiDAR and IMU data, development of a 3-DOF manipulator with a four-bar linkage for efficient and stable object handling, integration of vision-based object recognition and servoing, and deployment of a ROS-based communication stack using micro-ROS for real-time subsystem control. The system also featured feedback-enabled control for improved precision, an interactive audio feedback module, and a simulation environment built in Unity for iterative testing. These accomplishments demonstrate the feasibility of deploying a fully integrated autonomous mobile manipulator in confined and dynamic industrial settings.
 
-The project not only tested our technical capabilities but also required us to collaborate on broader aspects such as project management, market research, sustainability, and ethical considerations. We analysed how such a system could be deployed in real-world settings, particularly in areas where manual waste handling poses serious health and environmental risks. 
+Beyond engineering, the project tested our capabilities in project management, market analysis, sustainability, and ethical engineering. We explored real-world deployment scenarios in sectors such as chemical spill response, industrial site cleanup, and post-disaster operations contexts where automation can significantly improve safety and efficiency.
 
-Despite several challenges—including hardware limitations and mapping inconsistencies—our team remained focused and solution-oriented. Each obstacle presented an opportunity to learn, iterate, and improve. The final prototype demonstrates that autonomous systems can play a meaningful role in addressing global safety concerns and industrial inefficiencies. 
+Despite encountering challenges such as power management issues, hardware failure, and mapping drift, we maintained a solution-oriented approach. Each setback contributed to a cycle of learning and improvement that shaped the final system into a cohesive, functioning prototype capable of navigating environments, detecting waste, and performing autonomous collection and disposal.
 
-In conclusion, Hazmat is more than just a demonstration of robotic capability; it reflects the potential for engineering to solve real-world problems through thoughtful design, interdisciplinary teamwork, and a commitment to impact. This project has laid a strong foundation for future developments in the field of autonomous hazardous waste management and has highlighted the value of integrating emerging technologies into socially responsible engineering solutions. 
+In conclusion, SLAM: Hazmat is more than just a demonstration of robotic capability—it reflects how thoughtful design, interdisciplinary teamwork, and technological innovation can come together to address real-world problems. This project lays a strong foundation for future advancements in autonomous hazardous waste management and presents numerous avenues for future work, including the integration of autonomous charging capabilities, enhancement of visual recognition with machine learning, and expansion into outdoor or GPS-based navigation. Further research and refinement will bring this concept closer to industrial deployment and contribute to a safer, more sustainable future.
 
 \printbibliography[heading=bibintoc]
 
