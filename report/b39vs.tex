@@ -4,10 +4,13 @@
 \hypersetup{
   colorlinks=true,
   linkcolor=black,
+  citecolor=black,
   urlcolor=cyan
 }
 \usepackage{graphicx}
 \graphicspath{{./imgs/}}
+
+\usepackage{pdfpages}
 
 \usepackage{xcolor}
 \usepackage{listings}
@@ -16,6 +19,8 @@
 \texttt{\textcolor{blue}{#1}}%
 }
 \lstset{language=C,keywordstyle={\bfseries \color{blue}}}
+
+\usepackage[toc,page]{appendix}
 
 \usepackage{indentfirst}
 
@@ -234,7 +239,7 @@ SLAM Industries is a team of six passionate individuals committed to redefining 
 \item Mentored the team on Linux, version control, and ROS fundamentals.
 \end{itemize}
 
-\textbf{Moiz Saeed – Software Intern}
+\textbf{Moaiz Saeed – Software Specialist}
 
 \begin{itemize}\item Assisted in designing the robot's base structure.
     
@@ -313,6 +318,16 @@ $$u=k_{P}e+k_{I}\int_{0}^{t}{e\ dt}+k_{D}\dot{e}$$
 
 \subsubsection{PWM control}
 
+A PWM (Pulse-Width Modulation) is a method used to “convert” digital signal to analog signal by switching on and off the digital output. 3 main concepts of PWM: 
+
+\begin{itemize}
+  \item (P) - Pulse, the digital signal 0 (LOW) and 1 (HIGH), 
+
+  \item (W) - Width, the duration of HIGH signal, 
+
+  \item (M) - Modulation, which is the duty cycle which adjusts the duration to control output power. 
+\end{itemize}
+
 \subsection{Sensing}
 
 \subsubsection{Odometry}
@@ -384,6 +399,14 @@ The designs we considered as follow, and their decision matrix scores are shown 
 \end{table}
 
 \subsection{Digital Design}
+
+The diagram in Figure \ref{digital_design} illustrates an FSM diagram of our robot's logic and operation.
+
+\begin{figure}[H]
+  \centering\includegraphics[width=0.63\textwidth]{digital_design.png}
+  \caption{FSM diagram of our robot's logic}
+  \label{digital_design}
+\end{figure}
 
 \subsection{Mechanical Design}
 
@@ -543,6 +566,12 @@ Note: All mounting holes include heat-set inserts for improved screw retention a
 
 \subsection{Sensors}
 
+\begin{figure}[H]
+  \centering\includegraphics[width=0.85\textwidth]{sensors.png}
+  \caption{3D render of the base plate}
+  \label{sensors}
+\end{figure}
+
 Hazmat's arm has a 3-DOF arm with 3 servomotors (hereafter referred to as servos). We decided to create an inverse kinematics system, and for that, we need a feedback angle from the servos. Our servomotors had a potentiometer inside that outputs an analog signal that is corelated to servomotor's actual angle, visible in Figure \ref{servo_1}. In order to get that signal servos were opened, and additional wire was soldered to one of the potentiometers pins, as shown in Figure \ref{servo_2}.
 
 \begin{figure}[H]
@@ -557,7 +586,7 @@ Hazmat's arm has a 3-DOF arm with 3 servomotors (hereafter referred to as servos
   \label{servo_2}
 \end{figure}
 
-Hence, the fourth wire was outputting feedback signal. This signal had minimum and maximum values that were corresponded to the minimum and maximum servo angles. The range of the analog signal differs in between different servo; it was depended on the servo calibration method when they were produced. In the code, it was mapped to correspond with an angle. 
+Hence, the fourth wire was outputting feedback signal. This signal had minimum and maximum values that were corresponded to the minimum and maximum servo angles. The range of the analog signal differs in between different servo; it was depended on the servo calibration method when they were produced. In the code, it was mapped to correspond with an angle. The rest of our sensors connections are illustrated in Figure \ref{sensors}. 
 
 \subsection{Software}
 
@@ -567,7 +596,7 @@ Hence, the fourth wire was outputting feedback signal. This signal had minimum a
     \label{software_flowchart}
 \end{figure}
 
-Our software stack was primarily built upon the expansive ecosystem of Robot Operating System (ROS) \cite{doi:10.1126/scirobotics.abm6074}, which provided cross-script communication, parallelisation, and ready-to-use packages maintained by robotics companies and industry experts, out of the box.  Figure \ref{software_flowchart}
+Our software stack was primarily built upon the expansive ecosystem of Robot Operating System (ROS) \cite{doi:10.1126/scirobotics.abm6074}, which provided cross-script communication, parallelisation, and ready-to-use packages maintained by robotics companies and industry experts, out of the box. Figure \ref{software_flowchart} shows an overview of our ROS nodes and data-flow.
 
 \subsubsection{SLAM}
 
@@ -716,11 +745,131 @@ The converter powers the Pi and I2C (PCA9685) board for the servo motors. Then P
 
 \begin{figure}[H]
   \centering\includegraphics[width=0.85\textwidth]{schematic_current.png}
-  \caption{current schematics}
+  \caption{Current schematics}
   \label{schematic_current}
 \end{figure}
 
 \subsection{Prototype development}
+
+The development of the robot's physical structure began with the selection and procurement of the appropriate hardware components. An initial prototype baseplate was designed to securely mount the motors, allowing for early-stage testing. A 3S LiPo battery was used as the primary power source for this prototype, shown in Figure \ref{dev_1}, with the 5V output from the motor driver used to power the ESP32 microcontroller. This setup enabled successful movement of the robot, validating the fundamental hardware integration. 
+
+\begin{figure}[H]
+  \centering\includegraphics[width=0.85\textwidth]{dev_1.png}
+  \caption{First prototype moving}
+  \label{dev_1}
+\end{figure}
+
+The second prototype introduced several structural improvements, including dedicated cable routing slots and provisions for securing the battery using zip ties, shown in Figure \ref{dev_2}. Mounting holes were added to accommodate the motor driver board, Raspberry Pi, ESP32, and the voltage converter board. The 3S LiPo battery from the initial prototype was replaced with a 4S LiPo, as the former experienced over-discharge and subsequent failure. Additionally, a separate battery bank was integrated to power the Raspberry Pi, addressing the issue of insufficient output from the motor driver's onboard 5V regulator. This iteration successfully achieved stable robot movement and reliable encoder feedback, marking a significant step forward in system integration.
+
+\begin{figure}[H]
+  \centering\includegraphics[width=0.85\textwidth]{dev_2.png}
+  \caption{Second prototype}
+  \label{dev_2}
+\end{figure}
+
+The subsequent prototype introduced additional structural enhancements, including mounting points for a top plate, 3D-printed spacers for elevation, and the top plate itself to accommodate upper-level components, shown in Figures \ref{dev_3} and \ref{dev_5}. In the following iteration, the previously used power bank was replaced with a dedicated converter board, and a custom 3D printed ESP32 holder was added to streamline wiring and improve connection stability, shown in Figure \ref{dev_4}. 
+
+To ensure secure and organized power distribution, a custom wiring harness was developed. This included connectors for the battery, driver board, USB power supply for the camera, and GPIO connectors for powering the Raspberry Pi. During this process, several converter boards were evaluated. The LM2592 module (provided by the university) failed to supply sufficient power, while the LM2956 functioned temporarily but overheated and failed. The XL4016 also proved unreliable due to an unspecified fault. Ultimately, the XL4015E1 converter board from Drok was selected. It met all performance requirements, reliably powering the Raspberry Pi, ESP32, servos, and camera. Moreover, it featured an integrated display for monitoring input voltage, helping to prevent over discharge of the LiPo battery which was a failure encountered in earlier versions.
+
+\begin{figure}[H]
+  \centering\includegraphics[width=0.85\textwidth]{dev_3.png}
+  \caption{Third prototype moving with current readings for power calculations}
+  \label{dev_3}
+\end{figure}
+
+\begin{figure}[H]
+  \centering\includegraphics[width=0.85\textwidth]{dev_4.png}
+  \caption{Side profile of custom ESP mount}
+  \label{dev_4}
+\end{figure}
+
+\begin{figure}[H]
+  \centering\includegraphics[width=0.85\textwidth]{dev_5.png}
+  \caption{Third prototype with custom ESP mount}
+  \label{dev_5}
+\end{figure}
+
+The finalized components were 3d printed and assembled to complete the last literation. Heat-set inserts were used instead of nuts for a cleaner and more finished product. However, during this stage our motor driver began to fail, causing us to remove the esp32 holder to allow for troubleshooting. The original driver board was replaced with two lower quality alternatives, but this setup did not perform as intended. In particular, the robot's ability to strafe left and right became highly unpredictable and unreliable. Figures \ref{dev_6}, \ref{dev_7}, and \ref{dev_8} show the fully assembled robot.
+
+\begin{figure}[H]
+  \centering\includegraphics[width=0.85\textwidth]{dev_6.png}
+  \caption{Final wiring underneath top plate}
+  \label{dev_6}
+\end{figure}
+
+\begin{figure}[H]
+  \centering\includegraphics[width=0.85\textwidth]{dev_7.png}
+  \caption{Front view of assembled body}
+  \label{dev_7}
+\end{figure}
+
+\begin{figure}[H]
+  \centering\includegraphics[width=0.85\textwidth]{dev_8.png}
+  \caption{Rear view of assembled body}
+  \label{dev_8}
+\end{figure}
+
+Development of the robotic arm was carried out in parallel with the design of the top plate. The initial arm prototype was based on a fully defined parametric sketch created in Fusion 360, incorporating joints to simulate and rapidly test variations in the offset 4-bar linkage geometry, as seen in Figures \ref{dev_9} and \ref{dev_10}. This design was then laser-cut from acrylic for physical prototyping, visible in Figure \ref{dev_11}. The first iteration included only the initial four-bar linkage, which served as a proof of concept to evaluate its mechanical compatibility with the robot chassis. It also tested the feasibility of using the laser cutter to emboss the servo gear profile directly into the acrylic which aimed at reducing both design complexity and overall component size.
+
+\begin{figure}[H]
+  \centering\includegraphics[width=0.85\textwidth]{dev_9.png}
+  \caption{Fusion model of the initial arm}
+  \label{dev_9}
+\end{figure}
+
+\begin{figure}[H]
+  \centering\includegraphics[width=0.85\textwidth]{dev_10.png}
+  \caption{Side profile of the design}
+  \label{dev_10}
+\end{figure}
+
+\begin{figure}[H]
+  \centering\includegraphics[width=0.85\textwidth]{dev_11.png}
+  \caption{First prototype of the arm}
+  \label{dev_11}
+\end{figure}
+
+The second prototype, shown in Figure \ref{dev_12}, featured an extended reach and introduced a dual 4-bar linkage upright mechanism, enhancing the arm's range of motion and stability. The base of this structure was also laser cut from acrylic to maintain precision and consistency with earlier iterations. Additionally, the top plate was updated to include mounting points for the camera, supporting further integration of perception systems.
+
+\begin{figure}[H]
+  \centering\includegraphics[width=0.85\textwidth]{dev_12.png}
+  \caption{Second prototype of the arm with top plate}
+  \label{dev_12}
+\end{figure}
+
+The finalized arm design was fully integrated with the top plate and 3D printed for structural strength and precision, both of which are shown in Figures \ref{dev_13} and \ref{dev_14}. The top plate itself included a built-in camera holder and standoffs to support the upper components. The base of the arm was embedded directly into the top plate, featuring a custom groove designed to accommodate a slip ring, which helped minimize friction during rotation and improved overall mechanical efficiency.
+
+\begin{figure}[H]
+  \centering\includegraphics[width=0.85\textwidth]{dev_13.png}
+  \caption{Final arm and top plate}
+  \label{dev_13}
+\end{figure}
+
+\begin{figure}[H]
+  \centering\includegraphics[width=0.85\textwidth]{dev_14.png}
+  \caption{Fully assembled body with arm}
+  \label{dev_14}
+\end{figure}
+
+The end effector was designed in Fusion and 3d printed with TPU, the first literation of the main body used a mini 9g servo, which turned out to be too weak for the application, thus a second one was printed to fit a normal sized servo. Figures \ref{dev_16} and \ref{dev_17} show the design of the end-effector, and Figure \ref{dev_19} shows our final gripper in action.
+
+\begin{figure}[H]
+  \centering\includegraphics[width=0.85\textwidth]{dev_16.png}
+  \caption{End effector relative to target object}
+  \label{dev_16}
+\end{figure}
+
+\begin{figure}[H]
+  \centering\includegraphics[width=0.85\textwidth]{dev_17.png}
+  \caption{End effector design}
+  \label{dev_17}
+\end{figure}
+
+\begin{figure}[H]
+  \centering\includegraphics[width=0.85\textwidth]{dev_19.png}
+  \caption{Final gripper grasping the object}
+  \label{dev_19}
+\end{figure}
 
 \section{Results}
 
@@ -854,6 +1003,27 @@ Despite several challenges—including hardware limitations and mapping inconsis
 In conclusion, SLAM: Hazmat is more than just a demonstration of robotic capability; it reflects the potential for engineering to solve real-world problems through thoughtful design, interdisciplinary teamwork, and a commitment to impact. This project has laid a strong foundation for future developments in the field of autonomous hazardous waste management and has highlighted the value of integrating emerging technologies into socially responsible engineering solutions. 
 
 \printbibliography[heading=bibintoc]
+
+\begin{appendices}
+
+  \section{Risk assessment matrix}
+
+  \begin{figure}[H]
+    \centering\includegraphics[width=0.85\textwidth]{risk_assessment.png}
+  \end{figure}
+
+  \section{Gantt chart}
+
+  \begin{figure}[H]
+    \centering\includegraphics[width=0.85\textwidth]{gantt.png}
+  \end{figure}
+  
+  \section{Meeting minutes}
+
+  \includepdf[pages=-]{./imgs/minutes.pdf}
+
+\end{appendices}
+  
 
 \end{document}
 
