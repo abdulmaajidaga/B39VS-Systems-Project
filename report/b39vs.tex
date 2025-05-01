@@ -138,7 +138,7 @@ SLAM Industries is a team of six passionate individuals committed to redefining 
     \label{organisation}
 \end{figure}
 
-\textbf{Abdul Maajid Aga – Director of Robotic Operations}
+\textbf{Abdul Maajid Aga - Director of Robotic Operations}
 
 \begin{itemize}
 \footnotesize
@@ -165,7 +165,7 @@ SLAM Industries is a team of six passionate individuals committed to redefining 
 
 \end{itemize}
 
-\textbf{Laith Mohammed – Senior Executive Mechanical Director}
+\textbf{Laith Mohammed - Senior Executive Mechanical Director}
 
 
 \begin{itemize}
@@ -184,7 +184,7 @@ SLAM Industries is a team of six passionate individuals committed to redefining 
 \item Coordinated between electrical, mechanical, and software teams.
 \end{itemize}
 
-\textbf{Aisultan Alpysbay – Electronics and Embedded Systems Lead}
+\textbf{Aisultan Alpysbay - Electronics and Embedded Systems Lead}
 
 \begin{itemize}
 \footnotesize
@@ -204,7 +204,7 @@ SLAM Industries is a team of six passionate individuals committed to redefining 
 \item Suggested vision-based alignment techniques to improve arm positioning.
 \end{itemize}
 
-\textbf{Sufyaan Atif – Electronics Specialist and Marketing Support}
+\textbf{Sufyaan Atif - Electronics Specialist and Marketing Support}
 
 
 \begin{itemize}
@@ -229,7 +229,7 @@ SLAM Industries is a team of six passionate individuals committed to redefining 
 \item Managed the project website and marketing activities.
 \end{itemize}
 
-\textbf{Abban Fahim – Senior Software Developer}
+\textbf{Abban Fahim - Senior Software Developer}
 
 \begin{itemize}
 \footnotesize
@@ -257,7 +257,7 @@ SLAM Industries is a team of six passionate individuals committed to redefining 
 \item Typsetting the final report.
 \end{itemize}
 
-\textbf{Moaiz Saeed – Software Specialist}
+\textbf{Moaiz Saeed - Software Specialist}
 
 \begin{itemize}
 \footnotesize
@@ -307,6 +307,72 @@ Out of Scope:
 \section{Background and Theory}
 
 \subsection{Literature review}
+
+\subsubsection{Mobile base}
+
+\begin{itemize}
+  
+  \item Advanced Autonomous Platforms: Some systems employ model-based motion control to achieve precise navigation. For example, a four-wheel-drive mobile robot with wheel encoders was given a tuned PI controller for path tracking, yielding a tracking error under 1.5\% in experiments \ref{kaliDevelopmentControlMobile2024}. Another design integrates multiple sensors (light, touch, ultrasonic) and utilizes a trapezoidal acceleration-deceleration profile with PID control for smooth, accurate motion [2]. This enabled reliable line-following (e.g. along an S-curve track) and real-time obstacle avoidance on the mobile base.
+  \item Teleoperated Bases: Simpler mobile bases often forego autonomous navigation. One wireless robotic arm platform based on Arduino Mega is driven via a PS2 controller, moving forward/reverse and turning in discrete steps [3]. Its performance (speed over distance) was characterized under different battery voltages, showing that insufficient voltage (below ~7V) dramatically slows or even halts the robot [3]. Similarly, a bomb-disposal robot employs an RF remote control and a microcontroller to drive a wheeled base [4]. An onboard camera provides the human operator with feedback as the robot moves in all directions and even free-runs; the base could carry a gripped object up to ~1kg [4]. These teleoperated designs are straightforward but rely entirely on human guidance for navigation.
+
+\end{itemize}
+
+\subsubsection{Manipulator}
+
+\begin{itemize}
+  
+  \item Integrated Arms for Pick-and-Place: Many mobile manipulators incorporate an onboard robotic arm for interacting with objects. One platform uses a 4-DOF arm mounted on a NI sbRIO-controlled base to capture selected objects identified by the vision system and place them at target locations [2]. The arm's joints are driven by DC servomotors, and a PID control law coordinates the arm motion for accuracy. Experimental tests showed the arm moving in multiple axes (up/down, forward/back) to reach and grasp the object once the base was in position [2]. Another system features a 3-DOF manipulator (plus gripper) on a mobile platform, where the end-effector trajectory is planned using inverse kinematics\ref{kaliDevelopmentControlMobile2024}. After the base performs path tracking to the work site, the manipulator's position kinematics (with a shoulder offset) are solved to execute the pick-and-place task precisely.
+  \item Servo-Based Arms and Payload Limits: In a more minimalist design, a wireless mobile robot arm built on Arduino uses a 4-DOF revolute servo arm for basic pick-and-place [3]. While effective for light objects, its payload is limited - tests showed it can lift 50-150 g, but at ~200 g the servos could no longer function properly [3]. By contrast, a remotely operated EOD robot implemented a 3-DOF arm capable of gripping objects up to 1 kg weight [4]. This arm, controlled via a PIC microcontroller, was observed through a camera and maneuverer by an operator to safely dispose of dangerous items [4]. The lower degree of freedom and direct remote control simplified the arm's design while still accomplishing the essential task.
+
+\end{itemize}
+
+\subsubsection{SLAM (Simultaneous Localization and Mapping)}
+
+\begin{itemize}
+  
+  \item Structured Navigation vs. SLAM: Some mobile robots avoid full SLAM by using structured environment cues. For instance, one system notes the difficulty of rebuilding an unknown map in real-world complexity and instead focuses on efficient motion planning [2]. It uses line-following (via IR sensors) and known landmarks to navigate to targets, trading autonomy for simplicity. This approach works well in constrained or known environments but doesn't generalize beyond prepared trajectories.
+  \item 2D LIDAR SLAM Techniques: For robots that do explore unknown areas, 2D LIDAR-based SLAM algorithms are common. A direct comparison of popular methods found that GMapping (particle-filter grid mapping) sometimes failed to produce a consistent map, whereas Hector SLAM and Google Cartographer yielded accurate maps that matched ground-truth trajectories within a few centimeters [5]. In fact, Cartographer's real-time loop closure approach (using scan-to-submap matching) enabled large indoor areas to be mapped (tens of thousands of m²) with high fidelity on limited computing hardware [6]. These laser SLAM systems publish maps and pose estimates that can guide navigation for a mobile base.
+  \item Vision-Based SLAM: Monocular visual SLAM has also been explored, though it poses challenges in practice. Tests with ROS-based monocular SLAM on a mobile robot showed issues like scale ambiguity (no inherent distance scale) and heavy computation requirements - the processing had to be offloaded to an external PC, and manual adjustments were needed to fix scale. This indicates that without depth sensors, additional measures are required for reliable vision-only SLAM. Other feature-based approaches use environmental features to aid SLAM; for example, an EKF-SLAM algorithm representing walls and corridors as line segments was validated in a real indoor environment [7]. By extracting line features from laser scans and updating their parameters in the filter, the robot simultaneously localized itself and built a compact line-based map.
+  \item No-SLAM Teleoperation: It's worth noting that teleoperated systems dispense with SLAM entirely. Robots under direct remote control rely on the operator's situational awareness (often via on-board video feed) for navigation [4]. This eliminates the need for onboard mapping or localization algorithms, simplifying the design at the cost of requiring constant human input and a reliable communication link.
+
+\end{itemize}
+
+\subsubsection{Single Board Computer}
+
+\begin{itemize}
+  
+  \item Embedded Controller Platforms: Advanced mobile manipulators often use a dedicated single-board computer or embedded controller to handle all the subsystems. In one design, a National Instruments sbRIO-9606 (branded as a KNR controller) serves as the brain of the robot[2]. This real-time embedded platform integrates sensor I/O, motor drivers, and even vision processing capabilities, allowing the robot to process camera images and control motors in a closed-loop without a separate PC. The KNR controller operates as an independent system, reading encoder feedback and running algorithms (like Otsu thresholding and template matching for object tracking) on-board. Such an SBC provides robust performance and timing for coordination of the mobile base and arm.
+  \item Microcontroller-Only Designs: In contrast, some robots are built without a traditional SBC by leveraging microcontroller boards. The wireless mobile robotic arm, for example, is driven purely by an Arduino Mega 2560 microcontroller [3]. The Arduino interfaces directly with the wireless receiver and outputs control signals to motors, effectively acting as both the high-level and low-level controller. This greatly simplifies the architecture and reduces cost/power, but it means the system has limited computing power — it cannot easily perform heavy tasks like vision processing or SLAM on-board. Likewise, the bomb-disposal robot relies on a PIC microcontroller for all decision-making [4], indicating no onboard OS or computer beyond the microcontroller; the video transmission is handled by a separate analog/digital link to the operator, not by an onboard computer. These designs show that an SBC isn't always necessary when the task scope is limited.
+  \item Offloading Computation: When higher processing capability is needed, designers may incorporate a more powerful SBC or offload computation to an external system. In one SLAM evaluation, for instance, the robot's sensor data was sent to a laptop for processing because the on-board controller could not handle the intensive monocular SLAM algorithms. This highlights a trade-off: using a capable SBC (like a Raspberry Pi, Jetson, or an FPGA-based board) can enable advanced features on the robot (mapping, complex vision), but it increases power consumption and integration complexity. Each project balances these factors differently depending on requirements.
+
+\end{itemize}
+
+\subsubsection{Microcontroller}
+
+\begin{itemize}
+  
+  \item Real-Time Low-Level Control: Microcontrollers play a crucial role in the real-time control of mobile manipulators. They handle tasks such as sensor reading, motor actuation, and ensuring timely responses. In the Arduino-based mobile arm, the ATmega2560 microcontroller generates PWM signals to drive the arm's servos and reads inputs from the wireless game controller. The simplicity of toggling I/O pins at microsecond resolution makes microcontrollers ideal for precise control of motors (e.g., maintaining servo positions or motor speeds). Even in systems with an SBC, microcontroller units (or microcontroller-like cores) may be present for hard real-time tasks. For example, the NI sbRIO's onboard processor and FPGA take on microcontroller duties by interfacing with encoders and sensors directly, closing feedback loops at high speed while the higher-level logic runs in parallel.
+  \item Distributed Control Architecture: Some designs use a single microcontroller to manage both the base and manipulator, while others might distribute tasks. In the dangerous-object disposal robot, a single PIC microcontroller (programmed via MPLAB) handles all motion - it parses the decoded remote commands and issues signals to both the drive motors and the arm's servos [4]. This central unit orchestrates wheel movements and gripper actions in sync, proving sufficient for a teleoperated scenario. In more complex robots, one might find multiple microcontrollers (for example, one dedicated to the arm and one to the base) communicating with an SBC. However, increasing the number of controllers requires careful coordination. Overall, microcontrollers are favored for their reliability and deterministic control, especially in safety-critical manipulations, whereas computation-heavy tasks are offloaded to higher-level processors when needed [5].
+
+\end{itemize}
+
+\subsubsection{Pros and Cons of Different Methods}
+
+\begin{itemize}
+  
+  \item Autonomy vs. Teleoperation: Fully autonomous mobile manipulators can navigate and perform tasks without human intervention, which is crucial in inaccessible or dynamic environments. They leverage SLAM and path planning to handle unknown areas (e.g., using LIDAR SLAM to map and localize with ~3 cm accuracy [5]). The trade-off is significant system complexity: mapping a real-world environment is challenging [2] and requires robust algorithms and sensor fusion. Teleoperated robots, on the other hand, avoid this complexity by relying on human control. Designs like the PS2-controlled Arduino robot or the RF-controlled bomb disposal unit are far simpler - no SLAM or AI is needed [4]. The downside is they require continuous operator attention and a reliable communications link, and their effectiveness is limited by human reaction time and line-of-sight (or camera view) of the scene. In summary, autonomy increases capability and independence, but teleoperation offers simplicity and ensures a human is in the loop for critical decisions.
+  
+  \item Control Strategies and Complexity: The choice of control strategy affects both performance and development effort. Advanced control methods (e.g. model-based controllers, inverse kinematics, or even model predictive control) can greatly enhance precision and efficiency. For instance, incorporating kinematic modeling and feedback allowed one mobile base to track paths with only 1.41\% error \ref{kaliDevelopmentControlMobile2024}, and using inverse kinematics enabled accurate arm positioning \ref{kaliDevelopmentControlMobile2024}. However, these methods demand careful system identification, tuning, and computational resources. Simpler control approaches like PID loops or open-loop teleoperation are much easier to implement and require less processing power. They can achieve adequate performance (the NI-based robot effectively followed lines and positioned its arm with basic PID control), but they might yield suboptimal motion (e.g., more overshoot or slower response) compared to optimally tuned model-based controllers. Thus, engineers must balance the need for precision against the available time and hardware for implementing complex controls.
+  
+  \item Hardware and Integration: Using a high-end integrated controller versus a basic microcontroller board presents a clear trade-off. Integrated SBC solutions (such as the sbRIO or a mini-PC) provide a one-stop platform to handle vision, navigation, and control with ease of integration [2]. They often come with rich development tools (LabVIEW, ROS, etc.) and can run sophisticated algorithms (object recognition, global planning) on-board. The cons are higher cost, greater power consumption, and typically increased weight/size. Conversely, microcontroller-centric builds (Arduino, PIC) are low-cost, lightweight, and energy-efficient [3], but they lack the horsepower for computation-heavy tasks. In practice, some projects augment microcontrollers with external computing (e.g., streaming sensor data to a laptop for processing) or use hybrid setups (microcontroller for real-time control, SBC for higher-level processing). The optimal architecture depends on the application: a research prototype might afford a powerful onboard computer, whereas a field-deployed simple robot might favor minimal electronics for robustness.
+  
+  \item Actuation and Payload Considerations: Different approaches to actuation lead to different capabilities. Hobby-grade servos (as seen in the Arduino-based arm) are inexpensive and easy to control but impose strict payload limits (~0.15 kg in that design before stalling [3]). They are suitable for educational or light-duty robots but not for heavy manipulation. Upgrading to larger motors or professional servos increases payload (the EOD robot arm handled ~1 kg [4]) and speed but requires more powerful drivers and power supply and often closed-loop control for precision. Moreover, a heavier arm can destabilize a small mobile base when extended; this is why careful mechanical and control design (like lowering speed or using a counterbalance) is needed for heavier payloads. Choosing the right actuators involves balancing the desired payload and reach of the arm against the battery capacity, weight budget, and cost constraints of the overall system.
+  
+  \item Sensor Suite and Environmental Perception: The methods each system uses to perceive its environment come with pros and cons. A robot equipped with LIDAR and cameras can perform complex tasks like SLAM and object recognition, enabling true autonomy in diverse environments. The NI-based platform, for example, used a camera for vision (with color tracking and template matching) and multiple ultrasonic rangefinders for obstacle detection, giving it a rich awareness of its surroundings. The downside is the integration effort and processing needed for these sensors. Simpler robots that use only basic sensors (bump switches, IR line sensors, a few sonars) are much easier to build and program, but they can only operate in structured settings (following lines, avoiding obstacles directly ahead). If a task demands high reliability in unstructured or dynamic environments, investing in a robust sensor suite is worthwhile; otherwise, a lean sensor setup keeps the system affordable and less complex.
+  
+  \item Experimental Validation and Results: A key advantage of hardware-focused research is the ability to validate methods in real-world tests. Different approaches have been proven through experiments: the four-wheel mobile base demonstrated its path tracking accuracy on a physical track \ref{kaliDevelopmentControlMobile2024}, and the wireless arm's trials quantified the relationship between battery voltage and speed [3] as well as its payload capacity. SLAM algorithms were not just simulated but also tested on a robot doing laps in an indoor environment, revealing practical differences between mapping methods [5]. Such empirical data is invaluable - it highlights failure modes (e.g., GMapping's map inconsistency [5], or the Arduino arm stalling at 200 g [3]) and verifies that certain methods meet their performance goals (e.g., Cartographer's real-time mapping success [6]). In summary, each method comes with trade-offs, and examining the engineering decisions and outcomes across projects provides guidance for future designs. The best solution for a mobile manipulator will depend on the specific use-case requirements, whether it's the autonomy level, precision, payload, or operating environment that is the top priority.
+
+\end{itemize}
 
 \subsection{Motor Control}
 
