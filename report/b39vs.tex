@@ -442,7 +442,7 @@ The top plate is a flat, 3D-printed PLA panel engineered to support the manipula
 
 \begin{figure}[H]
   \centering\includegraphics[width=0.85\textwidth]{top_3.png}
-  \caption{Engineering drawing of the toop plate}
+  \caption{Engineering drawing of the top plate}
   \label{top_3}
 \end{figure}
 
@@ -568,7 +568,7 @@ Note: All mounting holes include heat-set inserts for improved screw retention a
 
 \begin{figure}[H]
   \centering\includegraphics[width=0.85\textwidth]{sensors.png}
-  \caption{3D render of the base plate}
+  \caption{Data flow diagram}
   \label{sensors}
 \end{figure}
 
@@ -586,7 +586,7 @@ Hazmat's arm has a 3-DOF arm with 3 servomotors (hereafter referred to as servos
   \label{servo_2}
 \end{figure}
 
-Hence, the fourth wire was outputting feedback signal. This signal had minimum and maximum values that were corresponded to the minimum and maximum servo angles. The range of the analog signal differs in between different servo; it was depended on the servo calibration method when they were produced. In the code, it was mapped to correspond with an angle. The rest of our sensors connections are illustrated in Figure \ref{sensors}. 
+Hence, the fourth wire was outputting feedback signal. This signal had minimum and maximum values that were corresponded to the minimum and maximum servo angles. The range of the analog signal differs in between different servo; it was depended on the servo calibration method when they were produced. In the code, it was mapped to correspond with an angle. The rest of our sensors connections are illustrated in Figure \ref{sensors}.
 
 \subsection{Software}
 
@@ -911,7 +911,7 @@ Risk mitigation strategies were implemented to address potential delays in hardw
 
 \textbf{Bill of Materials (BOM)} 
 
-The following table summarizes the major components used in the SLAM: Hazmat project along with their quantity and approximate cost:
+The following table summarizes the major components used in the Hazmat project along with their quantity and approximate cost:
 
 \begin{table}[H]
   \centering
@@ -921,14 +921,14 @@ The following table summarizes the major components used in the SLAM: Hazmat pro
       Raspberry Pi 5 & 1 & 290 & 290 \\ \hline
       ESP32-S3 & 1 & 25 & 25 \\ \hline
       LiDAR & 1 & 400 & 400 \\ \hline
-      Stereo Camera & 1 & 250 & 250 \\ \hline
+      Stereo Camera & 1 & 1800 & 1800 \\ \hline
       DC Motors with Encoders & 4 & 60 & 240 \\ \hline
       Servo Motors & 4 & 40 & 160 \\ \hline
       Motor Drivers & 2 & 80 & 160 \\ \hline
       Mecanum Wheels & 4 & 50 & 200 \\ \hline
       3D Printing Material (PLA \& TPU) & - & 20 & 100 \\ \hline
       Misc. Components (buck converter, I2C board, bearings, end-effector) & - & 150 & 150 \\ \hline
-      Total Estimated Cost & 2000 AED & ~ & ~ \\ \hline
+      Total Estimated Cost & 3550 AED & ~ & ~ \\ \hline
   \end{tabular}
 \end{table}
 
@@ -992,7 +992,7 @@ From an environmental standpoint, the use of 3D-printed PLA - a biodegradable ma
 
 \section{Conclusion and Future Work}
 
-The SLAM: Hazmat project represents the outcome of a rigorous engineering effort driven by a shared commitment to innovation, safety, and practical problem-solving. Assigned the task of designing a robotic solution to assist in hazardous waste handling, our team set out to develop an autonomous system capable of minimizing human exposure in high-risk environments. 
+The Hazmat project represents the outcome of a rigorous engineering effort driven by a shared commitment to innovation, safety, and practical problem-solving. Assigned the task of designing a robotic solution to assist in hazardous waste handling, our team set out to develop an autonomous system capable of minimizing human exposure in high-risk environments. 
 
 Throughout the development process, our team applied advanced concepts in robotics, artificial intelligence, and autonomous navigation. By integrating SLAM (Simultaneous Localization and Mapping), real-time obstacle avoidance, and robotic manipulation, we engineered a prototype capable of navigating hazardous zones and safely transporting waste materials. This system is particularly suitable for scenarios involving chemical spills, industrial accidents, or post-disaster clean-up operations. 
 
@@ -1000,17 +1000,47 @@ The project not only tested our technical capabilities but also required us to c
 
 Despite several challenges—including hardware limitations and mapping inconsistencies—our team remained focused and solution-oriented. Each obstacle presented an opportunity to learn, iterate, and improve. The final prototype demonstrates that autonomous systems can play a meaningful role in addressing global safety concerns and industrial inefficiencies. 
 
-In conclusion, SLAM: Hazmat is more than just a demonstration of robotic capability; it reflects the potential for engineering to solve real-world problems through thoughtful design, interdisciplinary teamwork, and a commitment to impact. This project has laid a strong foundation for future developments in the field of autonomous hazardous waste management and has highlighted the value of integrating emerging technologies into socially responsible engineering solutions. 
+In conclusion, Hazmat is more than just a demonstration of robotic capability; it reflects the potential for engineering to solve real-world problems through thoughtful design, interdisciplinary teamwork, and a commitment to impact. This project has laid a strong foundation for future developments in the field of autonomous hazardous waste management and has highlighted the value of integrating emerging technologies into socially responsible engineering solutions. 
 
 \printbibliography[heading=bibintoc]
 
 \begin{appendices}
+  
+  \section{Code repository}
+
+  All of our code for ROS nodes, ESP32s, and simulations files, as well as the source files for the report, are hosted on a public repository on Github: \href{https://github.com/abdulmaajidaga/B39VS-Systems-Project}{link}.
 
   \section{Risk assessment matrix}
 
   \begin{figure}[H]
     \centering\includegraphics[width=0.85\textwidth]{risk_assessment.png}
   \end{figure}
+
+  Risk Identification:
+
+  \begin{itemize}
+    \item R1: Hardware component failure (motors, servos) 
+    
+    \item R2: Software bugs in navigation system 
+    
+    \item R3: Sensor calibration issues 
+    
+    \item R4: Environmental obstacles causing navigation failure 
+    
+    \item R5: Mechanical damage during transportation 
+    
+    \item R6: Mechanical arm failure during waste pickup 
+    
+    \item R7: Electrical wiring issues 
+    
+    \item R8: Battery failure during operation 
+    
+    \item R9: Inadequate power supply for operations 
+    
+    \item R10: Integration issues between subsystems 
+    
+    \item R11: Health and safety hazards during testing
+  \end{itemize}
 
   \section{Gantt chart}
 
