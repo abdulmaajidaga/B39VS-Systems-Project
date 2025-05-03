@@ -1,8 +1,10 @@
 Hazmat, an indoor waste transportation and disposal robot.
 
+![Hazmat](./report/imgs/hazmat_2.jpeg)
+
 ## Software flowchart
 
-![Diagram](./report/imgs/software_flowchart.svg)
+![Diagram](./report/imgs/software_flowchart.png)
 
 ## Setup
 
